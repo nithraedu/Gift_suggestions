@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="red">#FF0000</color>
+    <color name="bg">#f6f9fa</color>
+    <color name="bottom_bg">#0069ff</color>
+    <color name="bottom_icon">#ff3a52</color>
+
+
+
+
+
+    <color name="blood_donor_lib_colorPrimary">#cd0000</color>
+    <color name="blood_donor_lib_colorPrimaryDark">#A80202</color>
+    <color name="blood_donor_lib_colorAccent">#DD2425</color>
+    <color name="blood_donor_lib_lighest">#CCCED0</color>
+    <color name="blood_donor_lib_lighest2">#f6f6f6</color>
+    <color name="blood_donor_lib_pale_green">#698539</color>
+    <color name="blood_donor_lib_skyblue_thick">#03A9F4</color>
+    <color name="blood_donor_lib_yellow">#fdb317</color>
+    <color name="blood_donor_lib_navi_green">#81C784</color>
+    <color name="blood_donor_lib_whatsapp">#00c853</color>
+    <color name="blood_donor_lib_thick_blue">#303F9F</color>
+    <color name="blood_donor_lib_drop_shadow_color">#66000000</color>
+    <color name="blood_donor_lib_browish_red">#990033</color>
+    <color name="blood_donor_lib_grey">#646263</color>
+    <color name="blood_donor_lib_primary_thick">#FFF997A1</color>
+    <color name="blood_donor_lib_primary_text">#424242</color>
+    <color name="blood_donor_lib_secondary_text">#757575</color>
+    <color name="blood_donor_lib_divider">#BDBDBD</color>
+    <color name="blood_donor_lib_green">#1B5E20</color>
+    <color name="blood_donor_lib_blue">#607D8B</color>
+    <color name="blood_donor_lib_shade1">#EEEEEE</color>
+    <color name="blood_donor_lib_shade2">#BDBDBD</color>
+    <color name="blood_donor_lib_shade3">#d7d6d6</color>
+    <color name="blood_donor_lib_white">#ffffff</color>
+    <color name="blood_donor_lib_light_orange">#80FF8A65</color>
+    <color name="blood_donor_lib_light_orange_tr">#FBE4E1</color>
+    <color name="blood_donor_lib_orange">#efad34</color>
+    <color name="blood_donor_lib_from">#000000</color>
+    <color name="blood_donor_lib_subject">#111111</color>
+    <color name="blood_donor_lib_timestamp">#4285f4</color>
+    <color name="blood_donor_lib_marital_select">#4DE5B2</color>
+    <color name="blood_donor_lib_message">#7a7a7a</color>
+    <color name="blood_donor_lib_icon_tint_normal">#7a7a7a</color>
+    <color name="blood_donor_lib_icon_tint_selected">#fed776</color>
+    <color name="blood_donor_lib_dark_yellow">#EFA111</color>
+    <color name="blood_donor_lib_row_activated">#e0e0e0</color>
+    <color name="blood_donor_lib_bg_circle_default">#666666</color>
+    <color name="blood_donor_lib_background">#aea8a8</color>
+    <color name="blood_donor_lib_light_green">#00838f</color>
+    <color name="blood_donor_lib_light_green_dark">#0097a7</color>
+    <color name="blood_donor_lib_lightblue">#13B0A5</color>
+    <color name="blood_donor_lib_bacg">#D2D3D5</color>
+    <color name="blood_donor_lib_pink">#ED2A56</color>
+    <color name="blood_donor_lib_pink_dark">#f7317a</color>
+    <color name="blood_donor_lib_black">#353233</color>
+    <color name="blood_donor_lib_skyblue">#b2dfdb</color>
+    <color name="blood_donor_lib_thick_green">#00A859</color>
+    <color name="blood_donor_lib_red">#D74634</color>
+    <color name="blood_donor_lib_l">#f5f5f5</color>
+    <color name="blood_donor_lib_ll">#CCCED0</color>
+    <color name="blood_donor_lib_quiz_que">#3E7486</color>
+    <color name="blood_donor_lib_toast">#F05D73</color>
+    <color name="blood_donor_lib_sandle">#D0C490</color>
+    <color name="blood_donor_lib_voilet">#B40486</color>
+    <color name="blood_donor_lib_transparent">#07000000</color>
+    <color name="blood_donor_lib_navi_back">#81C784</color>
+    <color name="blood_donor_lib_trans_black">#8000</color>
+    <color name="blood_donor_lib_trans_grey">#40dadee1</color>
+    <color name="blood_donor_lib_light_yellow">#fdf9d3</color>
+    <color name="blood_donor_lib_thick_yellow">#fdc92b</color>
+    <color name="blood_donor_lib_thick_brown">#94033a</color>
+    <color name="blood_donor_lib_trans_red">#80dd4b39</color>
+    <color name="blood_donor_lib_mango_yellow">#FBA81E</color>
+    <color name="blood_donor_lib_shade4">#D2D3D5</color>
+    <color name="blood_donor_lib_thick_grey">#5B5B5B</color>
+    <color name="blood_donor_lib_light_grey">#83DFDADA</color>
+    <color name="blood_donor_lib_stpi_default_primary_color">#00b47c</color>
+    <color name="blood_donor_lib_stpi_default_line_color">#b3bdc2</color>
+    <color name="blood_donor_lib_stpi_default_text_color">#000</color>
+
+
+
+</resources>

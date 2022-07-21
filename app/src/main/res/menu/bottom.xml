@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/bottom_home"
+        android:title="Home"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/home"/>
+    <item
+        android:id="@+id/bottom_fav"
+        android:title="Favourite"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_favourite"/>
+    <item
+        android:id="@+id/bottom_shop"
+        android:title="Add Shop" />
+    <item
+        android:id="@+id/bottom_location"
+        android:title="Location"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_location"/>
+    <item
+        android:id="@+id/bottom_settings"
+        android:title="Settings"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_settings"/>
+</menu>
