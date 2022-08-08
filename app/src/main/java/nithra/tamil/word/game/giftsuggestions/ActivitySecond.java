@@ -74,7 +74,6 @@ public class ActivitySecond extends AppCompatActivity {
         list.setLayoutManager(gridLayoutManager);
         adapter = new Adapter(this, images, text);
         list.setAdapter(adapter);
-
     }
 
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
@@ -123,5 +122,4 @@ public class ActivitySecond extends AppCompatActivity {
             }
         }
     }
-
 }

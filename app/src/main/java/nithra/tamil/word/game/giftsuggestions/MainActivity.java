@@ -1,53 +1,35 @@
 package nithra.tamil.word.game.giftsuggestions;
 
-import android.content.Context;
-import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Lifecycle;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import nithra.tamil.word.game.giftsuggestions.Fragment.Add;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Home;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Location;
+import nithra.tamil.word.game.giftsuggestions.Fragment.Product;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Settings;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener,FragMove {
     ViewPager2 viewpager2;
     Frag_Adapter frag_adapter;
     BottomNavigationView bottomnavigationview;
@@ -74,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         frag_adapter.addFragment(new Add());
         frag_adapter.addFragment(new Location());
         frag_adapter.addFragment(new Settings());
+        frag_adapter.addFragment(new Product());
         bottomnavigationview = findViewById(R.id.bottomnavigationview);
         bottomnavigationview.setOnItemSelectedListener(this);
         bottomnavigationview.setSelectedItemId(R.id.bottom_home);
@@ -182,8 +165,40 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
     @Override
+    public void onBackPressed() {
+        if (viewpager2.getCurrentItem() == 1) {
+            viewpager2.setCurrentItem(0, false);
+        } else if (viewpager2.getCurrentItem() == 2) {
+            viewpager2.setCurrentItem(0, false);
+        }else if (viewpager2.getCurrentItem() == 3) {
+            viewpager2.setCurrentItem(0, false);
+        }else if (viewpager2.getCurrentItem() == 4) {
+            viewpager2.setCurrentItem(0, false);
+        }
+        else {
+            finish();
+        }
+    }
+
+    @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         return false;
+    }
+
+    @Override
+    public void product() {
+        viewpager2.setCurrentItem(5,false);
+
+    }
+
+    @Override
+    public void register() {
+
+    }
+
+    @Override
+    public void verify() {
+
     }
 
     public class Frag_Adapter extends FragmentStateAdapter {
