@@ -6,14 +6,10 @@
     android:orientation="vertical"
     tools:context=".Fragment.Add">
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -28,6 +24,7 @@
                 android:textSize="20dp"
                 android:layout_weight="1"/>
             <TextView
+                android:id="@+id/myproduct"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="My product"
@@ -41,7 +38,7 @@
         </LinearLayout>
 
         <EditText
-            android:id="@+id/sellername"
+            android:id="@+id/productname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Product Name" />
@@ -54,6 +51,7 @@
             android:background="@drawable/background1">
 
             <Spinner
+                android:id="@+id/spin_occaction"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -69,6 +67,7 @@
             android:background="@drawable/background1">
 
             <Spinner
+                android:id="@+id/spin_gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
@@ -107,22 +106,24 @@
 
 
         <EditText
-            android:id="@+id/shopname"
+            android:id="@+id/prod_prize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Product Prize" />
 
         <EditText
-            android:id="@+id/shopaddress"
+            android:id="@+id/offer_prize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Offer Prize" />
         <EditText
+            android:id="@+id/offer_percentage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Offer Percentage" />
 
         <EditText
+            android:id="@+id/prod_des"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="150dp"

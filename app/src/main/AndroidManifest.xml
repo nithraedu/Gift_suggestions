@@ -14,13 +14,16 @@
         android:theme="@style/Theme.GiftSuggestions"
         tools:targetApi="31">
         <activity
+            android:name=".MyProduct"
+            android:exported="false" />
+        <activity
             android:name=".ActivitySecond"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.GiftSuggestions"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.GiftSuggestions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

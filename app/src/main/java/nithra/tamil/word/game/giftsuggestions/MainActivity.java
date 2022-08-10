@@ -23,19 +23,20 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 import java.util.ArrayList;
 
 import nithra.tamil.word.game.giftsuggestions.Fragment.Add;
+import nithra.tamil.word.game.giftsuggestions.Fragment.EnterOTP;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Home;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Location;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Product;
+import nithra.tamil.word.game.giftsuggestions.Fragment.SendOTP;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Settings;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener,FragMove {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener, FragMove {
     ViewPager2 viewpager2;
     Frag_Adapter frag_adapter;
-    BottomNavigationView bottomnavigationview;
-    ImageView home,favourite,location,settings;
+    ImageView home, favourite, location, settings;
     FloatingActionButton add_shop;
-
+    BottomAppBar bottomAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,125 +58,132 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         frag_adapter.addFragment(new Location());
         frag_adapter.addFragment(new Settings());
         frag_adapter.addFragment(new Product());
-        bottomnavigationview = findViewById(R.id.bottomnavigationview);
-        bottomnavigationview.setOnItemSelectedListener(this);
-        bottomnavigationview.setSelectedItemId(R.id.bottom_home);
-        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        frag_adapter.addFragment(new SendOTP());
+        frag_adapter.addFragment(new EnterOTP());
+        bottomAppBar = findViewById(R.id.bottomAppBar);
 
         MaterialShapeDrawable bottomBarBackground = (MaterialShapeDrawable) bottomAppBar.getBackground();
         bottomBarBackground.setShapeAppearanceModel(
                 bottomBarBackground.getShapeAppearanceModel()
                         .toBuilder()
-                        .setTopRightCorner(CornerFamily.ROUNDED,15)
-                        .setTopLeftCorner(CornerFamily.ROUNDED,15)
-                        .setBottomLeftCorner(CornerFamily.ROUNDED,15)
-                        .setBottomRightCorner(CornerFamily.ROUNDED,15)
+                        .setTopRightCorner(CornerFamily.ROUNDED, 15)
+                        .setTopLeftCorner(CornerFamily.ROUNDED, 15)
+                        .setBottomLeftCorner(CornerFamily.ROUNDED, 15)
+                        .setBottomRightCorner(CornerFamily.ROUNDED, 15)
                         .build());
+
         home.setBackgroundResource(R.drawable.background2);
 
         home.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 home.setBackgroundResource(R.drawable.background2);
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(0);
                 settings.setBackgroundResource(0);
-
-                viewpager2.setCurrentItem(0,false);
+                viewpager2.setCurrentItem(0, false);
             }
         });
+
         favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 home.setBackgroundResource(0);
                 favourite.setBackgroundResource(R.drawable.background2);
                 location.setBackgroundResource(0);
                 settings.setBackgroundResource(0);
-
-                viewpager2.setCurrentItem(1,false);
+                viewpager2.setCurrentItem(1, false);
             }
         });
+
         add_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewpager2.setCurrentItem(2,false);
+                viewpager2.setCurrentItem(6, false);
+                home.setBackgroundResource(0);
+                favourite.setBackgroundResource(0);
+                location.setBackgroundResource(0);
+                settings.setBackgroundResource(0);
+              /*bottomAppBar.setVisibility(View.GONE);
+                add_shop.setVisibility(View.GONE);*/
             }
         });
+
         location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 home.setBackgroundResource(0);
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(R.drawable.background2);
                 settings.setBackgroundResource(0);
-
-                viewpager2.setCurrentItem(3,false);
+                viewpager2.setCurrentItem(3, false);
             }
         });
+
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 home.setBackgroundResource(0);
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(0);
                 settings.setBackgroundResource(R.drawable.background2);
-
-                viewpager2.setCurrentItem(4,false);
+                viewpager2.setCurrentItem(4, false);
             }
         });
 
-
-        bottomnavigationview.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()) {
-                case R.id.bottom_home:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, firstFragment).commit();
-                    viewpager2.setCurrentItem(0,false);
-                    return true;
-
-                case R.id.bottom_fav:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, secondFragment).commit();
-                    viewpager2.setCurrentItem(1,false);
-
-                    return true;
-                case R.id.bottom_shop:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, secondFragment).commit();
-                    viewpager2.setCurrentItem(2,false);
-
-                    return true;
-
-                case R.id.bottom_location:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, thirdFragment).commit();
-                    viewpager2.setCurrentItem(3,false);
-
-                    return true;
-
-                case R.id.bottom_settings:
-                    //getSupportFragmentManager().beginTransaction().replace(R.id.container, thirdFragment).commit();
-                    viewpager2.setCurrentItem(4,false);
-                    return true;
-            }
-            return false;
-        });
         viewpager2.setAdapter(frag_adapter);
     }
 
 
     @Override
     public void onBackPressed() {
+        bottomAppBar.setVisibility(View.VISIBLE);
+        add_shop.setVisibility(View.VISIBLE);
+
         if (viewpager2.getCurrentItem() == 1) {
             viewpager2.setCurrentItem(0, false);
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
         } else if (viewpager2.getCurrentItem() == 2) {
             viewpager2.setCurrentItem(0, false);
-        }else if (viewpager2.getCurrentItem() == 3) {
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else if (viewpager2.getCurrentItem() == 3) {
             viewpager2.setCurrentItem(0, false);
-        }else if (viewpager2.getCurrentItem() == 4) {
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else if (viewpager2.getCurrentItem() == 4) {
             viewpager2.setCurrentItem(0, false);
-        }
-        else {
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else if (viewpager2.getCurrentItem() == 5) {
+            viewpager2.setCurrentItem(0, false);
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else if (viewpager2.getCurrentItem() == 6) {
+            viewpager2.setCurrentItem(0, false);
+            home.setBackgroundResource(R.drawable.background2);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else if (viewpager2.getCurrentItem() == 7) {
+            viewpager2.setCurrentItem(6, false);
+            bottomAppBar.setVisibility(View.GONE);
+            add_shop.setVisibility(View.GONE);
+            favourite.setBackgroundResource(0);
+            location.setBackgroundResource(0);
+            settings.setBackgroundResource(0);
+        } else {
             finish();
         }
     }
@@ -187,17 +195,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void product() {
-        viewpager2.setCurrentItem(5,false);
+        viewpager2.setCurrentItem(5, false);
 
     }
 
     @Override
-    public void register() {
+    public void seller() {
+        viewpager2.setCurrentItem(2, false);
 
     }
 
     @Override
-    public void verify() {
+    public void enterotp() {
+        viewpager2.setCurrentItem(7, false);
 
     }
 

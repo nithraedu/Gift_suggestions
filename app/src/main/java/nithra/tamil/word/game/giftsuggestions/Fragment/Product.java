@@ -1,66 +1,92 @@
 package nithra.tamil.word.game.giftsuggestions.Fragment;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+
+import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
+import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link Product#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class Product extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    EditText productname, prod_prize, offer_prize, offer_percentage, prod_des;
+    Button save,BSelectImage;
+    Spinner  spin_occaction, spin_gender;
+    TextView myproduct;
+    ImageView IVPreviewImage;
+    int SELECT_PICTURE = 200;
 
     public Product() {
-        // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment Product.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static Product newInstance(String param1, String param2) {
-        Product fragment = new Product();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_product, container, false);
+        View view = inflater.inflate(R.layout.fragment_product, container, false);
+        productname = view.findViewById(R.id.productname);
+        spin_occaction = view.findViewById(R.id.spin_occaction);
+        spin_gender = view.findViewById(R.id.spin_gender);
+        BSelectImage=view.findViewById(R.id.BSelectImage);
+        prod_prize=view.findViewById(R.id.prod_prize);
+        offer_prize=view.findViewById(R.id.offer_prize);
+        offer_percentage=view.findViewById(R.id.offer_percentage);
+        prod_des=view.findViewById(R.id.prod_des);
+        save=view.findViewById(R.id.save);
+        myproduct=view.findViewById(R.id.myproduct);
+        IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
+        BSelectImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageChooser();
+
+            }
+        });
+        myproduct.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(getContext(), MyProduct.class);
+                startActivity(intent);
+            }
+        });
+        return view;
+    }
+
+    void imageChooser() {
+        Intent i = new Intent();
+        i.setType("image/*");
+        i.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(i, "Select Picture"), SELECT_PICTURE);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_PICTURE) {
+                Uri selectedImageUri = data.getData();
+                if (null != selectedImageUri) {
+                    IVPreviewImage.setImageURI(selectedImageUri);
+                }
+            }
+        }
     }
 }
