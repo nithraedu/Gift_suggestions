@@ -16,13 +16,15 @@ import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.textfield.TextInputEditText;
+
 import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
 
 public class Product extends Fragment {
-    EditText productname, prod_prize, offer_prize, offer_percentage, prod_des;
-    Button save,BSelectImage;
+    TextInputEditText productname, prod_prize, offer_prize, offer_percentage, prod_des;
+    TextView save;
     Spinner  spin_occaction, spin_gender;
     TextView myproduct;
     ImageView IVPreviewImage;
@@ -45,7 +47,6 @@ public class Product extends Fragment {
         productname = view.findViewById(R.id.productname);
         spin_occaction = view.findViewById(R.id.spin_occaction);
         spin_gender = view.findViewById(R.id.spin_gender);
-        BSelectImage=view.findViewById(R.id.BSelectImage);
         prod_prize=view.findViewById(R.id.prod_prize);
         offer_prize=view.findViewById(R.id.offer_prize);
         offer_percentage=view.findViewById(R.id.offer_percentage);
@@ -53,7 +54,7 @@ public class Product extends Fragment {
         save=view.findViewById(R.id.save);
         myproduct=view.findViewById(R.id.myproduct);
         IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
-        BSelectImage.setOnClickListener(new View.OnClickListener() {
+        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 imageChooser();

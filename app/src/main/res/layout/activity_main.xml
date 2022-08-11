@@ -100,6 +100,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@color/bottom_icon"
         android:src="@drawable/ic_shop_add"
+        app:tint="@color/bottom_icon"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="50dp" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

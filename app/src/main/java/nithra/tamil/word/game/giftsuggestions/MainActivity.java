@@ -1,5 +1,7 @@
 package nithra.tamil.word.game.giftsuggestions;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,13 +39,21 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     ImageView home, favourite, location, settings;
     FloatingActionButton add_shop;
     BottomAppBar bottomAppBar;
+    SharedPreferences pref;
+    SharedPreference sharedPreference = new SharedPreference();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+        pref = getSharedPreferences("register", Context.MODE_PRIVATE);
+        System.out.println("android_id" + Utils_Class.android_id(this));
+
         viewpager2 = findViewById(R.id.viewpager2);
         home = findViewById(R.id.home);
         favourite = findViewById(R.id.favourite);
@@ -81,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(0);
                 settings.setBackgroundResource(0);
+
                 viewpager2.setCurrentItem(0, false);
             }
         });
@@ -99,7 +110,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         add_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewpager2.setCurrentItem(6, false);
+
+
+
+                if (sharedPreference.getInt(getApplicationContext(), "yes") == 0) {
+                    viewpager2.setCurrentItem(6, false);
+
+                } else {
+                    viewpager2.setCurrentItem(2, false);
+                }
+
                 home.setBackgroundResource(0);
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(0);

@@ -1,10 +1,5 @@
 package nithra.tamil.word.game.giftsuggestions;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +10,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -27,7 +27,7 @@ public class MyProduct extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String title;
-    TextView cat_title;
+    TextView cat_title,profile_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,8 +38,17 @@ public class MyProduct extends AppCompatActivity {
         images = new ArrayList<Integer>();
         text = new ArrayList<String>();
         list = findViewById(R.id.list);
-        cat_title=findViewById(R.id.cat_title);
-        back=findViewById(R.id.back);
+        profile_edit = findViewById(R.id.profile_edit);
+        cat_title = findViewById(R.id.cat_title);
+        back = findViewById(R.id.back);
+
+        profile_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getApplicationContext(),ShopEdit.class);
+                startActivity(i);
+            }
+        });
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -75,6 +84,7 @@ public class MyProduct extends AppCompatActivity {
         adapter = new Adapter(this, images, text);
         list.setAdapter(adapter);
     }
+
     public class Adapter extends RecyclerView.Adapter<MyProduct.Adapter.ViewHolder> {
         ArrayList<Integer> images;
         LayoutInflater inflater;
@@ -100,6 +110,13 @@ public class MyProduct extends AppCompatActivity {
         public void onBindViewHolder(@NonNull MyProduct.Adapter.ViewHolder holder, int position) {
             holder.img_slide.setImageResource(images.get(position));
             holder.gridText.setText(titles.get(position));
+            holder.edit_product.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i=new Intent(getApplicationContext(),ProductEdit.class);
+                    startActivity(i);
+                }
+            });
         }
 
 
@@ -109,13 +126,14 @@ public class MyProduct extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView img_slide;
+            ImageView img_slide, edit_product;
             TextView gridText;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 img_slide = itemView.findViewById(R.id.imageGrid);
                 gridText = itemView.findViewById(R.id.gridText);
+                edit_product = itemView.findViewById(R.id.edit_product);
             }
         }
     }

@@ -58,11 +58,17 @@
                     android:textSize="25dp" />
 
                 <EditText
+                    android:id="@+id/enter_otp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/background4"
                     android:hint="OTP"
+                    android:maxLength="4"
+                    android:maxLines="1"
+                    android:textCursorDrawable="@null"
                     android:gravity="center"
+                    android:imeOptions="actionDone"
+                    android:inputType="number"
                     android:layout_marginTop="20dp"
                     android:padding="10dp"/>
                 <TextView
@@ -70,10 +76,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:gravity="center"
                     android:text="OTP Not Received? Resend"
                     android:layout_marginTop="10dp"
-                    android:textColor="#0f0f54"
-                    android:textSize="20dp"
+                    android:textColor="@color/red"
+                    android:textSize="15dp"
                     android:textStyle="bold" />
 
                 <TextView

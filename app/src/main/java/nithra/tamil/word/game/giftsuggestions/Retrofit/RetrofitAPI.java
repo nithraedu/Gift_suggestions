@@ -11,5 +11,13 @@ import retrofit2.http.POST;
 public interface RetrofitAPI {
     @FormUrlEncoded
     @POST("data.php")
-    Call<ArrayList<SellerRegister>> getadd_user(@FieldMap HashMap<String, String> data);
+    Call<ArrayList<SendOtppojo>> getotp(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<CheckOtp>> checkotp(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<AddSeller>> add_seller(@FieldMap HashMap<String, String> data);
 }

@@ -19,7 +19,7 @@
             android:layout_marginLeft="5dp"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Register Your Shop"
+            android:text="Edit Your Shop"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:textStyle="bold" />
@@ -164,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
-                android:hint="Country"
+                android:hint="City"
                 android:theme="@style/AppThemetextinput"
                 app:boxCornerRadiusBottomEnd="15dp"
                 app:boxCornerRadiusBottomStart="15dp"
@@ -174,17 +174,16 @@
                 app:hintTextColor="@color/gray_light">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/country"
+                    android:id="@+id/city"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
+                    android:imeOptions="actionDone"
                     android:paddingTop="20dp"
                     android:paddingBottom="20dp"
-                    android:imeOptions="actionDone"
                     android:inputType="textCapSentences"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
-
 
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -211,34 +210,6 @@
                     android:inputType="textCapSentences"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:hint="City"
-                android:theme="@style/AppThemetextinput"
-                app:boxCornerRadiusBottomEnd="15dp"
-                app:boxCornerRadiusBottomStart="15dp"
-                app:boxCornerRadiusTopEnd="15dp"
-                app:boxCornerRadiusTopStart="15dp"
-                app:endIconMode="clear_text"
-                app:hintTextColor="@color/gray_light">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/city"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:imeOptions="actionDone"
-                    android:paddingTop="20dp"
-                    android:paddingBottom="20dp"
-                    android:inputType="textCapSentences"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
-
-
 
             <!--<RelativeLayout
                 android:layout_width="match_parent"
@@ -277,7 +248,7 @@
                 android:gravity="center"
                 android:paddingTop="15dp"
                 android:paddingBottom="15dp"
-                android:text="Save and Continue"
+                android:text="Update"
                 android:textColor="@color/white"
                 android:textSize="20dp" />
         </LinearLayout>
