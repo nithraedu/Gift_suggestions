@@ -16,18 +16,29 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MyProduct extends AppCompatActivity {
     Adapter adapter;
-    ArrayList<Integer> images;
-    ArrayList<String> text;
+    ArrayList<GiftList> gift;
     RecyclerView list;
     ImageView back;
-    Intent intent;
     Bundle extra;
     String title;
     TextView cat_title,profile_edit;
+    SharedPreference sharedPreference = new SharedPreference();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,8 +46,7 @@ public class MyProduct extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_my_product);
-        images = new ArrayList<Integer>();
-        text = new ArrayList<String>();
+        gift = new ArrayList<GiftList>();
         list = findViewById(R.id.list);
         profile_edit = findViewById(R.id.profile_edit);
         cat_title = findViewById(R.id.cat_title);
@@ -55,46 +65,51 @@ public class MyProduct extends AppCompatActivity {
                 finish();
             }
         });
-        intent = getIntent();
-        extra = intent.getExtras();
-        if (extra != null) {
-            title = extra.getString("title");
-        }
         cat_title.setText("My Products");
-        images.add(R.drawable.birthday);
-        images.add(R.drawable.childrensday);
-        images.add(R.drawable.fathersday);
-        images.add(R.drawable.friendship);
-        images.add(R.drawable.mothersday);
-        images.add(R.drawable.valentinesday);
-        images.add(R.drawable.wedding);
-        images.add(R.drawable.womensday);
-
-        text.add("Birthday");
-        text.add("Children's Day");
-        text.add("Father's Day");
-        text.add("Friendship");
-        text.add("Mother's Day");
-        text.add("Valentine's Day");
-        text.add("Wedding");
-        text.add("Women's Day");
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         list.setLayoutManager(gridLayoutManager);
-        adapter = new Adapter(this, images, text);
+        adapter = new Adapter(this, gift);
         list.setAdapter(adapter);
+        category();
     }
 
+
+    public void category() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_gift_list");
+        map.put("user_id", sharedPreference.getString(this, "user_id"));
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
+        call.enqueue(new Callback<ArrayList<GiftList>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GiftList>> call, Response<ArrayList<GiftList>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    gift.addAll(response.body());
+                    adapter.notifyDataSetChanged();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GiftList>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+
     public class Adapter extends RecyclerView.Adapter<MyProduct.Adapter.ViewHolder> {
-        ArrayList<Integer> images;
+        ArrayList<GiftList> gift;
         LayoutInflater inflater;
-        ArrayList<String> titles;
+        Context context;
 
-
-        public Adapter(Context ctx, ArrayList<Integer> images, ArrayList<String> titles) {
-            this.images = images;
-            this.titles = titles;
+        public Adapter(Context ctx, ArrayList<GiftList> images) {
+            this.gift = images;
             this.inflater = LayoutInflater.from(ctx);
+            this.context = ctx;
         }
 
         @NonNull
@@ -108,8 +123,16 @@ public class MyProduct extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(@NonNull MyProduct.Adapter.ViewHolder holder, int position) {
-            holder.img_slide.setImageResource(images.get(position));
-            holder.gridText.setText(titles.get(position));
+            int pos = position;
+           /* holder.img_slide.setImageResource(images.get(position));
+            holder.gridText.setText(titles.get(position));*/
+
+            holder.gridText.setText(gift.get(pos).getGiftName());
+            Glide.with(context).load(gift.get(position).getGiftImage())
+                    //.error(R.drawable.warning)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.img_slide);
+
             holder.edit_product.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -122,7 +145,7 @@ public class MyProduct extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return images.size();
+            return gift.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {

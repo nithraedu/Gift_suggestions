@@ -20,4 +20,20 @@ public interface RetrofitAPI {
     @FormUrlEncoded
     @POST("data.php")
     Call<ArrayList<AddSeller>> add_seller(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<AddGift>> add_gift(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<GiftFor>> gift_giftfor(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<GiftList>> gift_giftlist(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<Occasion>> gift_occasion(@FieldMap HashMap<String, String> data);
 }

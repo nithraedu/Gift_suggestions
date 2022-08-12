@@ -100,7 +100,8 @@ public class EnterOTP extends Fragment {
                     Utils_Class.toast_center(getContext(), "Enter your otp");
                 } else if (sharedPreference.getString(getContext(), "register_otp").equals(enter_otp.getText().toString())) {
                     otp_verify();
-                    fragMove.seller();
+
+
                 } else {
                     Utils_Class.toast_center(getContext(), "Invalid otp");
                 }
@@ -115,6 +116,7 @@ public class EnterOTP extends Fragment {
         verify = enter_otp.getText().toString().trim();
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "check_otp");
+        map.put("user_id", sharedPreference.getString(getContext(), "user_id"));
         //map.put("mobile_num", "" + sharedPreference.getString(getContext(), "resend"));
         map.put("otp", verify);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
@@ -125,8 +127,17 @@ public class EnterOTP extends Fragment {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
-                    sharedPreference.putInt(getContext(), "yes", 1);
-                    enter_otp.getText().toString();
+                   // sharedPreference.putInt(getContext(), "yes", 1);
+                    enter_otp.getText().clear();
+                    String user=sharedPreference.getString(getContext(), "user_status");
+
+                    if (user.equals("exiting")) {
+
+                        fragMove.product();
+                    }else if(user.equals("new")){
+                        fragMove.seller();
+
+                    }
 
                 }
                 System.out.println("======response :" + response);

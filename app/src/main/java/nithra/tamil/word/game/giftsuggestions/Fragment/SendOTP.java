@@ -113,6 +113,9 @@ public class SendOTP extends Fragment {
                             System.out.println("======response result:" + result);
                             send_otp.addAll(response.body());
                             sharedPreference.putString(getContext(), "register_otp", "" + send_otp.get(0).getOtp());
+                            sharedPreference.putString(getContext(), "user_id", "" + send_otp.get(0).getId());
+                            sharedPreference.putString(getContext(), "user_status", "" + send_otp.get(0).getUserStatus());
+
                             name.getText().clear();
                             gmail.getText().clear();
                             fragMove.enterotp();
