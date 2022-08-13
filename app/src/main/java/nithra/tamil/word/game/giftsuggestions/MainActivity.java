@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     viewpager2.setCurrentItem(6, false);
 
                 } else {
-                    viewpager2.setCurrentItem(5, false);
+                    //viewpager2.setCurrentItem(5, false);
+                    viewpager2.setCurrentItem(2, false);
                 }
 
                 home.setBackgroundResource(0);

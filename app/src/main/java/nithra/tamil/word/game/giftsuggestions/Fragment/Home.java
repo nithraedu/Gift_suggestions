@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
@@ -28,6 +29,7 @@ import java.util.ArrayList;
 
 import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
 import nithra.tamil.word.game.giftsuggestions.MainActivity;
+import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
 
 public class Home extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -38,6 +40,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     ArrayList<String> text3;
     Adapter2 adapter2;
     Adapter3 adapter3;
+    LinearLayout notification;
     public Home() {
     }
 
@@ -54,6 +57,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         drawer = view.findViewById(R.id.drawer_layout);
+        notification=view.findViewById(R.id.notification);
         images2 = new ArrayList<Integer>();
         images3 = new ArrayList<Integer>();
         text2=new ArrayList<String>();
@@ -89,6 +93,14 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         text3.add("Wedding");
         text3.add("Women's Day");
 
+
+        notification.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i=new Intent(getContext(), MyProduct.class);
+                startActivity(i);
+            }
+        });
 
 
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);

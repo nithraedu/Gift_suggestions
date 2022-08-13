@@ -136,7 +136,9 @@ public class MyProduct extends AppCompatActivity {
             holder.edit_product.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //sharedPreference.getString(MyProduct.this, "gift_id");
                     Intent i=new Intent(getApplicationContext(),ProductEdit.class);
+                    i.putExtra("id", gift.get(pos).getId());
                     startActivity(i);
                 }
             });

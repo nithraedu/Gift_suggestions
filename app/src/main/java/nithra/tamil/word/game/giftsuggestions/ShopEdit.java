@@ -1,6 +1,16 @@
 package nithra.tamil.word.game.giftsuggestions;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.provider.OpenableColumns;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -10,13 +20,36 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftEdit;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
@@ -31,7 +64,11 @@ public class ShopEdit extends AppCompatActivity {
     TextView save, remove;
     ImageView IVPreviewImage;
     SharedPreference sharedPreference = new SharedPreference();
-    ArrayList<AddSeller> list_shop;
+    ArrayList<GiftEdit> list_shop;
+    Uri uri_1;
+    HashMap<String, String> map1 = new HashMap<>();
+    HashMap<String, String> map2 = new HashMap<>();
+    String path = "";
 
 
     @Override
@@ -55,7 +92,7 @@ public class ShopEdit extends AppCompatActivity {
         pincode = findViewById(R.id.pincode);
         pincode = findViewById(R.id.pincode);
         district = findViewById(R.id.district);
-        list_shop = new ArrayList<AddSeller>();
+        list_shop = new ArrayList<GiftEdit>();
 
         shopedit();
 
@@ -98,7 +135,7 @@ public class ShopEdit extends AppCompatActivity {
                 } else if (shop_longitude.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your longitude...");
                 } else {
-                    submit_res();
+                   submit_res();
 
                 }
 
@@ -109,85 +146,373 @@ public class ShopEdit extends AppCompatActivity {
     }
 
     public void submit_res() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "add_seller");
-        map.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
-        map.put("shop_name", shop_name);
-        map.put("seller_mobile", mob_num);
-        map.put("name", sell_name);
-        map.put("state", shop_state);
-        map.put("address", shop_add);
-        map.put("pincode", shop_pincode);
-        map.put("latitude", shop_latitude);
-        map.put("longitude", shop_longitude);
-        map.put("district", shop_district);
-        map.put("city", shop_city);
-        //map.put("logo", mob_num);
-        System.out.println("printmap" + map);
+        map1.clear();
+        map2.clear();
+        map1.put("action", "add_seller");
+        map1.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
+        map1.put("shop_name", shop_name);
+        map1.put("seller_mobile", mob_num);
+        map1.put("name", sell_name);
+        map1.put("country", shop_country);
+        map1.put("state", shop_state);
+        map1.put("address", shop_add);
+        map1.put("pincode", shop_pincode);
+        map1.put("latitude", shop_latitude);
+        map1.put("longitude", shop_longitude);
+        map1.put("district", shop_district);
+        map1.put("city", shop_city);
 
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<AddSeller>> call = retrofitAPI.add_seller(map);
-        call.enqueue(new Callback<ArrayList<AddSeller>>() {
-            @Override
-            public void onResponse(Call<ArrayList<AddSeller>> call, Response<ArrayList<AddSeller>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    if (response.body().get(0).getStatus().equals("Success")) {
-                        sellername.getText().clear();
-                        shopname.getText().clear();
-                        shopaddress.getText().clear();
-                        mobilenumber.getText().clear();
-                        city.getText().clear();
-                        state.getText().clear();
-                        country.getText().clear();
-                        latitude.getText().clear();
-                        longitude.getText().clear();
-                        pincode.getText().clear();
-                        district.getText().clear();
-                        Toast.makeText(getApplicationContext(), "Your shop updated successfully, Thank you", Toast.LENGTH_SHORT).show();
+        File file = null;
+        try {
+            file = getFile(getApplicationContext(), uri_1);
+            path = file.getPath().replace(file.getName(), "");
+            System.out.println("---file name : " + file.getName());
+            System.out.println("---file path : " + path);
+            System.out.println("---file path : " + file.getAbsolutePath());
+            map2.put("logo",""+ Uri.fromFile(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("printerror" + e);
+        }
 
-                    }
+        System.out.println("print map1 : " + map1);
+        System.out.println("print map2 : " + map2);
 
-                }
-                System.out.println("======response :" + response);
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<AddSeller>> call, Throwable t) {
-                System.out.println("======response t:" + t);
-            }
-        });
+        UploadAsync();
+
     }
 
-    public void shopedit() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "add_seller");
-        map.put("user_id", sharedPreference.getString(this, "user_id"));
 
-        System.out.println("print_map " + map);
+    public static File getFile(Context context, Uri uri) throws IOException {
+        String root = context.getFilesDir().getPath() + File.separatorChar + "Images";
+        File folder = new File(root);
+        // have the object build the directory structure, if needed.
+        if (!folder.exists()) {
+            folder.mkdirs();
+        }
+        File destinationFilename = new File(root + File.separatorChar + queryName(context, uri));
+        try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
+            createFileFromStream(ins, destinationFilename);
+        } catch (Exception ex) {
+            Log.e("Save File", ex.getMessage());
+            ex.printStackTrace();
+        }
+        return destinationFilename;
+    }
+
+    public static void createFileFromStream(InputStream ins, File destination) {
+        try (OutputStream os = new FileOutputStream(destination)) {
+            byte[] buffer = new byte[4096];
+            int length;
+            while ((length = ins.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            os.flush();
+        } catch (Exception ex) {
+            Log.e("Save File", ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+
+    private static String queryName(Context context, Uri uri) {
+        Cursor returnCursor =
+                context.getContentResolver().query(uri, null, null, null, null);
+        assert returnCursor != null;
+        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+        returnCursor.moveToFirst();
+        String name = returnCursor.getString(nameIndex);
+        returnCursor.close();
+        return name;
+    }
+
+
+    public void UploadAsync() {
+        ProgressDialog progressDialog = new ProgressDialog(ShopEdit.this);
+        //progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.setMessage("Uploading... ");
+        // progressDialog.setMax(100);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+        final Handler handler = new Handler(Looper.myLooper()) {
+            public void handleMessage(final Message msg) {
+                Runnable runnable = new Runnable() {
+                    public void run() {
+                        //post execute
+                        if (getApplicationContext() != null) {
+                            System.out.println("====msg result : " + msg.obj.toString());
+                            if (progressDialog.isShowing()) {
+                                progressDialog.dismiss();
+                            }
+
+                            if (msg.obj != null && msg.obj.toString().length() != 0) {
+                                System.out.println("result : " + msg.obj.toString());
+
+
+                                String result = msg.obj.toString();
+
+                                JSONArray jsonArray = null;
+                                JSONObject jsonObject = null;
+                                try {
+                                    jsonArray = new JSONArray(result);
+                                    jsonObject = jsonArray.getJSONObject(0);
+
+
+                                    System.out.println("---output : " + jsonObject.getString("name"));
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                                try {
+                                    if (jsonObject.getString("status").contains("Success")) {
+                                        sellername.getText().clear();
+                                        shopname.getText().clear();
+                                        shopaddress.getText().clear();
+                                        mobilenumber.getText().clear();
+                                        city.getText().clear();
+                                        state.getText().clear();
+                                        country.getText().clear();
+                                        latitude.getText().clear();
+                                        longitude.getText().clear();
+                                        pincode.getText().clear();
+                                        district.getText().clear();
+                                        sharedPreference.putInt(getApplicationContext(), "yes", 1);
+                                        Toast.makeText(getApplicationContext(), "Your shop Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
+                                        Intent i =new Intent(ShopEdit.this,MyProduct.class);
+                                        startActivity(i);
+
+                                    }
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                }
+
+                            } else {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            if (progressDialog.isShowing()) {
+                                                progressDialog.dismiss();
+                                            }
+                                        } catch (Exception e) {
+                                            e.printStackTrace();
+                                        }
+
+                                    }
+                                });
+                            }
+                        }
+                    }
+                };
+                runOnUiThread(runnable);
+            }
+        };
+        final Thread checkUpdate = new Thread() {
+            public void run() {
+                //do in back ground
+                String response = null;
+                try {
+                    String requestURL = "http://15.206.173.184/upload/gift_suggestion/api/data.php";
+                    String path = "Images/";
+
+                    final String boundary;
+                    String tail = "";
+                    final String LINE_END = "\r\n";
+                    final String TWOHYPEN = "--";
+                    HttpURLConnection httpConn;
+                    String charset = "UTF-8";
+                    PrintWriter writer;
+                    OutputStream outputStream;
+                    String paramsPart = "";
+                    String fileHeader = "";
+                    String filePart = "";
+                    long fileLength = 0;
+                    int maxBufferSize = 1024;
+
+                    try {
+                        boundary = "===" + System.currentTimeMillis() + "===";
+                        tail = LINE_END + TWOHYPEN + boundary + TWOHYPEN + LINE_END;
+                        URL url = new URL(requestURL);
+                        httpConn = (HttpURLConnection) url.openConnection();
+                        httpConn.setDoOutput(true);
+                        httpConn.setDoInput(true);
+                        httpConn.setRequestProperty("Content-Type", "multipart/form-data; boundary=" + boundary);
+
+
+                        ArrayList<String> paramHeaders = new ArrayList<>();
+                        for (Map.Entry<String, String> entry : map1.entrySet()) {
+
+                            String param = TWOHYPEN + boundary + LINE_END
+                                    + "Content-Disposition: form-data; name=\"" + entry.getKey() + "\"" + LINE_END
+                                    + "Content-Type: text/plain; charset=" + charset + LINE_END
+                                    + LINE_END
+                                    + entry.getValue() + LINE_END;
+                            paramsPart += param;
+                            paramHeaders.add(param);
+                        }
+
+
+                        ArrayList<File> filesAL = new ArrayList<>();
+                        ArrayList<String> fileHeaders = new ArrayList<>();
+                        try {
+                            for (Map.Entry<String, String> entry : map2.entrySet()) {
+                                String file_name = entry.getValue().substring(entry.getValue().lastIndexOf("/") + 1);
+                                File file = null;
+
+                                System.out.println("===error1 " + entry.getValue());
+                                System.out.println("===error2 " + file_name);
+                                //  System.out.println("===error path " + path);
+                                //file = new File(entry.getValue());
+
+                                file = new File(getFilesDir().getPath(), path + file_name);
+
+                                fileHeader = TWOHYPEN + boundary + LINE_END
+                                        + "Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + file.getName() + "\"" + LINE_END
+                                        + "Content-Type: " + URLConnection.guessContentTypeFromName(file.getAbsolutePath()) + LINE_END
+                                        + "Content-Transfer-Encoding: binary" + LINE_END
+                                        + LINE_END;
+                                fileLength += file.length() + LINE_END.getBytes(charset).length;
+                                filePart += fileHeader;
+
+                                fileHeaders.add(fileHeader);
+                                filesAL.add(file);
+
+
+                            }
+                            String partData = paramsPart + filePart;
+
+                            long requestLength = partData.getBytes(charset).length + fileLength + tail.getBytes(charset).length;
+                            httpConn.setRequestProperty("Content-length", "" + requestLength);
+                            httpConn.setFixedLengthStreamingMode((int) requestLength);
+                            httpConn.connect();
+
+                            outputStream = new BufferedOutputStream(httpConn.getOutputStream());
+                            writer = new PrintWriter(new OutputStreamWriter(outputStream, charset), true);
+
+                            for (int i = 0; i < paramHeaders.size(); i++) {
+                                writer.append(paramHeaders.get(i));
+                                writer.flush();
+                            }
+
+                            int totalRead = 0;
+                            int bytesRead;
+                            byte buf[] = new byte[maxBufferSize];
+                            for (int i = 0; i < filesAL.size(); i++) {
+                                writer.append(fileHeaders.get(i));
+                                writer.flush();
+                                BufferedInputStream bufferedInputStream = new BufferedInputStream(new FileInputStream(filesAL.get(i)));
+                                while ((bytesRead = bufferedInputStream.read(buf)) != -1) {
+
+                                    outputStream.write(buf, 0, bytesRead);
+                                    writer.flush();
+                                    totalRead += bytesRead;
+                                    int progress = (int) ((totalRead * 100) / requestLength);
+                                    //update progress
+                                    //  publishProgress(progress,(i + 1), filesAL.size());
+                                    final long finalTotal = totalRead;
+                                    final long finalFileLength = fileLength;
+                                    runOnUiThread(new Runnable() {
+                                        public void run() {
+                                            if (progressDialog != null && progressDialog.isShowing()) {
+                                                progressDialog.setMessage("Loading...");
+                                            }
+                                        }
+                                    });
+
+                                }
+                                outputStream.write(LINE_END.getBytes());
+                                outputStream.flush();
+                                bufferedInputStream.close();
+                            }
+                            writer.append(tail);
+                            writer.flush();
+                            writer.close();
+
+                        } catch (Exception e) {
+                            System.out.println("===error3 " + e.getMessage());
+                        }
+                        String line = null;
+                        StringBuilder sb = new StringBuilder();
+                        try {
+                            // checks server's status code first
+                            int status = httpConn.getResponseCode();
+                            if (status == HttpURLConnection.HTTP_OK) {
+                                BufferedReader reader = new BufferedReader(new InputStreamReader(httpConn.getInputStream(), "UTF-8"), 8);
+
+                                while ((line = reader.readLine()) != null) {
+                                    //  sb.append(line).append("\n");
+                                    sb.append(line);
+                                }
+                                reader.close();
+                                httpConn.disconnect();
+                            } else {
+                                throw new IOException("Server returned non-OK status: " + status + " " + httpConn.getResponseMessage());
+                            }
+                        } catch (Exception e) {
+                            System.out.println("===error4 " + e.getMessage());
+                        }
+                        try {
+                            System.out.println("===error5 " + sb.toString());
+
+                        } catch (NullPointerException e) {
+                            e.printStackTrace();
+                            System.out.println("===error6 " + e.getMessage());
+                        }
+                        response = sb.toString();
+                        System.out.println("result from server : " + response);
+                    } catch (IOException e) {
+                        System.out.println("===result error1 : " + e.getMessage());
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    System.out.println("====msg error : " + e.getMessage());
+                }
+                Message message = new Message();
+                message.obj = response;
+                // handler.sendEmptyMessage(0);
+                handler.sendMessage(message);
+            }
+        };
+        checkUpdate.start();
+    }
+
+
+
+    public void shopedit() {
+
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_id");
+        map.put("id", sharedPreference.getString(this, "user_id"));
+
+        System.out.println("print_map "+map );
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<AddSeller>> call = retrofitAPI.add_seller(map);
-        call.enqueue(new Callback<ArrayList<AddSeller>>() {
+        Call<ArrayList<GiftEdit>> call = retrofitAPI.edit_gift(map);
+        call.enqueue(new Callback<ArrayList<GiftEdit>>() {
             @Override
-            public void onResponse(Call<ArrayList<AddSeller>> call, Response<ArrayList<AddSeller>> response) {
+            public void onResponse(Call<ArrayList<GiftEdit>> call, Response<ArrayList<GiftEdit>> response) {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     if (response.body().get(0).getStatus().equals("Success")) {
                         list_shop.addAll(response.body());
 
+                        Glide.with(getApplicationContext()).load(list_shop.get(0).getLogo())
+                                //.error(R.drawable.warning)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(IVPreviewImage);
+
                         sellername.setText(list_shop.get(0).getName());
                         shopname.setText(list_shop.get(0).getShopName());
-                        shopaddress.setText(list_shop.get(0).getName());
-                        mobilenumber.setText(list_shop.get(0).getName());
-                        city.setText(list_shop.get(0).getName());
-                        state.setText(list_shop.get(0).getName());
-                        country.setText(list_shop.get(0).getName());
-                        latitude.setText(list_shop.get(0).getName());
-                        longitude.setText(list_shop.get(0).getName());
-                        pincode.setText(list_shop.get(0).getName());
-                        district.setText(list_shop.get(0).getName());
+                        shopaddress.setText(list_shop.get(0).getAddress());
+                        mobilenumber.setText(list_shop.get(0).getSellerMobile());
+                        city.setText(list_shop.get(0).getCity());
+                        state.setText(list_shop.get(0).getState());
+                        country.setText(list_shop.get(0).getCountry());
+                        latitude.setText(list_shop.get(0).getLatitude());
+                        longitude.setText(list_shop.get(0).getLongitude());
+                        pincode.setText(list_shop.get(0).getPincode());
+                        district.setText(list_shop.get(0).getDistrict());
 
                     }
                 }
@@ -195,7 +520,7 @@ public class ShopEdit extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<AddSeller>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<GiftEdit>> call, Throwable t) {
                 System.out.println("======response t:" + t);
             }
         });

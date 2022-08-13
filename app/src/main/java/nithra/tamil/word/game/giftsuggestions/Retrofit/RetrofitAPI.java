@@ -3,10 +3,14 @@ package nithra.tamil.word.game.giftsuggestions.Retrofit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
 
 public interface RetrofitAPI {
     @FormUrlEncoded
@@ -19,7 +23,20 @@ public interface RetrofitAPI {
 
     @FormUrlEncoded
     @POST("data.php")
-    Call<ArrayList<AddSeller>> add_seller(@FieldMap HashMap<String, String> data);
+    Call<ArrayList<AddSeller>> add_seller(
+            @Part RequestBody action,
+            @Part RequestBody user_id,
+            @Part RequestBody shopname,
+            @Part RequestBody seller_mobile,
+            @Part RequestBody name,
+            @Part RequestBody state,
+            @Part RequestBody address,
+            @Part RequestBody pincode,
+            @Part RequestBody latitude,
+            @Part RequestBody longitude,
+            @Part RequestBody district,
+            @Part RequestBody city,
+            @Part MultipartBody.Part file);
 
     @FormUrlEncoded
     @POST("data.php")
@@ -36,4 +53,8 @@ public interface RetrofitAPI {
     @FormUrlEncoded
     @POST("data.php")
     Call<ArrayList<Occasion>> gift_occasion(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<GiftEdit>> edit_gift(@FieldMap HashMap<String, String> data);
 }

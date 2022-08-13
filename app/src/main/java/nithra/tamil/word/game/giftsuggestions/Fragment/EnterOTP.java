@@ -127,13 +127,13 @@ public class EnterOTP extends Fragment {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
-                   // sharedPreference.putInt(getContext(), "yes", 1);
+                    sharedPreference.putInt(getContext(), "yes", 1);
                     enter_otp.getText().clear();
                     String user=sharedPreference.getString(getContext(), "user_status");
 
                     if (user.equals("exiting")) {
-
                         fragMove.product();
+                        //fragMove.seller();
                     }else if(user.equals("new")){
                         fragMove.seller();
 
