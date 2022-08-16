@@ -1,4 +1,4 @@
-package nithra.tamil.word.game.giftsuggestions.Fragment;
+package nithra.tamil.word.game.giftsuggestions.Otp;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,13 +12,10 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,7 +23,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -54,11 +51,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.tamil.word.game.giftsuggestions.MyProduct;
+import nithra.tamil.word.game.giftsuggestions.FragMove;
+import nithra.tamil.word.game.giftsuggestions.MainActivity;
 import nithra.tamil.word.game.giftsuggestions.R;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.Occasion;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
 import nithra.tamil.word.game.giftsuggestions.SharedPreference;
@@ -67,84 +63,95 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Product extends Fragment {
-    TextInputEditText productname, prod_prize, offer_prize, offer_percentage, prod_des;
-    TextView save;
-    Spinner spin_occaction, spin_gender;
-    TextView myproduct;
+public class ShopAdd extends AppCompatActivity {
+
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district;
+    TextView save, remove;
+    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude;
     ImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
-    String gift_name, gift_image, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
-    ArrayList<String> spin;
-    ArrayList<String> spin1;
-    ArrayList<GiftFor> giftfor;
-    ArrayList<Occasion> occasion;
-    ArrayList<AddGift> add_gift;
+    String pack = "nithra.tamil.word.game.giftsuggestions";
+
     Uri uri_1;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
 
-    public Product() {
-    }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.fragment_add);
 
-    }
+        sellername = findViewById(R.id.sellername);
+        shopname = findViewById(R.id.shopname);
+        shopaddress = findViewById(R.id.shopaddress);
+        mobilenumber = findViewById(R.id.mobilenumber);
+        city = findViewById(R.id.city);
+        state = findViewById(R.id.state);
+        country = findViewById(R.id.country);
+        save = findViewById(R.id.save);
+        remove = findViewById(R.id.remove);
+        IVPreviewImage = findViewById(R.id.IVPreviewImage);
+        latitude = findViewById(R.id.latitude);
+        longitude = findViewById(R.id.longitude);
+        pincode = findViewById(R.id.pincode);
+        pincode = findViewById(R.id.pincode);
+        district = findViewById(R.id.district);
+        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult();
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product, container, false);
-        productname = view.findViewById(R.id.productname);
-        spin_occaction = view.findViewById(R.id.spin_occaction);
-        spin_gender = view.findViewById(R.id.spin_gender);
-        prod_prize = view.findViewById(R.id.prod_prize);
-        offer_prize = view.findViewById(R.id.offer_prize);
-        offer_percentage = view.findViewById(R.id.offer_percentage);
-        prod_des = view.findViewById(R.id.prod_des);
-        save = view.findViewById(R.id.save);
-        myproduct = view.findViewById(R.id.myproduct);
-        IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
-        spin = new ArrayList<>();
-        spin1 = new ArrayList<>();
-        giftfor = new ArrayList<GiftFor>();
-        occasion = new ArrayList<Occasion>();
-        add_gift = new ArrayList<AddGift>();
-
-
-        gender_gift();
-        gift_occasion();
-
-        save.setOnClickListener(new View.OnClickListener() {
+            }
+        });
+        remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                gift_name = productname.getText().toString().trim();
-                gift_amount = offer_prize.getText().toString().trim();
-                discount = offer_percentage.getText().toString().trim();
-                total_amount = prod_prize.getText().toString().trim();
-                gift_description = prod_des.getText().toString().trim();
+                IVPreviewImage.setImageResource(R.drawable.logo_add);
+            }
+        });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sell_name = sellername.getText().toString().trim();
+                shop_name = shopname.getText().toString().trim();
+                shop_add = shopaddress.getText().toString().trim();
+                mob_num = mobilenumber.getText().toString().trim();
+                shop_city = city.getText().toString().trim();
+                shop_state = state.getText().toString().trim();
+                shop_country = country.getText().toString().trim();
+                shop_district = district.getText().toString().trim();
+                shop_pincode = pincode.getText().toString().trim();
+                shop_latitude = latitude.getText().toString().trim();
+                shop_longitude = longitude.getText().toString().trim();
 
-                if (gift_name.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Name...");
-                } else if (spin_occaction.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getContext(), "Please select Occasion...");
-                } else if (spin_gender.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getContext(), "Please select Gender...");
-                } else if (gift_amount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Prize...");
-                } else if (discount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Offer Percentage...");
-                } else if (total_amount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Offer Prize...");
-                } else if (gift_description.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Description...");
+
+                if (sell_name.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");
+                } else if (shop_name.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Shop address...");
+                } else if (mob_num.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Correct Mobile Number...");
+                } else if (shop_add.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
+                } else if (shop_pincode.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
+                } else if (shop_country.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
+                } else if (shop_state.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your state...");
+                } else if (shop_district.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your district...");
+                } else if (shop_city.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your city...");
+                } else if (shop_latitude.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your latitude...");
+                } else if (shop_longitude.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your longitude...");
                 } else {
-
                     submit_res();
 
                 }
@@ -153,25 +160,8 @@ public class Product extends Fragment {
             }
         });
 
-        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openSomeActivityForResult();
-
-
-            }
-        });
-        myproduct.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MyProduct.class);
-                startActivity(intent);
-            }
-        });
-        return view;
-
-
     }
+
 
     public void openSomeActivityForResult() {
         Intent intent = new Intent();
@@ -194,28 +184,31 @@ public class Product extends Fragment {
                 }
             });
 
-
     public void submit_res() {
         map1.clear();
         map2.clear();
-        map1.put("action", "add_gift");
-        map1.put("user_id", sharedPreference.getString(getContext(), "user_id"));
-        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()-1).getId());
-        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()-1).getId());
-        map1.put("gift_name", gift_name);
-        map1.put("gift_description", gift_description);
-        map1.put("gift_amount", gift_amount);
-        map1.put("discount", discount);
-        map1.put("total_amount", total_amount);
+        map1.put("action", "add_seller");
+        map1.put("user_id", sharedPreference.getString(ShopAdd.this, "user_id"));
+        map1.put("shop_name", shop_name);
+        map1.put("seller_mobile", mob_num);
+        map1.put("name", sell_name);
+        map1.put("country", shop_country);
+        map1.put("state", shop_state);
+        map1.put("address", shop_add);
+        map1.put("pincode", shop_pincode);
+        map1.put("latitude", shop_latitude);
+        map1.put("longitude", shop_longitude);
+        map1.put("district", shop_district);
+        map1.put("city", shop_city);
 
         File file = null;
         try {
-            file = getFile(requireActivity(), uri_1);
+            file = getFile(ShopAdd.this, uri_1);
             path = file.getPath().replace(file.getName(), "");
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("gift_image[]", "" + Uri.fromFile(file));
+            map2.put("logo",""+Uri.fromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -225,134 +218,9 @@ public class Product extends Fragment {
         System.out.println("print map2 : " + map2);
 
 
-       UploadAsync();
-
-
-    }
-
-
-    public void gender_gift() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "gift_for");
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<GiftFor>> call = retrofitAPI.gift_giftfor(map);
-        call.enqueue(new Callback<ArrayList<GiftFor>>() {
-            @Override
-            public void onResponse(Call<ArrayList<GiftFor>> call, Response<ArrayList<GiftFor>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    giftfor.addAll(response.body());
-                    spinner();
-                    //adapter.notifyDataSetChanged();
-                }
-                System.out.println("======response :" + response);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<GiftFor>> call, Throwable t) {
-                System.out.println("======response t:" + t);
-            }
-        });
-    }
-
-    public void spinner() {
-        spin.add(0, "All category");
-        for (int i = 0; i < giftfor.size(); i++) {
-            spin.add(giftfor.get(i).people);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_gender.setAdapter(adapter);
-        spin_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != 0) {
-                    gift_for = giftfor.get(i-1).people;
-                }
-               /* if (i == 0) {
-                    spin_gender.setEnabled(false);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spin_gender.setAdapter(adapter);
-                } else {
-                    spin_gender.setEnabled(true);
-                    spin.clear();
-                }*/
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        adapter.notifyDataSetChanged();
+        UploadAsync();
 
     }
-
-    public void gift_occasion() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "category");
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<Occasion>> call = retrofitAPI.gift_occasion(map);
-        call.enqueue(new Callback<ArrayList<Occasion>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Occasion>> call, Response<ArrayList<Occasion>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    occasion.addAll(response.body());
-                    spinner1();
-                    //adapter.notifyDataSetChanged();
-                }
-                System.out.println("======response :" + response);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<Occasion>> call, Throwable t) {
-                System.out.println("======response t:" + t);
-            }
-        });
-    }
-
-    public void spinner1() {
-        spin1.add(0, "All category");
-        for (int i = 0; i < occasion.size(); i++) {
-            spin1.add(occasion.get(i).category);
-        }
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin1);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin_occaction.setAdapter(adapter);
-        spin_occaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (i != 0) {
-                    gift_category = occasion.get(i-1).category;
-                }
-                /*if (i == 0) {
-
-                    spin_gender.setEnabled(false);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spin_gender.setAdapter(adapter);
-                } else {
-                    spin_gender.setEnabled(true);
-                    spin_1.clear();
-                    spinner_1(i);
-                }*/
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
-        adapter.notifyDataSetChanged();
-
-    }
-
 
     public static File getFile(Context context, Uri uri) throws IOException {
         String root = context.getFilesDir().getPath() + File.separatorChar + "Images";
@@ -398,7 +266,7 @@ public class Product extends Fragment {
 
 
     public void UploadAsync() {
-        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        ProgressDialog progressDialog = new ProgressDialog(ShopAdd.this);
         //progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Uploading... ");
         // progressDialog.setMax(100);
@@ -409,7 +277,7 @@ public class Product extends Fragment {
                 Runnable runnable = new Runnable() {
                     public void run() {
                         //post execute
-                        if (getContext() != null) {
+                        if (ShopAdd.this != null) {
                             System.out.println("====msg result : " + msg.obj.toString());
                             if (progressDialog.isShowing()) {
                                 progressDialog.dismiss();
@@ -435,27 +303,30 @@ public class Product extends Fragment {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-
-                                        spin_occaction.setSelection(0);
-                                        spin_gender.setSelection(0);
-                                        productname.getText().clear();
-                                        prod_prize.getText().clear();
-                                        offer_percentage.getText().clear();
-                                        offer_prize.getText().clear();
-                                        prod_des.getText().clear();
-
-                                        sharedPreference.putString(getContext(), "gift_id", "" + jsonObject.getString("id"));
-
-                                        Toast.makeText(getContext(), "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getContext(), MyProduct.class);
+                                        sellername.getText().clear();
+                                        shopname.getText().clear();
+                                        shopaddress.getText().clear();
+                                        mobilenumber.getText().clear();
+                                        city.getText().clear();
+                                        state.getText().clear();
+                                        country.getText().clear();
+                                        latitude.getText().clear();
+                                        longitude.getText().clear();
+                                        pincode.getText().clear();
+                                        district.getText().clear();
+                                        sharedPreference.putInt(ShopAdd.this, "yes", 1);
+                                        Toast.makeText(ShopAdd.this, "Your shop added successfully, Thank you", Toast.LENGTH_SHORT).show();
+                                        Intent i=new Intent(ShopAdd.this, ProductAdd.class);
                                         startActivity(i);
+                                        //fragMove.product();
+
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
 
                             } else {
-                                getActivity().runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
@@ -472,7 +343,7 @@ public class Product extends Fragment {
                         }
                     }
                 };
-                getActivity().runOnUiThread(runnable);
+                runOnUiThread(runnable);
             }
         };
         final Thread checkUpdate = new Thread() {
@@ -532,7 +403,7 @@ public class Product extends Fragment {
                                 //  System.out.println("===error path " + path);
                                 //file = new File(entry.getValue());
 
-                                file = new File(requireActivity().getFilesDir().getPath(), path + file_name);
+                                file = new File(getFilesDir().getPath(), path + file_name);
 
                                 fileHeader = TWOHYPEN + boundary + LINE_END
                                         + "Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + file.getName() + "\"" + LINE_END
@@ -579,7 +450,7 @@ public class Product extends Fragment {
                                     //  publishProgress(progress,(i + 1), filesAL.size());
                                     final long finalTotal = totalRead;
                                     final long finalFileLength = fileLength;
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
                                         public void run() {
                                             if (progressDialog != null && progressDialog.isShowing()) {
                                                 progressDialog.setMessage("Loading...");

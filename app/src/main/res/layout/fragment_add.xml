@@ -43,6 +43,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:text="Remove image"
+                android:visibility="gone"
                 android:textColor="@color/black" />
 
             <ImageView

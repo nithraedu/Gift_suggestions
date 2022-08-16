@@ -1,6 +1,7 @@
 package nithra.tamil.word.game.giftsuggestions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,6 +33,7 @@ import nithra.tamil.word.game.giftsuggestions.Fragment.Location;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Product;
 import nithra.tamil.word.game.giftsuggestions.Fragment.SendOTP;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Settings;
+import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener, FragMove {
     ViewPager2 viewpager2;
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
         pref = getSharedPreferences("register", Context.MODE_PRIVATE);
@@ -114,11 +115,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
 
                 if (sharedPreference.getInt(getApplicationContext(), "yes") == 0) {
-                    viewpager2.setCurrentItem(6, false);
+                    //viewpager2.setCurrentItem(6, false);
+                    Intent i=new Intent(MainActivity.this, OtpSend.class);
+                    startActivity(i);
 
                 } else {
-                    //viewpager2.setCurrentItem(5, false);
-                    viewpager2.setCurrentItem(2, false);
+                    Intent i=new Intent(MainActivity.this, MyProduct.class);
+                    startActivity(i);
+                    // viewpager2.setCurrentItem(5, false);
+                    //viewpager2.setCurrentItem(2, false);
                 }
 
                 home.setBackgroundResource(0);

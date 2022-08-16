@@ -237,64 +237,6 @@ public class Add extends Fragment {
 
         UploadAsync();
 
-
-        /*MultipartBody.Part filePart = null;
-        if (file != null) {
-            filePart = MultipartBody.Part.createFormData("logo", file.getName(), RequestBody.create(MediaType.parse("image/*"), file));
-        }
-
-        RequestBody action = RequestBody.create(MultipartBody.FORM, "add_seller");
-        RequestBody user_id = RequestBody.create(MultipartBody.FORM, sharedPreference.getString(getContext(), "user_id"));
-        RequestBody shopname = RequestBody.create(MultipartBody.FORM, shop_name);
-        RequestBody seller_mobile = RequestBody.create(MultipartBody.FORM, mob_num);
-        RequestBody name = RequestBody.create(MultipartBody.FORM, sell_name);
-        RequestBody state = RequestBody.create(MultipartBody.FORM, shop_state);
-        RequestBody address = RequestBody.create(MultipartBody.FORM, shop_add);
-        RequestBody pincode = RequestBody.create(MultipartBody.FORM, shop_pincode);
-        RequestBody latitude = RequestBody.create(MultipartBody.FORM, shop_latitude);
-        RequestBody longitude = RequestBody.create(MultipartBody.FORM, shop_longitude);
-        RequestBody district = RequestBody.create(MultipartBody.FORM, shop_district);
-        RequestBody city = RequestBody.create(MultipartBody.FORM, shop_city);
-
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<AddSeller>> call = retrofitAPI.add_seller(action, user_id, shopname, seller_mobile, name, state, address, pincode, latitude,
-                longitude, district, city,
-                filePart);
-        call.enqueue(new Callback<ArrayList<AddSeller>>() {
-            @Override
-            public void onResponse(Call<ArrayList<AddSeller>> call, Response<ArrayList<AddSeller>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    if (response.body().get(0).getStatus().equals("Success")) {
-                       *//* sellername.getText().clear();
-                        shopname.getText().clear();
-                        shopaddress.getText().clear();
-                        mobilenumber.getText().clear();
-                        city.getText().clear();
-                        state.getText().clear();
-                        country.getText().clear();
-                        latitude.getText().clear();
-                        longitude.getText().clear();
-                        pincode.getText().clear();
-                        district.getText().clear();*//*
-                        sharedPreference.putInt(getContext(), "yes", 1);
-                        Toast.makeText(getContext(), "Your shop added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                        fragMove.product();
-
-                    }
-
-                }
-                System.out.println("======response :" + response);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<AddSeller>> call, Throwable t) {
-                System.out.println("======response t:" + t);
-            }
-        });*/
-
-
     }
 
     public static File getFile(Context context, Uri uri) throws IOException {

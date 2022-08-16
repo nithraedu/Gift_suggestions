@@ -8,7 +8,6 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
-import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 
@@ -57,4 +56,12 @@ public interface RetrofitAPI {
     @FormUrlEncoded
     @POST("data.php")
     Call<ArrayList<GiftEdit>> edit_gift(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<SellerProfilePojo>> profile(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<GetGift>> getgift(@FieldMap HashMap<String, String> data);
 }

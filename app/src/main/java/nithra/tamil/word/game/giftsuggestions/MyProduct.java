@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,6 +24,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.tamil.word.game.giftsuggestions.Otp.ProductAdd;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
@@ -37,7 +39,7 @@ public class MyProduct extends AppCompatActivity {
     ImageView back;
     Bundle extra;
     String title;
-    TextView cat_title,profile_edit;
+    TextView cat_title,profile_edit,no_item;
     SharedPreference sharedPreference = new SharedPreference();
 
     @Override
@@ -51,11 +53,21 @@ public class MyProduct extends AppCompatActivity {
         profile_edit = findViewById(R.id.profile_edit);
         cat_title = findViewById(R.id.cat_title);
         back = findViewById(R.id.back);
+        no_item=findViewById(R.id.no_item);
+
+      /*  if (gift.size()==0){
+            list.setVisibility(View.GONE);
+            no_item.setVisibility(View.VISIBLE);
+        }else {
+            list.setVisibility(View.VISIBLE);
+            no_item.setVisibility(View.GONE);
+        }*/
+
 
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),ShopEdit.class);
+                Intent i=new Intent(MyProduct.this, ProductAdd.class);
                 startActivity(i);
             }
         });
@@ -79,6 +91,7 @@ public class MyProduct extends AppCompatActivity {
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "get_gift_list");
         map.put("user_id", sharedPreference.getString(this, "user_id"));
+
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
         Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
         call.enqueue(new Callback<ArrayList<GiftList>>() {
@@ -128,10 +141,11 @@ public class MyProduct extends AppCompatActivity {
             holder.gridText.setText(titles.get(position));*/
 
             holder.gridText.setText(gift.get(pos).getGiftName());
-            Glide.with(context).load(gift.get(position).getGiftImage())
-                    //.error(R.drawable.warning)
+            Glide.with(context).load(gift.get(pos).getGiftImage())
+                    //.error(R.drawable.gift_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
+            System.out.println("print_img "+gift.get(pos).getGiftImage());
 
             holder.edit_product.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -139,6 +153,15 @@ public class MyProduct extends AppCompatActivity {
                     //sharedPreference.getString(MyProduct.this, "gift_id");
                     Intent i=new Intent(getApplicationContext(),ProductEdit.class);
                     i.putExtra("id", gift.get(pos).getId());
+                    startActivity(i);
+                }
+            });
+            holder.category.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent i=new Intent(getApplicationContext(),ProductFullView.class);
+                    i.putExtra("id", gift.get(pos).getId());
+
                     startActivity(i);
                 }
             });
@@ -153,12 +176,14 @@ public class MyProduct extends AppCompatActivity {
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView img_slide, edit_product;
             TextView gridText;
+            CardView category;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 img_slide = itemView.findViewById(R.id.imageGrid);
                 gridText = itemView.findViewById(R.id.gridText);
                 edit_product = itemView.findViewById(R.id.edit_product);
+                category=itemView.findViewById(R.id.category);
             }
         }
     }

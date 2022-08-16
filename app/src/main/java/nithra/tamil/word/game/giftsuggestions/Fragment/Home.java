@@ -31,6 +31,7 @@ import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
 import nithra.tamil.word.game.giftsuggestions.MainActivity;
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
+import nithra.tamil.word.game.giftsuggestions.SellerProfile;
 
 public class Home extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
@@ -97,7 +98,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         notification.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getContext(), MyProduct.class);
+                Intent i=new Intent(getContext(), SellerProfile.class);
                 startActivity(i);
             }
         });

@@ -18,6 +18,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SellerProfile"
+            android:exported="false" />
+        <activity
+            android:name=".ProductFullView"
+            android:exported="false" />
+        <activity
             android:name=".ShopEdit"
             android:exported="false" />
         <activity
@@ -30,11 +36,15 @@
             android:name=".ActivitySecond"
             android:exported="false" />
         <activity
-            android:name=".ShopAdd"
+            android:name=".Otp.ShopAdd"
             android:exported="false" />
         <activity
-            android:name=".ProductAdd"
+            android:name=".Otp.ProductAdd"
             android:exported="false" />
+        <activity android:name=".Otp.OtpVerify"
+            android:exported="false"/>
+        <activity android:name=".Otp.OtpSend"
+            android:exported="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -48,7 +58,6 @@
             </intent-filter>
         </activity>
 
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"
@@ -58,7 +67,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths_new" />
         </provider>
-
     </application>
 
 </manifest>

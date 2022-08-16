@@ -1,5 +1,6 @@
 package nithra.tamil.word.game.giftsuggestions;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -18,6 +19,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -96,6 +101,15 @@ public class ShopEdit extends AppCompatActivity {
 
         shopedit();
 
+
+        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult();
+
+            }
+        });
+
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -145,6 +159,27 @@ public class ShopEdit extends AppCompatActivity {
 
     }
 
+    public void openSomeActivityForResult() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher1.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher1 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        IVPreviewImage.setImageURI(data.getData());
+                        uri_1 = data.getData();
+                    }
+                }
+            });
+
     public void submit_res() {
         map1.clear();
         map2.clear();
@@ -169,7 +204,7 @@ public class ShopEdit extends AppCompatActivity {
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("logo",""+ Uri.fromFile(file));
+            map2.put("logo[]",""+ Uri.fromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -278,8 +313,9 @@ public class ShopEdit extends AppCompatActivity {
                                         district.getText().clear();
                                         sharedPreference.putInt(getApplicationContext(), "yes", 1);
                                         Toast.makeText(getApplicationContext(), "Your shop Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i =new Intent(ShopEdit.this,MyProduct.class);
-                                        startActivity(i);
+                                        finish();
+                                        /*Intent i =new Intent(ShopEdit.this,MyProduct.class);
+                                        startActivity(i);*/
 
                                     }
                                 } catch (JSONException e) {

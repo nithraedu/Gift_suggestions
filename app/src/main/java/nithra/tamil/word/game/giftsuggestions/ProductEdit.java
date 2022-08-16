@@ -56,6 +56,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
+import nithra.tamil.word.game.giftsuggestions.Otp.ProductAdd;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Occasion;
@@ -86,6 +88,7 @@ public class ProductEdit extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -182,10 +185,10 @@ public class ProductEdit extends AppCompatActivity {
         map2.clear();
         map1.put("action", "add_gift");
         map1.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
-        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()).getId());
-        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()).getId());
+        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()-1).getId());
+        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()-1).getId());
         map1.put("gift_name", gift_name);
-        map1.put("id", sharedPreference.getString(getApplicationContext(), "gift_id"));
+        map1.put("id", id_gift);
         map1.put("gift_description", gift_description);
         map1.put("gift_amount", gift_amount);
         map1.put("discount", discount);
@@ -198,7 +201,7 @@ public class ProductEdit extends AppCompatActivity {
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("gift_image", "" + Uri.fromFile(file));
+            map2.put("gift_image[0]", "" + Uri.fromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -214,9 +217,11 @@ public class ProductEdit extends AppCompatActivity {
 
     public void giftedit() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("action", "add_gift");
-        map.put("user_id", sharedPreference.getString(this, "user_id"));
+        map.put("action", "get_gift");
+        //map.put("user_id", sharedPreference.getString(this, "user_id"));
         map.put("id", id_gift);
+        System.out.println("idddd"+id_gift);
+        System.out.println("printmap"+map);
 
         System.out.println("print_map " + map);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
@@ -229,8 +234,10 @@ public class ProductEdit extends AppCompatActivity {
                     System.out.println("======response result:" + result);
                     if (response.body().get(0).getStatus().equals("Success")) {
                         list_gift.addAll(response.body());
+
                         gender_gift();
                         gift_occasion();
+
                         Glide.with(getApplicationContext()).load(list_gift.get(0).getGiftImage())
                                 //.error(R.drawable.warning)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -240,6 +247,24 @@ public class ProductEdit extends AppCompatActivity {
                         offer_prize.setText(list_gift.get(0).getGiftAmount());
                         offer_percentage.setText(list_gift.get(0).getDiscount());
                         prod_des.setText(list_gift.get(0).getGiftDescription());
+                        System.out.println("======response_check :" );
+
+                       /* for (int i = 0; i < list_gift.size(); i++) {
+                            for (int j=0;j<occasion.size();j++) {
+                                if (occasion.get(j).getId() == list_gift.get(i).getId()) {
+                                    spin_occaction.setSelection(j);
+                                }
+                            }
+                        }
+
+                        for (int i = 0; i < list_gift.size(); i++) {
+                            for (int j=0;j<giftfor.size();j++) {
+                                if (giftfor.get(j).getId() == list_gift.get(i).getId()) {
+                                    spin_gender.setSelection(j);
+                                }
+                            }
+                        }
+*/
                         //spin_occaction.setSelection(Integer.parseInt(occasion.get(0).getCategory()));
                         //spin_gender.setSelection(Integer.parseInt(list_gift.get(0).getGiftFor()));
 
@@ -268,7 +293,15 @@ public class ProductEdit extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     giftfor.addAll(response.body());
+
                     spinner();
+                    for (int i = 0; i < list_gift.size(); i++) {
+                        for (int j=0;j<giftfor.size();j++) {
+                            if (giftfor.get(j).getId().equals(list_gift.get(i).getGiftFor()) ) {
+                                spin_gender.setSelection(j+1);
+                            }
+                        }
+                    }
                     //adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
@@ -294,7 +327,7 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_for = giftfor.get(i).people;
+                    gift_for = giftfor.get(i-1).people;
                 }
                /* if (i == 0) {
                     spin_gender.setEnabled(false);
@@ -328,7 +361,23 @@ public class ProductEdit extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     occasion.addAll(response.body());
+                    System.out.println("check size"+list_gift.size());
+
                     spinner1();
+                    for (int i = 0; i < list_gift.size(); i++) {
+
+                        System.out.println("check loop1");
+                        for (int j=0;j<occasion.size();j++) {
+                            System.out.println("check loop2");
+                            System.out.println("check id" +occasion.get(j).getId() + "=="+list_gift.get(i).getGiftCategory() );
+
+                            if (occasion.get(j).getId().equals(list_gift.get(i).getGiftCategory()) ) {
+                                System.out.println("check loop3");
+                                System.out.println("check cat" +occasion.get(j).getCategory());
+                                spin_occaction.setSelection(j+1);
+                            }
+                        }
+                    }
                     //adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
@@ -354,7 +403,7 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_category = occasion.get(i).category;
+                    gift_category = occasion.get(i-1).category;
                 }
                 /*if (i == 0) {
 
@@ -468,7 +517,7 @@ public class ProductEdit extends AppCompatActivity {
                                         offer_prize.getText().clear();
                                         prod_des.getText().clear();
 
-                                        Toast.makeText(getApplicationContext(), "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getApplicationContext(), "Your product Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(getApplicationContext(), MyProduct.class);
                                         startActivity(i);
                                     }
@@ -666,5 +715,8 @@ public class ProductEdit extends AppCompatActivity {
         checkUpdate.start();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        finish();
+    }
 }

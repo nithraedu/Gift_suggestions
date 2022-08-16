@@ -1,4 +1,4 @@
-package nithra.tamil.word.game.giftsuggestions.Fragment;
+package nithra.tamil.word.game.giftsuggestions.Otp;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -12,9 +12,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.provider.OpenableColumns;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -26,7 +26,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.gson.Gson;
@@ -57,6 +57,7 @@ import java.util.Map;
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Occasion;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
@@ -67,7 +68,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class Product extends Fragment {
+public class ProductAdd extends AppCompatActivity {
+
     TextInputEditText productname, prod_prize, offer_prize, offer_percentage, prod_des;
     TextView save;
     Spinner spin_occaction, spin_gender;
@@ -86,30 +88,22 @@ public class Product extends Fragment {
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
 
-    public Product() {
-    }
 
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_product, container, false);
-        productname = view.findViewById(R.id.productname);
-        spin_occaction = view.findViewById(R.id.spin_occaction);
-        spin_gender = view.findViewById(R.id.spin_gender);
-        prod_prize = view.findViewById(R.id.prod_prize);
-        offer_prize = view.findViewById(R.id.offer_prize);
-        offer_percentage = view.findViewById(R.id.offer_percentage);
-        prod_des = view.findViewById(R.id.prod_des);
-        save = view.findViewById(R.id.save);
-        myproduct = view.findViewById(R.id.myproduct);
-        IVPreviewImage = view.findViewById(R.id.IVPreviewImage);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.fragment_product);
+        productname = findViewById(R.id.productname);
+        spin_occaction = findViewById(R.id.spin_occaction);
+        spin_gender = findViewById(R.id.spin_gender);
+        prod_prize = findViewById(R.id.prod_prize);
+        offer_prize = findViewById(R.id.offer_prize);
+        offer_percentage = findViewById(R.id.offer_percentage);
+        prod_des = findViewById(R.id.prod_des);
+        save = findViewById(R.id.save);
+        myproduct = findViewById(R.id.myproduct);
+        IVPreviewImage = findViewById(R.id.IVPreviewImage);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
         giftfor = new ArrayList<GiftFor>();
@@ -130,19 +124,19 @@ public class Product extends Fragment {
                 gift_description = prod_des.getText().toString().trim();
 
                 if (gift_name.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Name...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Name...");
                 } else if (spin_occaction.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getContext(), "Please select Occasion...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please select Occasion...");
                 } else if (spin_gender.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getContext(), "Please select Gender...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please select Gender...");
                 } else if (gift_amount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Prize...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Prize...");
                 } else if (discount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Offer Percentage...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (total_amount.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Offer Prize...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Prize...");
                 } else if (gift_description.equals("")) {
-                    Utils_Class.toast_center(getContext(), "Please Enter Product Description...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Description...");
                 } else {
 
                     submit_res();
@@ -164,14 +158,13 @@ public class Product extends Fragment {
         myproduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), MyProduct.class);
+                Intent intent = new Intent(ProductAdd.this, MyProduct.class);
                 startActivity(intent);
             }
         });
-        return view;
-
 
     }
+
 
     public void openSomeActivityForResult() {
         Intent intent = new Intent();
@@ -199,7 +192,7 @@ public class Product extends Fragment {
         map1.clear();
         map2.clear();
         map1.put("action", "add_gift");
-        map1.put("user_id", sharedPreference.getString(getContext(), "user_id"));
+        map1.put("user_id", sharedPreference.getString(ProductAdd.this, "user_id"));
         map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()-1).getId());
         map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()-1).getId());
         map1.put("gift_name", gift_name);
@@ -210,7 +203,7 @@ public class Product extends Fragment {
 
         File file = null;
         try {
-            file = getFile(requireActivity(), uri_1);
+            file = getFile(ProductAdd.this, uri_1);
             path = file.getPath().replace(file.getName(), "");
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
@@ -225,7 +218,7 @@ public class Product extends Fragment {
         System.out.println("print map2 : " + map2);
 
 
-       UploadAsync();
+        UploadAsync();
 
 
     }
@@ -262,7 +255,7 @@ public class Product extends Fragment {
             spin.add(giftfor.get(i).people);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ProductAdd.this, android.R.layout.simple_spinner_item, spin);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_gender.setAdapter(adapter);
         spin_gender.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -273,7 +266,7 @@ public class Product extends Fragment {
                 }
                /* if (i == 0) {
                     spin_gender.setEnabled(false);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ProductAdd.this, android.R.layout.simple_spinner_item, spin_1);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spin_gender.setAdapter(adapter);
                 } else {
@@ -322,7 +315,7 @@ public class Product extends Fragment {
             spin1.add(occasion.get(i).category);
         }
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin1);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ProductAdd.this, android.R.layout.simple_spinner_item, spin1);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_occaction.setAdapter(adapter);
         spin_occaction.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -334,7 +327,7 @@ public class Product extends Fragment {
                 /*if (i == 0) {
 
                     spin_gender.setEnabled(false);
-                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
+                    ArrayAdapter<String> adapter = new ArrayAdapter<String>(ProductAdd.this, android.R.layout.simple_spinner_item, spin_1);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spin_gender.setAdapter(adapter);
                 } else {
@@ -398,7 +391,7 @@ public class Product extends Fragment {
 
 
     public void UploadAsync() {
-        ProgressDialog progressDialog = new ProgressDialog(getContext());
+        ProgressDialog progressDialog = new ProgressDialog(ProductAdd.this);
         //progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.setMessage("Uploading... ");
         // progressDialog.setMax(100);
@@ -409,7 +402,7 @@ public class Product extends Fragment {
                 Runnable runnable = new Runnable() {
                     public void run() {
                         //post execute
-                        if (getContext() != null) {
+                        if (ProductAdd.this != null) {
                             System.out.println("====msg result : " + msg.obj.toString());
                             if (progressDialog.isShowing()) {
                                 progressDialog.dismiss();
@@ -444,10 +437,10 @@ public class Product extends Fragment {
                                         offer_prize.getText().clear();
                                         prod_des.getText().clear();
 
-                                        sharedPreference.putString(getContext(), "gift_id", "" + jsonObject.getString("id"));
+                                        sharedPreference.putString(ProductAdd.this, "gift_id", "" + jsonObject.getString("id"));
 
-                                        Toast.makeText(getContext(), "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getContext(), MyProduct.class);
+                                        Toast.makeText(ProductAdd.this, "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
+                                        Intent i = new Intent(ProductAdd.this, MyProduct.class);
                                         startActivity(i);
                                     }
                                 } catch (JSONException e) {
@@ -455,7 +448,7 @@ public class Product extends Fragment {
                                 }
 
                             } else {
-                                getActivity().runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
                                         try {
@@ -472,7 +465,7 @@ public class Product extends Fragment {
                         }
                     }
                 };
-                getActivity().runOnUiThread(runnable);
+                runOnUiThread(runnable);
             }
         };
         final Thread checkUpdate = new Thread() {
@@ -532,7 +525,7 @@ public class Product extends Fragment {
                                 //  System.out.println("===error path " + path);
                                 //file = new File(entry.getValue());
 
-                                file = new File(requireActivity().getFilesDir().getPath(), path + file_name);
+                                file = new File(getFilesDir().getPath(), path + file_name);
 
                                 fileHeader = TWOHYPEN + boundary + LINE_END
                                         + "Content-Disposition: form-data; name=\"" + entry.getKey() + "\"; filename=\"" + file.getName() + "\"" + LINE_END
@@ -579,7 +572,7 @@ public class Product extends Fragment {
                                     //  publishProgress(progress,(i + 1), filesAL.size());
                                     final long finalTotal = totalRead;
                                     final long finalFileLength = fileLength;
-                                    getActivity().runOnUiThread(new Runnable() {
+                                    runOnUiThread(new Runnable() {
                                         public void run() {
                                             if (progressDialog != null && progressDialog.isShowing()) {
                                                 progressDialog.setMessage("Loading...");
