@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -33,6 +34,8 @@ public class ProductFullView extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
+    ImageView back;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +54,13 @@ public class ProductFullView extends AppCompatActivity {
         intent = getIntent();
         extra = intent.getExtras();
         id_gift = extra.getString("id");
+        back = findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
 
         category();

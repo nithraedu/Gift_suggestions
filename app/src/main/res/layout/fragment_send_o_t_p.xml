@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.SendOTP">
+    tools:context=".Otp.OtpSend">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -64,6 +64,7 @@
                     android:background="@drawable/background4"
                     android:hint="Name"
                     android:maxLines="1"
+                    android:inputType="textCapSentences"
                     android:textCursorDrawable="@null"
                     android:layout_marginTop="20dp"
                     android:padding="10dp"/>
@@ -75,6 +76,7 @@
                     android:background="@drawable/background4"
                     android:hint="Gmail"
                     android:maxLines="1"
+                    android:inputType="textCapSentences"
                     android:textCursorDrawable="@null"
                     android:layout_marginTop="20dp"
                     android:padding="10dp"/>

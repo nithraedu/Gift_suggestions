@@ -29,6 +29,7 @@ public class SellerProfile extends AppCompatActivity {
     ImageView IVPreviewImage;
     TextView giftname, giftcategory, giftgender, giftprize, offerprize, offerpercen, description, city,profile_edit;
     SharedPreference sharedPreference = new SharedPreference();
+    ImageView back;
 
 
     @Override
@@ -49,8 +50,15 @@ public class SellerProfile extends AppCompatActivity {
         description = findViewById(R.id.description);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         profile_edit = findViewById(R.id.profile_edit);
-
         city = findViewById(R.id.city);
+        back = findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

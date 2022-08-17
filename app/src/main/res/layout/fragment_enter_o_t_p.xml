@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Fragment.SendOTP">
+    tools:context=".Otp.OtpVerify">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -54,6 +54,16 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
+                    android:text="OTP sent to your mail_id"
+                    android:textColor="@color/red"
+                    android:textSize="18dp"
+                    android:textStyle="bold"  />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"
                     android:text="Enter OTP you Received"
                     android:textSize="25dp" />
 

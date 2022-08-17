@@ -74,6 +74,7 @@ public class ShopEdit extends AppCompatActivity {
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
+    ImageView back;
 
 
     @Override
@@ -98,6 +99,15 @@ public class ShopEdit extends AppCompatActivity {
         pincode = findViewById(R.id.pincode);
         district = findViewById(R.id.district);
         list_shop = new ArrayList<GiftEdit>();
+
+        back = findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         shopedit();
 
@@ -311,7 +321,7 @@ public class ShopEdit extends AppCompatActivity {
                                         longitude.getText().clear();
                                         pincode.getText().clear();
                                         district.getText().clear();
-                                        sharedPreference.putInt(getApplicationContext(), "yes", 1);
+                                        //sharedPreference.putInt(getApplicationContext(), "yes", 1);
                                         Toast.makeText(getApplicationContext(), "Your shop Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
                                         finish();
                                         /*Intent i =new Intent(ShopEdit.this,MyProduct.class);

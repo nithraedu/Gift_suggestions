@@ -1,3 +1,4 @@
+/*
 package nithra.tamil.word.game.giftsuggestions.Fragment;
 
 import android.os.Bundle;
@@ -184,4 +185,4 @@ public class EnterOTP extends Fragment {
     }
 
 
-}
+}*/

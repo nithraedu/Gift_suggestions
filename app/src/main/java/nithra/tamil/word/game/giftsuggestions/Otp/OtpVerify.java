@@ -119,11 +119,12 @@ public class OtpVerify extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     sharedPreference.putInt(OtpVerify.this, "yes", 1);
+                    sharedPreference.putInt(OtpVerify.this, "profile", 1);
                     enter_otp.getText().clear();
                     String user=sharedPreference.getString(OtpVerify.this, "user_status");
 
                     if (user.equals("exiting")) {
-
+                        sharedPreference.putInt(OtpVerify.this, "profile", 2);
                         Intent i=new Intent(OtpVerify.this, MyProduct.class);
                         startActivity(i);
                         finish();

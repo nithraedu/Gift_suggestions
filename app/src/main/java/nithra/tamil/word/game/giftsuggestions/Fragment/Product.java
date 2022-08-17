@@ -1,3 +1,4 @@
+/*
 package nithra.tamil.word.game.giftsuggestions.Fragment;
 
 import android.app.Activity;
@@ -257,7 +258,7 @@ public class Product extends Fragment {
     }
 
     public void spinner() {
-        spin.add(0, "All category");
+        spin.add(0, "Select category");
         for (int i = 0; i < giftfor.size(); i++) {
             spin.add(giftfor.get(i).people);
         }
@@ -271,7 +272,8 @@ public class Product extends Fragment {
                 if (i != 0) {
                     gift_for = giftfor.get(i-1).people;
                 }
-               /* if (i == 0) {
+               */
+/* if (i == 0) {
                     spin_gender.setEnabled(false);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -279,7 +281,8 @@ public class Product extends Fragment {
                 } else {
                     spin_gender.setEnabled(true);
                     spin.clear();
-                }*/
+                }*//*
+
             }
 
             @Override
@@ -317,7 +320,7 @@ public class Product extends Fragment {
     }
 
     public void spinner1() {
-        spin1.add(0, "All category");
+        spin1.add(0, "Select category");
         for (int i = 0; i < occasion.size(); i++) {
             spin1.add(occasion.get(i).category);
         }
@@ -331,7 +334,8 @@ public class Product extends Fragment {
                 if (i != 0) {
                     gift_category = occasion.get(i-1).category;
                 }
-                /*if (i == 0) {
+                */
+/*if (i == 0) {
 
                     spin_gender.setEnabled(false);
                     ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_spinner_item, spin_1);
@@ -341,7 +345,8 @@ public class Product extends Fragment {
                     spin_gender.setEnabled(true);
                     spin_1.clear();
                     spinner_1(i);
-                }*/
+                }*//*
+
             }
 
             @Override
@@ -644,4 +649,4 @@ public class Product extends Fragment {
         checkUpdate.start();
     }
 
-}
+}*/

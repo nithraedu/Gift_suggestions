@@ -1,8 +1,11 @@
 package nithra.tamil.word.game.giftsuggestions.Otp;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -51,13 +54,15 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Occasion;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
@@ -75,9 +80,8 @@ public class ProductAdd extends AppCompatActivity {
     Spinner spin_occaction, spin_gender;
     TextView myproduct;
     ImageView IVPreviewImage;
-    int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
-    String gift_name, gift_image, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
+    String gift_name, gift_occasion,gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
     ArrayList<String> spin;
     ArrayList<String> spin1;
     ArrayList<GiftFor> giftfor;
@@ -87,6 +91,18 @@ public class ProductAdd extends AppCompatActivity {
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
+    ImageView back;
+
+
+    TextView textView,textView1;
+    boolean[] selectedLanguage;
+    boolean[] selectedLanguage1;
+    String[] cat;
+    String[] cat_id;
+    String[] cat1;
+    String[] cat_id1;
+    ArrayList<Integer> langList = new ArrayList<>();
+    ArrayList<Integer> langList1 = new ArrayList<>();
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,25 +125,175 @@ public class ProductAdd extends AppCompatActivity {
         giftfor = new ArrayList<GiftFor>();
         occasion = new ArrayList<Occasion>();
         add_gift = new ArrayList<AddGift>();
+        back = findViewById(R.id.back);
+        textView = findViewById(R.id.textView);
+        textView1 = findViewById(R.id.textView1);
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         gender_gift();
         gift_occasion();
+
+        //textview
+
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                for (int i = 0; i < occasion.size(); i++) {
+                    cat[i] = occasion.get(i).getCategory();
+                    cat_id[i] = occasion.get(i).getId();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductAdd.this);
+
+                builder.setTitle("Select Category");
+
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(cat, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+                            selectedLanguage[i] = true;
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder id = new StringBuilder();
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(cat[langList.get(j)]);
+                            id.append(cat_id[langList.get(j)]);
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                                id.append(",");
+                            }
+                        }
+                       // langList.clear();
+                        textView.setText(stringBuilder.toString());
+                        textView.setTag(id.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (int j = 0; j < selectedLanguage.length; j++) {
+                            selectedLanguage[j] = false;
+                            langList.clear();
+                            textView.setText("");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        textView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                for (int i = 0; i < giftfor.size(); i++) {
+                    cat1[i] = giftfor.get(i).getPeople();
+                    cat_id1[i] = giftfor.get(i).getId();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductAdd.this);
+
+                builder.setTitle("Select Gender");
+
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(cat1, selectedLanguage1, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+                            selectedLanguage1[i] = true;
+                            langList1.add(i);
+                            Collections.sort(langList1);
+                        } else {
+                            langList1.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder id = new StringBuilder();
+                        for (int j = 0; j < langList1.size(); j++) {
+                            stringBuilder.append(cat1[langList1.get(j)]);
+                            id.append(cat_id1[langList1.get(j)]);
+                            if (j != langList1.size() - 1) {
+                                stringBuilder.append(", ");
+                                id.append(",");
+                            }
+                        }
+                        // langList1.clear();
+                        textView1.setText(stringBuilder.toString());
+                        textView1.setTag(id.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (int j = 0; j < selectedLanguage1.length; j++) {
+                            selectedLanguage1[j] = false;
+                            langList1.clear();
+                            textView1.setText("");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 gift_name = productname.getText().toString().trim();
+                gift_occasion=textView.getTag().toString().trim();
+                gift_gender=textView1.getTag().toString().trim();
                 gift_amount = offer_prize.getText().toString().trim();
                 discount = offer_percentage.getText().toString().trim();
                 total_amount = prod_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
-
-                if (gift_name.equals("")) {
+                if (uri_1 == null) {
+                    Utils_Class.toast_center(ProductAdd.this, "Please set Product image ...");
+                } else if (gift_name.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Name...");
-                } else if (spin_occaction.getSelectedItemPosition() == 0) {
+                } /*else if (spin_occaction.getSelectedItemPosition() == 0) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Occasion...");
-                } else if (spin_gender.getSelectedItemPosition() == 0) {
+                } */else if (spin_gender.getSelectedItemPosition() == 0) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Gender...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Prize...");
@@ -193,8 +359,10 @@ public class ProductAdd extends AppCompatActivity {
         map2.clear();
         map1.put("action", "add_gift");
         map1.put("user_id", sharedPreference.getString(ProductAdd.this, "user_id"));
-        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()-1).getId());
-        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()-1).getId());
+       // map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
+        map1.put("gift_category", gift_occasion);
+        //map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition() - 1).getId());
+        map1.put("gift_for", gift_gender);
         map1.put("gift_name", gift_name);
         map1.put("gift_description", gift_description);
         map1.put("gift_amount", gift_amount);
@@ -236,8 +404,11 @@ public class ProductAdd extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     giftfor.addAll(response.body());
-                    spinner();
+                    //spinner();
                     //adapter.notifyDataSetChanged();
+                    cat1 = new String[giftfor.size()];
+                    cat_id1 = new String[giftfor.size()];
+                    selectedLanguage1 = new boolean[giftfor.size()];
                 }
                 System.out.println("======response :" + response);
             }
@@ -250,7 +421,7 @@ public class ProductAdd extends AppCompatActivity {
     }
 
     public void spinner() {
-        spin.add(0, "All category");
+        spin.add(0, "Select category");
         for (int i = 0; i < giftfor.size(); i++) {
             spin.add(giftfor.get(i).people);
         }
@@ -262,7 +433,7 @@ public class ProductAdd extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_for = giftfor.get(i-1).people;
+                    gift_for = giftfor.get(i - 1).people;
                 }
                /* if (i == 0) {
                     spin_gender.setEnabled(false);
@@ -296,8 +467,13 @@ public class ProductAdd extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     occasion.addAll(response.body());
-                    spinner1();
+                    //spinner1();
                     //adapter.notifyDataSetChanged();
+
+                    cat = new String[occasion.size()];
+                    cat_id = new String[occasion.size()];
+                    selectedLanguage = new boolean[occasion.size()];
+
                 }
                 System.out.println("======response :" + response);
             }
@@ -310,7 +486,7 @@ public class ProductAdd extends AppCompatActivity {
     }
 
     public void spinner1() {
-        spin1.add(0, "All category");
+        spin1.add(0, "Select category");
         for (int i = 0; i < occasion.size(); i++) {
             spin1.add(occasion.get(i).category);
         }
@@ -322,7 +498,7 @@ public class ProductAdd extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_category = occasion.get(i-1).category;
+                    gift_category = occasion.get(i - 1).category;
                 }
                 /*if (i == 0) {
 
@@ -428,7 +604,7 @@ public class ProductAdd extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-
+                                        IVPreviewImage.setImageResource(R.drawable.logo_add);
                                         spin_occaction.setSelection(0);
                                         spin_gender.setSelection(0);
                                         productname.getText().clear();

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,12 +20,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import nithra.tamil.word.game.giftsuggestions.Otp.ProductAdd;
+import nithra.tamil.word.game.giftsuggestions.Otp.ShopAdd;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
@@ -39,8 +42,11 @@ public class MyProduct extends AppCompatActivity {
     ImageView back;
     Bundle extra;
     String title;
-    TextView cat_title,profile_edit,no_item;
+    TextView cat_title;
     SharedPreference sharedPreference = new SharedPreference();
+    ImageView profile_edit;
+    LinearLayout no_item;
+    FloatingActionButton add;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +59,37 @@ public class MyProduct extends AppCompatActivity {
         profile_edit = findViewById(R.id.profile_edit);
         cat_title = findViewById(R.id.cat_title);
         back = findViewById(R.id.back);
-        no_item=findViewById(R.id.no_item);
-
-      /*  if (gift.size()==0){
-            list.setVisibility(View.GONE);
-            no_item.setVisibility(View.VISIBLE);
-        }else {
-            list.setVisibility(View.VISIBLE);
-            no_item.setVisibility(View.GONE);
-        }*/
+        no_item = findViewById(R.id.no_item);
+        add=findViewById(R.id.add);
 
 
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(MyProduct.this, ProductAdd.class);
-                startActivity(i);
+                if (sharedPreference.getInt(MyProduct.this, "profile") == 1) {
+                    Intent i = new Intent(MyProduct.this, ShopAdd.class);
+                    startActivity(i);
+                } else if (sharedPreference.getInt(MyProduct.this, "profile") == 2) {
+                    Intent i = new Intent(MyProduct.this, ProductAdd.class);
+                    startActivity(i);
+                }
             }
         });
+
+
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sharedPreference.getInt(MyProduct.this, "profile") == 1) {
+                    Intent i = new Intent(MyProduct.this, ShopAdd.class);
+                    startActivity(i);
+                } else if (sharedPreference.getInt(MyProduct.this, "profile") == 2) {
+                    Intent i = new Intent(MyProduct.this, ProductAdd.class);
+                    startActivity(i);
+                }
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,8 +119,21 @@ public class MyProduct extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
-                    gift.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    if (response.body().get(0).getStatus().equals("Success")) {
+
+                        gift.addAll(response.body());
+                        System.out.println("print_size==" + gift.size());
+
+
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (gift.size() == 0) {
+                        list.setVisibility(View.GONE);
+                        no_item.setVisibility(View.VISIBLE);
+                    } else {
+                        list.setVisibility(View.VISIBLE);
+                        no_item.setVisibility(View.GONE);
+                    }
                 }
                 System.out.println("======response :" + response);
             }
@@ -145,13 +177,13 @@ public class MyProduct extends AppCompatActivity {
                     //.error(R.drawable.gift_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
-            System.out.println("print_img "+gift.get(pos).getGiftImage());
+            System.out.println("print_img " + gift.get(pos).getGiftImage());
 
             holder.edit_product.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     //sharedPreference.getString(MyProduct.this, "gift_id");
-                    Intent i=new Intent(getApplicationContext(),ProductEdit.class);
+                    Intent i = new Intent(getApplicationContext(), ProductEdit.class);
                     i.putExtra("id", gift.get(pos).getId());
                     startActivity(i);
                 }
@@ -159,7 +191,7 @@ public class MyProduct extends AppCompatActivity {
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i=new Intent(getApplicationContext(),ProductFullView.class);
+                    Intent i = new Intent(getApplicationContext(), ProductFullView.class);
                     i.putExtra("id", gift.get(pos).getId());
 
                     startActivity(i);
@@ -183,7 +215,7 @@ public class MyProduct extends AppCompatActivity {
                 img_slide = itemView.findViewById(R.id.imageGrid);
                 gridText = itemView.findViewById(R.id.gridText);
                 edit_product = itemView.findViewById(R.id.edit_product);
-                category=itemView.findViewById(R.id.category);
+                category = itemView.findViewById(R.id.category);
             }
         }
     }

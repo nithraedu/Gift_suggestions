@@ -1,3 +1,4 @@
+/*
 package nithra.tamil.word.game.giftsuggestions.Fragment;
 
 import android.content.Context;
@@ -93,12 +94,14 @@ public class SendOTP extends Fragment {
             @Override
             public void onResponse(Call<ArrayList<SendOtppojo>> call, Response<ArrayList<SendOtppojo>> response) {
                 if (response.isSuccessful()) {
-                   /* String result = new Gson().toJson(response.body());
+                   */
+/* String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     send_otp.addAll(response.body());
                     name.getText().clear();
                     gmail.getText().clear();
-                    fragMove.enterotp();*/
+                    fragMove.enterotp();*//*
+
 
                     if (response.body().get(0).getStatus().equals("Success")) {
                         if (name_otp.equals("")) {
@@ -135,4 +138,4 @@ public class SendOTP extends Fragment {
 
     }
 
-}
+}*/

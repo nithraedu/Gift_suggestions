@@ -1,3 +1,4 @@
+/*
 package nithra.tamil.word.game.giftsuggestions.Fragment;
 
 import static android.app.Activity.RESULT_OK;
@@ -530,4 +531,4 @@ public class Add extends Fragment {
         checkUpdate.start();
     }
 
-}
+}*/

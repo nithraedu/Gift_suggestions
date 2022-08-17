@@ -25,13 +25,10 @@ import com.google.android.material.shape.MaterialShapeDrawable;
 
 import java.util.ArrayList;
 
-import nithra.tamil.word.game.giftsuggestions.Fragment.Add;
-import nithra.tamil.word.game.giftsuggestions.Fragment.EnterOTP;
+
 import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Home;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Location;
-import nithra.tamil.word.game.giftsuggestions.Fragment.Product;
-import nithra.tamil.word.game.giftsuggestions.Fragment.SendOTP;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Settings;
 import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
 
@@ -65,12 +62,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         frag_adapter = new Frag_Adapter(this);
         frag_adapter.addFragment(new Home());
         frag_adapter.addFragment(new Favourite());
-        frag_adapter.addFragment(new Add());
+        //frag_adapter.addFragment(new Add());
         frag_adapter.addFragment(new Location());
         frag_adapter.addFragment(new Settings());
-        frag_adapter.addFragment(new Product());
+        /*frag_adapter.addFragment(new Product());
         frag_adapter.addFragment(new SendOTP());
-        frag_adapter.addFragment(new EnterOTP());
+        frag_adapter.addFragment(new EnterOTP());*/
         bottomAppBar = findViewById(R.id.bottomAppBar);
 
         MaterialShapeDrawable bottomBarBackground = (MaterialShapeDrawable) bottomAppBar.getBackground();
@@ -163,8 +160,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void onBackPressed() {
-        bottomAppBar.setVisibility(View.VISIBLE);
-        add_shop.setVisibility(View.VISIBLE);
+
 
         if (viewpager2.getCurrentItem() == 1) {
             viewpager2.setCurrentItem(0, false);
@@ -172,13 +168,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             favourite.setBackgroundResource(0);
             location.setBackgroundResource(0);
             settings.setBackgroundResource(0);
-        } else if (viewpager2.getCurrentItem() == 2) {
+        } /*else if (viewpager2.getCurrentItem() == 2) {
             viewpager2.setCurrentItem(0, false);
             home.setBackgroundResource(R.drawable.background2);
             favourite.setBackgroundResource(0);
             location.setBackgroundResource(0);
             settings.setBackgroundResource(0);
-        } else if (viewpager2.getCurrentItem() == 3) {
+        }*/ else if (viewpager2.getCurrentItem() == 3) {
             viewpager2.setCurrentItem(0, false);
             home.setBackgroundResource(R.drawable.background2);
             favourite.setBackgroundResource(0);
@@ -190,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             favourite.setBackgroundResource(0);
             location.setBackgroundResource(0);
             settings.setBackgroundResource(0);
-        } else if (viewpager2.getCurrentItem() == 5) {
+        } /*else if (viewpager2.getCurrentItem() == 5) {
             viewpager2.setCurrentItem(0, false);
             home.setBackgroundResource(R.drawable.background2);
             favourite.setBackgroundResource(0);
@@ -209,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             favourite.setBackgroundResource(0);
             location.setBackgroundResource(0);
             settings.setBackgroundResource(0);
-        } else {
+        }*/ else {
             finish();
         }
     }

@@ -3,6 +3,13 @@ package nithra.tamil.word.game.giftsuggestions.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,23 +22,18 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
 
 import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
-import nithra.tamil.word.game.giftsuggestions.MainActivity;
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
+import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
+import nithra.tamil.word.game.giftsuggestions.Otp.OtpVerify;
+import nithra.tamil.word.game.giftsuggestions.Otp.ShopAdd;
 import nithra.tamil.word.game.giftsuggestions.R;
 import nithra.tamil.word.game.giftsuggestions.SellerProfile;
+import nithra.tamil.word.game.giftsuggestions.SharedPreference;
 
 public class Home extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     DrawerLayout drawer;
@@ -41,7 +43,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     ArrayList<String> text3;
     Adapter2 adapter2;
     Adapter3 adapter3;
-    LinearLayout notification;
+    LinearLayout notification,profile_view;
+    SharedPreference sharedPreference = new SharedPreference();
+
     public Home() {
     }
 
@@ -58,11 +62,12 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         Toolbar toolbar = view.findViewById(R.id.toolbar);
         drawer = view.findViewById(R.id.drawer_layout);
-        notification=view.findViewById(R.id.notification);
+        notification = view.findViewById(R.id.notification);
+        profile_view = view.findViewById(R.id.profile_view);
         images2 = new ArrayList<Integer>();
         images3 = new ArrayList<Integer>();
-        text2=new ArrayList<String>();
-        text3=new ArrayList<String>();
+        text2 = new ArrayList<String>();
+        text3 = new ArrayList<String>();
         RecyclerView list = view.findViewById(R.id.list);
         RecyclerView list2 = view.findViewById(R.id.list2);
         images2.add(R.drawable.ic_icon_1);
@@ -93,13 +98,37 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         text3.add("Valentine's Day");
         text3.add("Wedding");
         text3.add("Women's Day");
+        String user=sharedPreference.getString(getContext(), "user_status");
 
-
-        notification.setOnClickListener(new View.OnClickListener() {
+        profile_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getContext(), SellerProfile.class);
-                startActivity(i);
+
+               /* if (user.equals("exiting")) {
+
+                    Intent i=new Intent(getContext(), SellerProfile.class);
+                    startActivity(i);
+                }else if(user.equals("new")){
+                    Intent i=new Intent(getContext(), ShopAdd.class);
+                    startActivity(i);
+
+                }*/
+
+
+                if (sharedPreference.getInt(getContext(), "profile") == 1) {
+                    Intent i = new Intent(getContext(), ShopAdd.class);
+                    startActivity(i);
+                }else if (sharedPreference.getInt(getContext(), "profile") == 2){
+                    Intent i = new Intent(getContext(), SellerProfile.class);
+                    startActivity(i);
+                }else {
+                    Intent i = new Intent(getContext(), OtpSend.class);
+                    startActivity(i);
+                }
+
+
+
+
             }
         });
 
@@ -122,16 +151,15 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         name.setText(versionName);*/
 
 
-
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);
         list.setLayoutManager(gridLayoutManager2);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
         list2.setLayoutManager(gridLayoutManager);
 
-        adapter2 = new Adapter2(getContext(), images2,text2);
+        adapter2 = new Adapter2(getContext(), images2, text2);
         list.setAdapter(adapter2);
 
-        adapter3 = new Adapter3(getContext(), images3,text3);
+        adapter3 = new Adapter3(getContext(), images3, text3);
         list2.setAdapter(adapter3);
 
         return view;
@@ -163,9 +191,10 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         ArrayList<Integer> images;
         ArrayList<String> titles;
         LayoutInflater inflater;
+
         public Adapter2(Context ctx, ArrayList<Integer> images, ArrayList<String> titles) {
             this.images = images;
-            this.titles=titles;
+            this.titles = titles;
             this.inflater = LayoutInflater.from(ctx);
         }
 
@@ -208,9 +237,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         ArrayList<String> titles;
 
 
-        public Adapter3(Context ctx, ArrayList<Integer> images,ArrayList<String> titles) {
+        public Adapter3(Context ctx, ArrayList<Integer> images, ArrayList<String> titles) {
             this.images = images;
-            this.titles=titles;
+            this.titles = titles;
             this.inflater = LayoutInflater.from(ctx);
         }
 
@@ -227,14 +256,14 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
         @Override
         public void onBindViewHolder(@NonNull Adapter3.ViewHolder holder, int position) {
-            int pos=position;
+            int pos = position;
             holder.img_slide.setImageResource(images.get(pos));
             holder.gridText.setText(titles.get(pos));
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent i=new Intent(getContext(), ActivitySecond.class);
-                    i.putExtra("title",titles.get(pos));
+                    Intent i = new Intent(getContext(), ActivitySecond.class);
+                    i.putExtra("title", titles.get(pos));
                     startActivity(i);
                 }
             });
@@ -251,6 +280,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             ImageView img_slide;
             TextView gridText;
             CardView category;
+
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 img_slide = itemView.findViewById(R.id.imageGrid);

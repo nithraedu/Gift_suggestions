@@ -56,7 +56,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
 import nithra.tamil.word.game.giftsuggestions.Otp.ProductAdd;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
@@ -88,6 +87,7 @@ public class ProductEdit extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +107,7 @@ public class ProductEdit extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
-
+        back = findViewById(R.id.back);
         giftfor = new ArrayList<GiftFor>();
         list_gift = new ArrayList<AddGift>();
         occasion = new ArrayList<Occasion>();
@@ -118,6 +118,13 @@ public class ProductEdit extends AppCompatActivity {
 
         giftedit();
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,8 +134,9 @@ public class ProductEdit extends AppCompatActivity {
                 discount = offer_percentage.getText().toString().trim();
                 total_amount = prod_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
-
-                if (gift_name.equals("")) {
+                if (IVPreviewImage.getDrawable() == null) {
+                    Utils_Class.toast_center(ProductEdit.this, "Please set Product image ...");
+                } else if (gift_name.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Product Name...");
                 } else if (spin_occaction.getSelectedItemPosition() == 0) {
                     Utils_Class.toast_center(getApplicationContext(), "Please select Occasion...");
@@ -185,8 +193,8 @@ public class ProductEdit extends AppCompatActivity {
         map2.clear();
         map1.put("action", "add_gift");
         map1.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
-        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition()-1).getId());
-        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition()-1).getId());
+        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
+        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition() - 1).getId());
         map1.put("gift_name", gift_name);
         map1.put("id", id_gift);
         map1.put("gift_description", gift_description);
@@ -220,8 +228,8 @@ public class ProductEdit extends AppCompatActivity {
         map.put("action", "get_gift");
         //map.put("user_id", sharedPreference.getString(this, "user_id"));
         map.put("id", id_gift);
-        System.out.println("idddd"+id_gift);
-        System.out.println("printmap"+map);
+        System.out.println("idddd" + id_gift);
+        System.out.println("printmap" + map);
 
         System.out.println("print_map " + map);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
@@ -247,7 +255,7 @@ public class ProductEdit extends AppCompatActivity {
                         offer_prize.setText(list_gift.get(0).getGiftAmount());
                         offer_percentage.setText(list_gift.get(0).getDiscount());
                         prod_des.setText(list_gift.get(0).getGiftDescription());
-                        System.out.println("======response_check :" );
+                        System.out.println("======response_check :");
 
                        /* for (int i = 0; i < list_gift.size(); i++) {
                             for (int j=0;j<occasion.size();j++) {
@@ -296,9 +304,9 @@ public class ProductEdit extends AppCompatActivity {
 
                     spinner();
                     for (int i = 0; i < list_gift.size(); i++) {
-                        for (int j=0;j<giftfor.size();j++) {
-                            if (giftfor.get(j).getId().equals(list_gift.get(i).getGiftFor()) ) {
-                                spin_gender.setSelection(j+1);
+                        for (int j = 0; j < giftfor.size(); j++) {
+                            if (giftfor.get(j).getId().equals(list_gift.get(i).getGiftFor())) {
+                                spin_gender.setSelection(j + 1);
                             }
                         }
                     }
@@ -315,7 +323,7 @@ public class ProductEdit extends AppCompatActivity {
     }
 
     public void spinner() {
-        spin.add(0, "All category");
+        spin.add(0, "Select category");
         for (int i = 0; i < giftfor.size(); i++) {
             spin.add(giftfor.get(i).people);
         }
@@ -327,7 +335,7 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_for = giftfor.get(i-1).people;
+                    gift_for = giftfor.get(i - 1).people;
                 }
                /* if (i == 0) {
                     spin_gender.setEnabled(false);
@@ -361,20 +369,20 @@ public class ProductEdit extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     occasion.addAll(response.body());
-                    System.out.println("check size"+list_gift.size());
+                    System.out.println("check size" + list_gift.size());
 
                     spinner1();
                     for (int i = 0; i < list_gift.size(); i++) {
 
                         System.out.println("check loop1");
-                        for (int j=0;j<occasion.size();j++) {
+                        for (int j = 0; j < occasion.size(); j++) {
                             System.out.println("check loop2");
-                            System.out.println("check id" +occasion.get(j).getId() + "=="+list_gift.get(i).getGiftCategory() );
+                            System.out.println("check id" + occasion.get(j).getId() + "==" + list_gift.get(i).getGiftCategory());
 
-                            if (occasion.get(j).getId().equals(list_gift.get(i).getGiftCategory()) ) {
+                            if (occasion.get(j).getId().equals(list_gift.get(i).getGiftCategory())) {
                                 System.out.println("check loop3");
-                                System.out.println("check cat" +occasion.get(j).getCategory());
-                                spin_occaction.setSelection(j+1);
+                                System.out.println("check cat" + occasion.get(j).getCategory());
+                                spin_occaction.setSelection(j + 1);
                             }
                         }
                     }
@@ -391,7 +399,7 @@ public class ProductEdit extends AppCompatActivity {
     }
 
     public void spinner1() {
-        spin1.add(0, "All category");
+        spin1.add(0, "Select category");
         for (int i = 0; i < occasion.size(); i++) {
             spin1.add(occasion.get(i).category);
         }
@@ -403,7 +411,7 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 if (i != 0) {
-                    gift_category = occasion.get(i-1).category;
+                    gift_category = occasion.get(i - 1).category;
                 }
                 /*if (i == 0) {
 

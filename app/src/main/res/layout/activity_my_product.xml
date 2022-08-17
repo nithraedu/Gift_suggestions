@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/bg"
+    android:orientation="vertical"
     tools:context=".ActivitySecond">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:paddingLeft="5dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="5dp">
 
         <ImageView
             android:id="@+id/back"
@@ -26,38 +27,75 @@
             android:id="@+id/cat_title"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="1"
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:layout_weight="1"
             android:text="Cat_Title"
             android:textColor="@color/black"
             android:textSize="20dp"
-            android:layout_marginLeft="5dp"
             android:textStyle="bold" />
-        <TextView
+
+        <ImageView
             android:id="@+id/profile_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            android:layout_marginRight="10dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_gravity="center"
-            android:textSize="20dp"
-            android:textColor="@color/black"/>
+            android:padding="10dp"
+            android:background="@drawable/circle"
+            android:src="@drawable/add_white" />
 
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/no_item"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:visibility="gone"
-        android:text="No Items Here"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:text="No Products \n Click the (+) button to add Product"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/add"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
+                android:backgroundTint="#39315f"
+                android:clickable="true"
+                android:src="@drawable/add_white"
+                app:elevation="6dp"
+                app:fabSize="normal"
+                app:tint="@color/white" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
 
 </LinearLayout>

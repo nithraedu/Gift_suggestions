@@ -26,7 +26,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,17 +50,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.tamil.word.game.giftsuggestions.FragMove;
-import nithra.tamil.word.game.giftsuggestions.MainActivity;
+import nithra.tamil.word.game.giftsuggestions.MyProduct;
 import nithra.tamil.word.game.giftsuggestions.R;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
 import nithra.tamil.word.game.giftsuggestions.SharedPreference;
 import nithra.tamil.word.game.giftsuggestions.Utils_Class;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class ShopAdd extends AppCompatActivity {
 
@@ -72,7 +64,7 @@ public class ShopAdd extends AppCompatActivity {
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String pack = "nithra.tamil.word.game.giftsuggestions";
-
+    ImageView back;
     Uri uri_1;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
@@ -100,6 +92,16 @@ public class ShopAdd extends AppCompatActivity {
         pincode = findViewById(R.id.pincode);
         pincode = findViewById(R.id.pincode);
         district = findViewById(R.id.district);
+        back = findViewById(R.id.back);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -137,8 +139,6 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Correct Mobile Number...");
                 } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
-                } else if (shop_pincode.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
                 } else if (shop_country.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
                 } else if (shop_state.equals("")) {
@@ -147,10 +147,8 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your district...");
                 } else if (shop_city.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your city...");
-                } else if (shop_latitude.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your latitude...");
-                } else if (shop_longitude.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your longitude...");
+                } else if (shop_pincode.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
                 } else {
                     submit_res();
 
@@ -208,7 +206,7 @@ public class ShopAdd extends AppCompatActivity {
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("logo",""+Uri.fromFile(file));
+            map2.put("logo", "" + Uri.fromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -303,6 +301,7 @@ public class ShopAdd extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
+                                        IVPreviewImage.setImageResource(R.drawable.logo_add);
                                         sellername.getText().clear();
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();
@@ -315,9 +314,11 @@ public class ShopAdd extends AppCompatActivity {
                                         pincode.getText().clear();
                                         district.getText().clear();
                                         sharedPreference.putInt(ShopAdd.this, "yes", 1);
+                                        sharedPreference.putInt(ShopAdd.this, "profile", 2);
                                         Toast.makeText(ShopAdd.this, "Your shop added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i=new Intent(ShopAdd.this, ProductAdd.class);
+                                        Intent i = new Intent(ShopAdd.this, MyProduct.class);
                                         startActivity(i);
+                                        finish();
                                         //fragMove.product();
 
                                     }
