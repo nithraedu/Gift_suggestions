@@ -1,6 +1,5 @@
 package nithra.tamil.word.game.giftsuggestions.Otp;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -54,10 +53,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
@@ -81,7 +78,7 @@ public class ProductAdd extends AppCompatActivity {
     TextView myproduct;
     ImageView IVPreviewImage;
     SharedPreference sharedPreference = new SharedPreference();
-    String gift_name, gift_occasion,gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
+    String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
     ArrayList<String> spin;
     ArrayList<String> spin1;
     ArrayList<GiftFor> giftfor;
@@ -94,7 +91,7 @@ public class ProductAdd extends AppCompatActivity {
     ImageView back;
 
 
-    TextView textView,textView1;
+    TextView textView, textView1;
     boolean[] selectedLanguage;
     boolean[] selectedLanguage1;
     String[] cat;
@@ -128,6 +125,11 @@ public class ProductAdd extends AppCompatActivity {
         back = findViewById(R.id.back);
         textView = findViewById(R.id.textView);
         textView1 = findViewById(R.id.textView1);
+
+        textView.setText("");
+        textView.setTag("");
+        textView1.setText("");
+        textView1.setTag("");
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -183,7 +185,7 @@ public class ProductAdd extends AppCompatActivity {
                                 id.append(",");
                             }
                         }
-                       // langList.clear();
+                        // langList.clear();
                         textView.setText(stringBuilder.toString());
                         textView.setTag(id.toString());
                     }
@@ -202,6 +204,8 @@ public class ProductAdd extends AppCompatActivity {
                             selectedLanguage[j] = false;
                             langList.clear();
                             textView.setText("");
+                            textView.setTag("");
+
                         }
                     }
                 });
@@ -269,6 +273,8 @@ public class ProductAdd extends AppCompatActivity {
                             selectedLanguage1[j] = false;
                             langList1.clear();
                             textView1.setText("");
+                            textView1.setTag("");
+
                         }
                     }
                 });
@@ -281,28 +287,28 @@ public class ProductAdd extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 gift_name = productname.getText().toString().trim();
-                gift_occasion=textView.getTag().toString().trim();
-                gift_gender=textView1.getTag().toString().trim();
-                gift_amount = offer_prize.getText().toString().trim();
-                discount = offer_percentage.getText().toString().trim();
+                gift_occasion = textView.getTag().toString().trim();
+                gift_gender = textView1.getTag().toString().trim();
                 total_amount = prod_prize.getText().toString().trim();
+                discount = offer_percentage.getText().toString().trim();
+                gift_amount = offer_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
                 if (uri_1 == null) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please set Product image ...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_name.equals("")) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Name...");
-                } /*else if (spin_occaction.getSelectedItemPosition() == 0) {
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Name...");
+                } else if (gift_occasion.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Occasion...");
-                } */else if (spin_gender.getSelectedItemPosition() == 0) {
+                } else if (gift_gender.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Gender...");
-                } else if (gift_amount.equals("")) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Prize...");
+                } else if (total_amount.equals("")) {
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Amount...");
                 } else if (discount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
-                } else if (total_amount.equals("")) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Prize...");
+                } else if (gift_amount.equals("")) {
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
                 } else if (gift_description.equals("")) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Product Description...");
+                    Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
                 } else {
 
                     submit_res();
@@ -359,7 +365,7 @@ public class ProductAdd extends AppCompatActivity {
         map2.clear();
         map1.put("action", "add_gift");
         map1.put("user_id", sharedPreference.getString(ProductAdd.this, "user_id"));
-       // map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
+        // map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
         map1.put("gift_category", gift_occasion);
         //map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition() - 1).getId());
         map1.put("gift_for", gift_gender);
@@ -604,7 +610,7 @@ public class ProductAdd extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-                                        IVPreviewImage.setImageResource(R.drawable.logo_add);
+                                        IVPreviewImage.setImageResource(R.drawable.gallery);
                                         spin_occaction.setSelection(0);
                                         spin_gender.setSelection(0);
                                         productname.getText().clear();
@@ -618,6 +624,7 @@ public class ProductAdd extends AppCompatActivity {
                                         Toast.makeText(ProductAdd.this, "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(ProductAdd.this, MyProduct.class);
                                         startActivity(i);
+                                        finish();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

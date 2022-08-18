@@ -112,7 +112,7 @@ public class ShopAdd extends AppCompatActivity {
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IVPreviewImage.setImageResource(R.drawable.logo_add);
+                IVPreviewImage.setImageResource(R.drawable.add);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -301,7 +301,7 @@ public class ShopAdd extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-                                        IVPreviewImage.setImageResource(R.drawable.logo_add);
+                                        IVPreviewImage.setImageResource(R.drawable.add);
                                         sellername.getText().clear();
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();

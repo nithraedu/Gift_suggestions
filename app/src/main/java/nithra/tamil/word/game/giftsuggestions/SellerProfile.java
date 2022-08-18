@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -27,9 +28,10 @@ import retrofit2.Response;
 public class SellerProfile extends AppCompatActivity {
     ArrayList<SellerProfilePojo> gift;
     ImageView IVPreviewImage;
-    TextView giftname, giftcategory, giftgender, giftprize, offerprize, offerpercen, description, city,profile_edit;
+    TextView seller_name, shop_name, mobile, address, pincode, state, district, city, country, latitude, longitude;
     SharedPreference sharedPreference = new SharedPreference();
     ImageView back;
+    ImageView profile_edit;
 
 
     @Override
@@ -39,19 +41,24 @@ public class SellerProfile extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_seller_profile);
 
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
         gift = new ArrayList<SellerProfilePojo>();
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
-        giftname = findViewById(R.id.giftname);
-        giftcategory = findViewById(R.id.giftcategory);
-        giftgender = findViewById(R.id.giftgender);
-        giftprize = findViewById(R.id.giftprize);
-        offerprize = findViewById(R.id.offerprize);
-        offerpercen = findViewById(R.id.offerpercen);
-        description = findViewById(R.id.description);
+        seller_name = findViewById(R.id.seller_name);
+        shop_name = findViewById(R.id.shop_name);
+        mobile = findViewById(R.id.mobile);
+        address = findViewById(R.id.address);
+        pincode = findViewById(R.id.pincode);
+        state = findViewById(R.id.state);
+        district = findViewById(R.id.district);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         profile_edit = findViewById(R.id.profile_edit);
+        country = findViewById(R.id.country);
         city = findViewById(R.id.city);
         back = findViewById(R.id.back);
+        longitude = findViewById(R.id.longitude);
+        latitude = findViewById(R.id.latitude);
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,15 +69,34 @@ public class SellerProfile extends AppCompatActivity {
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i=new Intent(getApplicationContext(),ShopEdit.class);
+                Intent i = new Intent(getApplicationContext(), ShopEdit.class);
                 startActivity(i);
             }
         });
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
 
         category();
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                gift.clear();
+                category();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+
 
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sharedPreference.getInt(getApplicationContext(), "finish") == 1) {
+            category();
+            sharedPreference.putInt(SellerProfile.this, "finish", 0);
+
+        }
+        }
 
     public void category() {
         HashMap<String, String> map = new HashMap<>();
@@ -85,19 +111,23 @@ public class SellerProfile extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
+                    gift.clear();
                     gift.addAll(response.body());
                     Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
                             //.error(R.drawable.gift_1)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
-                    giftname.setText(gift.get(0).getName());
-                    giftcategory.setText(gift.get(0).getShopName());
-                    giftgender.setText(gift.get(0).getSellerMobile());
-                    giftprize.setText(gift.get(0).getAddress());
-                    offerprize.setText(gift.get(0).getPincode());
-                    offerpercen.setText(gift.get(0).getState());
-                    description.setText(gift.get(0).getDistrict());
+                    seller_name.setText(gift.get(0).getName());
+                    shop_name.setText(gift.get(0).getShopName());
+                    mobile.setText(gift.get(0).getSellerMobile());
+                    address.setText(gift.get(0).getAddress());
+                    pincode.setText(gift.get(0).getPincode());
+                    state.setText(gift.get(0).getState());
+                    district.setText(gift.get(0).getDistrict());
                     city.setText(gift.get(0).getCity());
+                    country.setTag(gift.get(0).getCountry());
+                    latitude.setText(gift.get(0).getLatitude());
+                    longitude.setText(gift.get(0).getLongitude());
                     Utils_Class.mProgress.dismiss();
 
                 }

@@ -53,6 +53,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.tamil.word.game.giftsuggestions.Otp.OtpVerify;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftEdit;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
@@ -310,6 +311,7 @@ public class ShopEdit extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
+                                        IVPreviewImage.setImageResource(R.drawable.add);
                                         sellername.getText().clear();
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();
@@ -323,6 +325,9 @@ public class ShopEdit extends AppCompatActivity {
                                         district.getText().clear();
                                         //sharedPreference.putInt(getApplicationContext(), "yes", 1);
                                         Toast.makeText(getApplicationContext(), "Your shop Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
+                                        sharedPreference.putInt(ShopEdit.this, "finish", 1);
+                                       /* Intent i =new Intent(ShopEdit.this,SellerProfile.class);
+                                        startActivity(i);*/
                                         finish();
                                         /*Intent i =new Intent(ShopEdit.this,MyProduct.class);
                                         startActivity(i);*/

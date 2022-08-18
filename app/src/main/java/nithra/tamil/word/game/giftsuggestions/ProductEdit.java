@@ -1,8 +1,10 @@
 package nithra.tamil.word.game.giftsuggestions;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -53,11 +55,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.tamil.word.game.giftsuggestions.Otp.ProductAdd;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.GetGift;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Occasion;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
@@ -74,12 +76,12 @@ public class ProductEdit extends AppCompatActivity {
     ImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
-    String gift_name, gift_image, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
+    String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
     ArrayList<String> spin;
     ArrayList<String> spin1;
     ArrayList<GiftFor> giftfor;
     ArrayList<Occasion> occasion;
-    ArrayList<AddGift> list_gift;
+    ArrayList<GetGift> list_gift;
     Uri uri_1;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
@@ -88,6 +90,16 @@ public class ProductEdit extends AppCompatActivity {
     Bundle extra;
     String id_gift;
     ImageView back;
+
+    TextView textView, textView1;
+    boolean[] selectedLanguage;
+    boolean[] selectedLanguage1;
+    String[] cat;
+    String[] cat_id;
+    String[] cat1;
+    String[] cat_id1;
+    ArrayList<Integer> langList = new ArrayList<>();
+    ArrayList<Integer> langList1 = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,14 +121,159 @@ public class ProductEdit extends AppCompatActivity {
         spin1 = new ArrayList<>();
         back = findViewById(R.id.back);
         giftfor = new ArrayList<GiftFor>();
-        list_gift = new ArrayList<AddGift>();
+        list_gift = new ArrayList<GetGift>();
         occasion = new ArrayList<Occasion>();
-
+        textView = findViewById(R.id.textView);
+        textView1 = findViewById(R.id.textView1);
         intent = getIntent();
         extra = intent.getExtras();
         id_gift = extra.getString("id");
 
+
+        textView.setText("");
+        textView.setTag("");
+        textView1.setText("");
+        textView1.setTag("");
+
         giftedit();
+
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                for (int i = 0; i < occasion.size(); i++) {
+                    cat[i] = occasion.get(i).getCategory();
+                    cat_id[i] = occasion.get(i).getId();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
+
+                builder.setTitle("Select Category");
+
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(cat, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+                            selectedLanguage[i] = true;
+                            langList.add(i);
+                            Collections.sort(langList);
+                        } else {
+                            langList.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder id = new StringBuilder();
+                        for (int j = 0; j < langList.size(); j++) {
+                            stringBuilder.append(cat[langList.get(j)]);
+                            id.append(cat_id[langList.get(j)]);
+                            if (j != langList.size() - 1) {
+                                stringBuilder.append(", ");
+                                id.append(",");
+                            }
+                        }
+                        // langList.clear();
+                        textView.setText(stringBuilder.toString());
+                        textView.setTag(id.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (int j = 0; j < selectedLanguage.length; j++) {
+                            selectedLanguage[j] = false;
+                            langList.clear();
+                            textView.setText("");
+                            textView.setTag("");
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
+        textView1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                for (int i = 0; i < giftfor.size(); i++) {
+                    cat1[i] = giftfor.get(i).getPeople();
+                    cat_id1[i] = giftfor.get(i).getId();
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
+
+                builder.setTitle("Select Gender");
+
+                builder.setCancelable(false);
+
+                builder.setMultiChoiceItems(cat1, selectedLanguage1, new DialogInterface.OnMultiChoiceClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                        if (b) {
+                            selectedLanguage1[i] = true;
+                            langList1.add(i);
+                            Collections.sort(langList1);
+                        } else {
+                            langList1.remove(Integer.valueOf(i));
+                        }
+                    }
+                });
+
+                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        StringBuilder id = new StringBuilder();
+                        for (int j = 0; j < langList1.size(); j++) {
+                            stringBuilder.append(cat1[langList1.get(j)]);
+                            id.append(cat_id1[langList1.get(j)]);
+                            if (j != langList1.size() - 1) {
+                                stringBuilder.append(", ");
+                                id.append(",");
+                            }
+                        }
+                        // langList1.clear();
+                        textView1.setText(stringBuilder.toString());
+                        textView1.setTag(id.toString());
+                    }
+                });
+
+                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        for (int j = 0; j < selectedLanguage1.length; j++) {
+                            selectedLanguage1[j] = false;
+                            langList1.clear();
+                            textView1.setText("");
+                            textView1.setTag("");
+
+                        }
+                    }
+                });
+                builder.show();
+            }
+        });
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,26 +287,28 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 gift_name = productname.getText().toString().trim();
-                gift_amount = offer_prize.getText().toString().trim();
-                discount = offer_percentage.getText().toString().trim();
+                gift_occasion = textView.getTag().toString().trim();
+                gift_gender = textView1.getTag().toString().trim();
                 total_amount = prod_prize.getText().toString().trim();
+                discount = offer_percentage.getText().toString().trim();
+                gift_amount = offer_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
                 if (IVPreviewImage.getDrawable() == null) {
-                    Utils_Class.toast_center(ProductEdit.this, "Please set Product image ...");
+                    Utils_Class.toast_center(ProductEdit.this, "Please set Gift image ...");
                 } else if (gift_name.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Product Name...");
-                } else if (spin_occaction.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please select Occasion...");
-                } else if (spin_gender.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please select Gender...");
-                } else if (gift_amount.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Product Prize...");
-                } else if (discount.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Offer Percentage...");
+                    Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Name...");
+                } else if (gift_occasion.equals("")) {
+                    Utils_Class.toast_center(ProductEdit.this, "Please select Occasion...");
+                } else if (gift_gender.equals("")) {
+                    Utils_Class.toast_center(ProductEdit.this, "Please select Gender...");
                 } else if (total_amount.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Offer Prize...");
+                    Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Amount...");
+                } else if (discount.equals("")) {
+                    Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Percentage...");
+                } else if (gift_amount.equals("")) {
+                    Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Amount...");
                 } else if (gift_description.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Product Description...");
+                    Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Description...");
                 } else {
 
                     submit_res();
@@ -193,8 +352,10 @@ public class ProductEdit extends AppCompatActivity {
         map2.clear();
         map1.put("action", "add_gift");
         map1.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
-        map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
-        map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition() - 1).getId());
+        // map1.put("gift_category", occasion.get(spin_occaction.getSelectedItemPosition() - 1).getId());
+        map1.put("gift_category", gift_occasion);
+        //map1.put("gift_for", giftfor.get(spin_gender.getSelectedItemPosition() - 1).getId());
+        map1.put("gift_for", gift_gender);
         map1.put("gift_name", gift_name);
         map1.put("id", id_gift);
         map1.put("gift_description", gift_description);
@@ -233,10 +394,10 @@ public class ProductEdit extends AppCompatActivity {
 
         System.out.println("print_map " + map);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<AddGift>> call = retrofitAPI.add_gift(map);
-        call.enqueue(new Callback<ArrayList<AddGift>>() {
+        Call<ArrayList<GetGift>> call = retrofitAPI.getgift(map);
+        call.enqueue(new Callback<ArrayList<GetGift>>() {
             @Override
-            public void onResponse(Call<ArrayList<AddGift>> call, Response<ArrayList<AddGift>> response) {
+            public void onResponse(Call<ArrayList<GetGift>> call, Response<ArrayList<GetGift>> response) {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
@@ -256,6 +417,7 @@ public class ProductEdit extends AppCompatActivity {
                         offer_percentage.setText(list_gift.get(0).getDiscount());
                         prod_des.setText(list_gift.get(0).getGiftDescription());
                         System.out.println("======response_check :");
+
 
                        /* for (int i = 0; i < list_gift.size(); i++) {
                             for (int j=0;j<occasion.size();j++) {
@@ -282,7 +444,7 @@ public class ProductEdit extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<AddGift>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<GetGift>> call, Throwable t) {
                 System.out.println("======response t:" + t);
             }
         });
@@ -301,15 +463,17 @@ public class ProductEdit extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     giftfor.addAll(response.body());
-
-                    spinner();
+                    cat1 = new String[giftfor.size()];
+                    cat_id1 = new String[giftfor.size()];
+                    selectedLanguage1 = new boolean[giftfor.size()];
+                   /* spinner();
                     for (int i = 0; i < list_gift.size(); i++) {
                         for (int j = 0; j < giftfor.size(); j++) {
                             if (giftfor.get(j).getId().equals(list_gift.get(i).getGiftFor())) {
                                 spin_gender.setSelection(j + 1);
                             }
                         }
-                    }
+                    }*/
                     //adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
@@ -371,7 +535,11 @@ public class ProductEdit extends AppCompatActivity {
                     occasion.addAll(response.body());
                     System.out.println("check size" + list_gift.size());
 
-                    spinner1();
+                    cat = new String[occasion.size()];
+                    cat_id = new String[occasion.size()];
+                    selectedLanguage = new boolean[occasion.size()];
+
+                    /*spinner1();
                     for (int i = 0; i < list_gift.size(); i++) {
 
                         System.out.println("check loop1");
@@ -385,7 +553,8 @@ public class ProductEdit extends AppCompatActivity {
                                 spin_occaction.setSelection(j + 1);
                             }
                         }
-                    }
+                    }*/
+
                     //adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
@@ -517,8 +686,11 @@ public class ProductEdit extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-                                        spin_occaction.setSelection(0);
-                                        spin_gender.setSelection(0);
+                                        IVPreviewImage.setImageResource(R.drawable.gallery);
+                                        textView.setText("");
+                                        textView.setTag("");
+                                        textView1.setText("");
+                                        textView1.setTag("");
                                         productname.getText().clear();
                                         prod_prize.getText().clear();
                                         offer_percentage.getText().clear();
@@ -528,6 +700,7 @@ public class ProductEdit extends AppCompatActivity {
                                         Toast.makeText(getApplicationContext(), "Your product Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
                                         Intent i = new Intent(getApplicationContext(), MyProduct.class);
                                         startActivity(i);
+                                        finish();
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();

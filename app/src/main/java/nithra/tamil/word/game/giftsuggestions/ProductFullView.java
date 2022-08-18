@@ -34,7 +34,7 @@ public class ProductFullView extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back;
+    ImageView back,profile_edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class ProductFullView extends AppCompatActivity {
         extra = intent.getExtras();
         id_gift = extra.getString("id");
         back = findViewById(R.id.back);
+        profile_edit = findViewById(R.id.profile_edit);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,7 +63,14 @@ public class ProductFullView extends AppCompatActivity {
             }
         });
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
-
+        profile_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ProductEdit.class);
+                i.putExtra("id", id_gift);
+                startActivity(i);
+            }
+        });
         category();
     }
 
@@ -87,9 +95,9 @@ public class ProductFullView extends AppCompatActivity {
                     giftname.setText(gift.get(0).getGiftName());
                     giftcategory.setText(gift.get(0).getCategory());
                     giftgender.setText(gift.get(0).getPeople());
-                    giftprize.setText(gift.get(0).getGiftAmount());
+                    giftprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
                     offerpercen.setText(gift.get(0).getDiscount());
-                    offerprize.setText(gift.get(0).getTotalAmount());
+                    offerprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
                     description.setText(gift.get(0).getGiftDescription());
                     Utils_Class.mProgress.dismiss();
 

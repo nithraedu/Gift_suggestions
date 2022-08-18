@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -60,7 +61,8 @@ public class MyProduct extends AppCompatActivity {
         cat_title = findViewById(R.id.cat_title);
         back = findViewById(R.id.back);
         no_item = findViewById(R.id.no_item);
-        add=findViewById(R.id.add);
+        add = findViewById(R.id.add);
+        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
 
 
         profile_edit.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +85,7 @@ public class MyProduct extends AppCompatActivity {
                 if (sharedPreference.getInt(MyProduct.this, "profile") == 1) {
                     Intent i = new Intent(MyProduct.this, ShopAdd.class);
                     startActivity(i);
+
                 } else if (sharedPreference.getInt(MyProduct.this, "profile") == 2) {
                     Intent i = new Intent(MyProduct.this, ProductAdd.class);
                     startActivity(i);
@@ -102,7 +105,18 @@ public class MyProduct extends AppCompatActivity {
         list.setLayoutManager(gridLayoutManager);
         adapter = new Adapter(this, gift);
         list.setAdapter(adapter);
+        Utils_Class.mProgress(MyProduct.this, "Loading please wait...", false).show();
+
         category();
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                gift.clear();
+                category();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
+
     }
 
 
@@ -134,7 +148,10 @@ public class MyProduct extends AppCompatActivity {
                         list.setVisibility(View.VISIBLE);
                         no_item.setVisibility(View.GONE);
                     }
+                    Utils_Class.mProgress.dismiss();
                 }
+
+
                 System.out.println("======response :" + response);
             }
 
@@ -193,7 +210,6 @@ public class MyProduct extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent i = new Intent(getApplicationContext(), ProductFullView.class);
                     i.putExtra("id", gift.get(pos).getId());
-
                     startActivity(i);
                 }
             });
