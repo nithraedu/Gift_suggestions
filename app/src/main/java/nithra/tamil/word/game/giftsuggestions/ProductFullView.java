@@ -62,7 +62,7 @@ public class ProductFullView extends AppCompatActivity {
                 finish();
             }
         });
-        Utils_Class.mProgress(this, "Loading please wait...", false).show();
+        //Utils_Class.mProgress(this, "Loading please wait...", false).show();
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +72,15 @@ public class ProductFullView extends AppCompatActivity {
             }
         });
         category();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (sharedPreference.getInt(getApplicationContext(), "finish_product") == 1) {
+            category();
+            sharedPreference.putInt(ProductFullView.this, "finish_product", 0);
+        }
     }
 
     public void category() {
@@ -87,19 +96,20 @@ public class ProductFullView extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
+                    gift.clear();
                     gift.addAll(response.body());
                     Glide.with(getApplicationContext()).load(gift.get(0).getGiftImage())
                             //.error(R.drawable.gift_1)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     giftname.setText(gift.get(0).getGiftName());
-                    giftcategory.setText(gift.get(0).getCategory());
-                    giftgender.setText(gift.get(0).getPeople());
+                    giftcategory.setText(gift.get(0).getGiftCat());
+                    giftgender.setText(gift.get(0).getGiftForPeople());
                     giftprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
                     offerpercen.setText(gift.get(0).getDiscount());
                     offerprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
                     description.setText(gift.get(0).getGiftDescription());
-                    Utils_Class.mProgress.dismiss();
+                    //Utils_Class.mProgress.dismiss();
 
                 }
                 System.out.println("======response :" + response);

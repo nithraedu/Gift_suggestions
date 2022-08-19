@@ -119,6 +119,20 @@ public class MyProduct extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        category();
+       /* if (sharedPreference.getInt(getApplicationContext(), "finish_product") == 1) {
+            category();
+            sharedPreference.putInt(MyProduct.this, "finish_product", 0);
+        }*/
+
+        if (sharedPreference.getInt(MyProduct.this, "product_add") == 1) {
+            category();
+            sharedPreference.putInt(MyProduct.this, "product_add", 0);
+        }
+    }
 
     public void category() {
         HashMap<String, String> map = new HashMap<>();
@@ -134,10 +148,9 @@ public class MyProduct extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     if (response.body().get(0).getStatus().equals("Success")) {
-
+                        gift.clear();
                         gift.addAll(response.body());
                         System.out.println("print_size==" + gift.size());
-
 
                         adapter.notifyDataSetChanged();
                     }

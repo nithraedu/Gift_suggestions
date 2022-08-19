@@ -58,6 +58,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
+import nithra.tamil.word.game.giftsuggestions.ProductEdit;
 import nithra.tamil.word.game.giftsuggestions.R;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
@@ -620,10 +621,11 @@ public class ProductAdd extends AppCompatActivity {
                                         prod_des.getText().clear();
 
                                         sharedPreference.putString(ProductAdd.this, "gift_id", "" + jsonObject.getString("id"));
+                                        sharedPreference.putInt(ProductAdd.this, "product_add", 1);
 
                                         Toast.makeText(ProductAdd.this, "Your product added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(ProductAdd.this, MyProduct.class);
-                                        startActivity(i);
+                                        /*Intent i = new Intent(ProductAdd.this, MyProduct.class);
+                                        startActivity(i);*/
                                         finish();
                                     }
                                 } catch (JSONException e) {

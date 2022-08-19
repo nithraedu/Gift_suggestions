@@ -94,7 +94,6 @@ public class SellerProfile extends AppCompatActivity {
         if (sharedPreference.getInt(getApplicationContext(), "finish") == 1) {
             category();
             sharedPreference.putInt(SellerProfile.this, "finish", 0);
-
         }
         }
 

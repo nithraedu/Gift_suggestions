@@ -383,7 +383,9 @@ public class ProductEdit extends AppCompatActivity {
         UploadAsync();
     }
 
+//{gift_description=K, user_id=13, total_amount=2, action=add_gift, discount=1, gift_name=Teddy, id=13, gift_amount=2, gift_category=32,31,30,29,28,27,26, gift_for=2,1,3,4}
 
+    //{gift_description=K, user_id=13, total_amount=5, action=add_gift, discount=5, gift_name=Nithra, gift_amount=8, gift_category=32,31,30,29,28,27,26, gift_for=2,1,3,4}
     public void giftedit() {
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "get_gift");
@@ -416,7 +418,13 @@ public class ProductEdit extends AppCompatActivity {
                         offer_prize.setText(list_gift.get(0).getGiftAmount());
                         offer_percentage.setText(list_gift.get(0).getDiscount());
                         prod_des.setText(list_gift.get(0).getGiftDescription());
+                        textView.setText(list_gift.get(0).getGiftCat());
+                        textView1.setText(list_gift.get(0).getGiftForPeople());
+
+
                         System.out.println("======response_check :");
+
+
 
 
                        /* for (int i = 0; i < list_gift.size(); i++) {
@@ -466,6 +474,24 @@ public class ProductEdit extends AppCompatActivity {
                     cat1 = new String[giftfor.size()];
                     cat_id1 = new String[giftfor.size()];
                     selectedLanguage1 = new boolean[giftfor.size()];
+
+                    String[] temp=list_gift.get(0).giftFor.split(",");
+                    StringBuilder id = new StringBuilder();
+
+                    for (int i=0;i<giftfor.size();i++) {
+                        for (int j = 0; j < temp.length; j++) {
+                            if (giftfor.get(i).getId().equals(temp[j])){
+                                id.append(temp[j]);
+
+                                selectedLanguage1[i]=true;
+                                break;
+                            }else {
+                                selectedLanguage1[i]=false;
+                            }
+                        }
+                    }
+                    textView1.setTag(id.toString());
+
                    /* spinner();
                     for (int i = 0; i < list_gift.size(); i++) {
                         for (int j = 0; j < giftfor.size(); j++) {
@@ -538,6 +564,23 @@ public class ProductEdit extends AppCompatActivity {
                     cat = new String[occasion.size()];
                     cat_id = new String[occasion.size()];
                     selectedLanguage = new boolean[occasion.size()];
+                    String[] temp=list_gift.get(0).giftCategory.split(",");
+                    StringBuilder id = new StringBuilder();
+                    for (int i=0;i<occasion.size();i++) {
+                        for (int j = 0; j < temp.length; j++) {
+
+
+                            if (occasion.get(i).getId().equals(temp[j])){
+                                id.append(temp[j]);
+
+                                selectedLanguage[i]=true;
+                                break;
+                            }else {
+                                selectedLanguage[i]=false;
+                            }
+                        }
+                    }
+                    textView.setTag(id.toString());
 
                     /*spinner1();
                     for (int i = 0; i < list_gift.size(); i++) {
@@ -698,8 +741,10 @@ public class ProductEdit extends AppCompatActivity {
                                         prod_des.getText().clear();
 
                                         Toast.makeText(getApplicationContext(), "Your product Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(getApplicationContext(), MyProduct.class);
-                                        startActivity(i);
+                                       /* Intent i = new Intent(getApplicationContext(), MyProduct.class);
+                                        startActivity(i);*/
+                                        sharedPreference.putInt(ProductEdit.this, "finish_product", 1);
+
                                         finish();
                                     }
                                 } catch (JSONException e) {

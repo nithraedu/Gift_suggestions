@@ -64,4 +64,8 @@ public interface RetrofitAPI {
     @FormUrlEncoded
     @POST("data.php")
     Call<ArrayList<GetGift>> getgift(@FieldMap HashMap<String, String> data);
+
+    @FormUrlEncoded
+    @POST("data.php")
+    Call<ArrayList<Gift_Cat>> gift_cat(@FieldMap HashMap<String, String> data);
 }

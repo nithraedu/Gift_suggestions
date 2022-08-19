@@ -58,7 +58,8 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
+                android:minHeight="250dp"
                 android:background="@drawable/background7"
                 android:orientation="horizontal">
 
@@ -94,10 +95,10 @@
                         android:id="@+id/giftcategory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Father's Day, Mother's Day, Women's Day"
+                        android:text="Father's Day, Mother's Day, Women's Day,Children day, Common "
                         android:layout_gravity="left"
                         android:background="@drawable/background10"
-                        android:textColor="#4cc1c5"
+                        android:textColor="@color/black"
                         android:layout_marginTop="5dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
@@ -108,10 +109,10 @@
                         android:id="@+id/giftgender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Men, Women, Kids"
+                        android:text="Men, Women, Kids, For all"
                         android:layout_gravity="left"
                         android:background="@drawable/background10"
-                        android:textColor="#4cc1c5"
+                        android:textColor="@color/black"
                         android:layout_marginTop="8dp"
                         android:paddingLeft="8dp"
                         android:paddingRight="8dp"
