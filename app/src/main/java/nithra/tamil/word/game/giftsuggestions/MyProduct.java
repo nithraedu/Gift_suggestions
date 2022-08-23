@@ -48,7 +48,7 @@ public class MyProduct extends AppCompatActivity {
     ImageView profile_edit;
     LinearLayout no_item;
     FloatingActionButton add;
-
+    SwipeRefreshLayout pullToRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +62,7 @@ public class MyProduct extends AppCompatActivity {
         back = findViewById(R.id.back);
         no_item = findViewById(R.id.no_item);
         add = findViewById(R.id.add);
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
 
 
         profile_edit.setOnClickListener(new View.OnClickListener() {
@@ -151,20 +151,17 @@ public class MyProduct extends AppCompatActivity {
                         gift.clear();
                         gift.addAll(response.body());
                         System.out.println("print_size==" + gift.size());
-
                         adapter.notifyDataSetChanged();
                     }
                     if (gift.size() == 0) {
-                        list.setVisibility(View.GONE);
+                        pullToRefresh.setVisibility(View.GONE);
                         no_item.setVisibility(View.VISIBLE);
                     } else {
-                        list.setVisibility(View.VISIBLE);
+                        pullToRefresh.setVisibility(View.VISIBLE);
                         no_item.setVisibility(View.GONE);
                     }
                     Utils_Class.mProgress.dismiss();
                 }
-
-
                 System.out.println("======response :" + response);
             }
 

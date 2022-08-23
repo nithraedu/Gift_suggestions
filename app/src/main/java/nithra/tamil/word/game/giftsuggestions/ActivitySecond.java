@@ -44,7 +44,7 @@ public class ActivitySecond extends AppCompatActivity {
     TextView cat_title;
     SharedPreference sharedPreference = new SharedPreference();
     LinearLayout no_item;
-
+    SwipeRefreshLayout pullToRefresh;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +56,7 @@ public class ActivitySecond extends AppCompatActivity {
         cat_title = findViewById(R.id.cat_title);
         back = findViewById(R.id.back);
         no_item = findViewById(R.id.no_item);
-        final SwipeRefreshLayout pullToRefresh = findViewById(R.id.pullToRefresh);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -117,10 +117,10 @@ public class ActivitySecond extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                     if (gift_show.size() == 0) {
-                        list.setVisibility(View.GONE);
+                        pullToRefresh.setVisibility(View.GONE);
                         no_item.setVisibility(View.VISIBLE);
                     } else {
-                        list.setVisibility(View.VISIBLE);
+                        pullToRefresh.setVisibility(View.VISIBLE);
                         no_item.setVisibility(View.GONE);
                     }
                     Utils_Class.mProgress.dismiss();
@@ -205,12 +205,13 @@ public class ActivitySecond extends AppCompatActivity {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(gift_show.get(pos).getGiftName());
-            holder.head.setText(title);
+            //holder.head.setText(title);
+            holder.head.setText(gift_show.get(pos).getDiscount()+"% offer");
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent i=new Intent(ActivitySecond.this,Full_Details.class);
-                    i.putExtra("full_view",gift_show.get(0).getId());
+                    i.putExtra("full_view",gift_show.get(pos).getId());
                     startActivity(i);
                 }
             });

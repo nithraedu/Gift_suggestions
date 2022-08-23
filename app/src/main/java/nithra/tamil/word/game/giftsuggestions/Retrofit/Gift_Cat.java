@@ -4,6 +4,12 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Gift_Cat {
+    @SerializedName("id")
+    @Expose
+    public String id;
+    @SerializedName("user_id")
+    @Expose
+    public String userId;
     @SerializedName("name")
     @Expose
     public String name;
@@ -40,12 +46,6 @@ public class Gift_Cat {
     @SerializedName("city")
     @Expose
     public String city;
-    @SerializedName("id")
-    @Expose
-    public String id;
-    @SerializedName("user_id")
-    @Expose
-    public String userId;
     @SerializedName("gift_name")
     @Expose
     public String giftName;
@@ -73,6 +73,22 @@ public class Gift_Cat {
     @SerializedName("status")
     @Expose
     public String status;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public String getName() {
         return name;
@@ -168,22 +184,6 @@ public class Gift_Cat {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 
     public String getGiftName() {

@@ -58,7 +58,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import nithra.tamil.word.game.giftsuggestions.MyProduct;
-import nithra.tamil.word.game.giftsuggestions.ProductEdit;
 import nithra.tamil.word.game.giftsuggestions.R;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.AddGift;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftFor;
@@ -182,7 +181,7 @@ public class ProductAdd extends AppCompatActivity {
                             stringBuilder.append(cat[langList.get(j)]);
                             id.append(cat_id[langList.get(j)]);
                             if (j != langList.size() - 1) {
-                                stringBuilder.append(", ");
+                                stringBuilder.append(",");
                                 id.append(",");
                             }
                         }
@@ -251,7 +250,7 @@ public class ProductAdd extends AppCompatActivity {
                             stringBuilder.append(cat1[langList1.get(j)]);
                             id.append(cat_id1[langList1.get(j)]);
                             if (j != langList1.size() - 1) {
-                                stringBuilder.append(", ");
+                                stringBuilder.append(",");
                                 id.append(",");
                             }
                         }

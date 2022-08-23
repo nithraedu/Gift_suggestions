@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class SellerProfilePojo {
+    @SerializedName("total_gifts")
+    @Expose
+    public String totalGifts;
     @SerializedName("id")
     @Expose
     public String id;
@@ -46,6 +49,14 @@ public class SellerProfilePojo {
     @SerializedName("status")
     @Expose
     public String status;
+
+    public String getTotalGifts() {
+        return totalGifts;
+    }
+
+    public void setTotalGifts(String totalGifts) {
+        this.totalGifts = totalGifts;
+    }
 
     public String getId() {
         return id;

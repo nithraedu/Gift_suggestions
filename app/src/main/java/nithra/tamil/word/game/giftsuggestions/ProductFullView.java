@@ -2,7 +2,9 @@ package nithra.tamil.word.game.giftsuggestions;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -56,6 +58,10 @@ public class ProductFullView extends AppCompatActivity {
         id_gift = extra.getString("id");
         back = findViewById(R.id.back);
         profile_edit = findViewById(R.id.profile_edit);
+
+        giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,7 +77,30 @@ public class ProductFullView extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ImageView img_view;
+                Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
+                dialog.setContentView(R.layout.image_view);
+
+                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(true);
+                img_view = dialog.findViewById(R.id.img_view);
+                Glide.with(getApplicationContext()).load(gift.get(0).getGiftImage())
+                        //.error(R.drawable.gift_1)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(img_view);
+                dialog.show();
+
+            }
+        });
+
+        Utils_Class.mProgress(ProductFullView.this, "Loading please wait...", false).show();
+
         category();
+
     }
 
     @Override
@@ -87,6 +116,8 @@ public class ProductFullView extends AppCompatActivity {
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "get_gift");
         map.put("id", id_gift);
+
+        System.out.println("print map : " + map);
 
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
         Call<ArrayList<GetGift>> call = retrofitAPI.getgift(map);
@@ -109,7 +140,7 @@ public class ProductFullView extends AppCompatActivity {
                     offerpercen.setText(gift.get(0).getDiscount());
                     offerprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
                     description.setText(gift.get(0).getGiftDescription());
-                    //Utils_Class.mProgress.dismiss();
+                    Utils_Class.mProgress.dismiss();
 
                 }
                 System.out.println("======response :" + response);

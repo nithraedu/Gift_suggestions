@@ -109,6 +109,8 @@ public class ShopEdit extends AppCompatActivity {
                 finish();
             }
         });
+        Utils_Class.mProgress(this, "Loading please wait...", false).show();
+
 
         shopedit();
 
@@ -566,6 +568,8 @@ public class ShopEdit extends AppCompatActivity {
                         district.setText(list_shop.get(0).getDistrict());
 
                     }
+                    Utils_Class.mProgress.dismiss();
+
                 }
                 System.out.println("======response :" + response);
             }

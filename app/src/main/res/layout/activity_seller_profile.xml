@@ -467,6 +467,16 @@
                     android:background="@color/app_color"
                     android:textColor="@color/white"
                     android:textSize="20dp" />
+                <TextView
+                    android:id="@+id/total_gifts"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:gravity="center"
+                    android:text="My total gifts : 20"
+                    android:background="@color/app_color"
+                    android:textColor="@color/white"
+                    android:textSize="13dp" />
 
             <ImageView
                 android:id="@+id/IVPreviewImage"

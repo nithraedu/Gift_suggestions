@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class SellerProfile extends AppCompatActivity {
     ArrayList<SellerProfilePojo> gift;
     ImageView IVPreviewImage;
-    TextView seller_name, shop_name, mobile, address, pincode, state, district, city, country, latitude, longitude;
+    TextView seller_name, shop_name, mobile, address, pincode, state, district, city, country, latitude, longitude,total_gifts;
     SharedPreference sharedPreference = new SharedPreference();
     ImageView back;
     ImageView profile_edit;
@@ -58,6 +58,7 @@ public class SellerProfile extends AppCompatActivity {
         back = findViewById(R.id.back);
         longitude = findViewById(R.id.longitude);
         latitude = findViewById(R.id.latitude);
+        total_gifts = findViewById(R.id.total_gifts);
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +128,7 @@ public class SellerProfile extends AppCompatActivity {
                     country.setTag(gift.get(0).getCountry());
                     latitude.setText(gift.get(0).getLatitude());
                     longitude.setText(gift.get(0).getLongitude());
+                    total_gifts.setText("My total gifts : "+gift.get(0).getTotalGifts());
                     Utils_Class.mProgress.dismiss();
 
                 }

@@ -134,6 +134,7 @@ public class ProductEdit extends AppCompatActivity {
         textView.setTag("");
         textView1.setText("");
         textView1.setTag("");
+        Utils_Class.mProgress(ProductEdit.this, "Loading please wait...", false).show();
 
         giftedit();
 
@@ -174,7 +175,7 @@ public class ProductEdit extends AppCompatActivity {
                             stringBuilder.append(cat[langList.get(j)]);
                             id.append(cat_id[langList.get(j)]);
                             if (j != langList.size() - 1) {
-                                stringBuilder.append(", ");
+                                stringBuilder.append(",");
                                 id.append(",");
                             }
                         }
@@ -242,7 +243,7 @@ public class ProductEdit extends AppCompatActivity {
                             stringBuilder.append(cat1[langList1.get(j)]);
                             id.append(cat_id1[langList1.get(j)]);
                             if (j != langList1.size() - 1) {
-                                stringBuilder.append(", ");
+                                stringBuilder.append(",");
                                 id.append(",");
                             }
                         }
@@ -288,7 +289,9 @@ public class ProductEdit extends AppCompatActivity {
             public void onClick(View v) {
                 gift_name = productname.getText().toString().trim();
                 gift_occasion = textView.getTag().toString().trim();
-                gift_gender = textView1.getTag().toString().trim();
+                System.out.println("---check_occ___ "+gift_occasion);
+                gift_gender = textView1.getTag().toString().trim().replace("\r\n","");
+                System.out.println("---check_occ1___ "+gift_gender);
                 total_amount = prod_prize.getText().toString().trim();
                 discount = offer_percentage.getText().toString().trim();
                 gift_amount = offer_prize.getText().toString().trim();
@@ -447,6 +450,8 @@ public class ProductEdit extends AppCompatActivity {
                         //spin_gender.setSelection(Integer.parseInt(list_gift.get(0).getGiftFor()));
 
                     }
+                    Utils_Class.mProgress.dismiss();
+
                 }
                 System.out.println("======response :" + response);
             }
@@ -475,32 +480,23 @@ public class ProductEdit extends AppCompatActivity {
                     cat_id1 = new String[giftfor.size()];
                     selectedLanguage1 = new boolean[giftfor.size()];
 
-                    String[] temp=list_gift.get(0).giftFor.split(",");
-                    StringBuilder id = new StringBuilder();
+                    String[] temp=list_gift.get(0).getGiftFor().replace("\r\n","").split(",");
 
                     for (int i=0;i<giftfor.size();i++) {
                         for (int j = 0; j < temp.length; j++) {
                             if (giftfor.get(i).getId().equals(temp[j])){
-                                id.append(temp[j]);
-
                                 selectedLanguage1[i]=true;
+                                cat1[i]=giftfor.get(i).getPeople();
+                                cat_id1[i]=giftfor.get(i).getId();
+                                langList1.add(i);
                                 break;
                             }else {
                                 selectedLanguage1[i]=false;
                             }
                         }
                     }
-                    textView1.setTag(id.toString());
-
-                   /* spinner();
-                    for (int i = 0; i < list_gift.size(); i++) {
-                        for (int j = 0; j < giftfor.size(); j++) {
-                            if (giftfor.get(j).getId().equals(list_gift.get(i).getGiftFor())) {
-                                spin_gender.setSelection(j + 1);
-                            }
-                        }
-                    }*/
-                    //adapter.notifyDataSetChanged();
+                    textView1.setText(list_gift.get(0).getGiftForPeople());
+                    textView1.setTag(list_gift.get(0).getGiftFor());
                 }
                 System.out.println("======response :" + response);
             }
@@ -558,47 +554,34 @@ public class ProductEdit extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
+                    occasion.clear();
                     occasion.addAll(response.body());
                     System.out.println("check size" + list_gift.size());
 
                     cat = new String[occasion.size()];
                     cat_id = new String[occasion.size()];
                     selectedLanguage = new boolean[occasion.size()];
-                    String[] temp=list_gift.get(0).giftCategory.split(",");
-                    StringBuilder id = new StringBuilder();
+
+                    System.out.println("--cat id all: " + list_gift.get(0).getGiftCategory());
+                    String[] temp=list_gift.get(0).getGiftCategory().split(",");
                     for (int i=0;i<occasion.size();i++) {
                         for (int j = 0; j < temp.length; j++) {
-
-
                             if (occasion.get(i).getId().equals(temp[j])){
-                                id.append(temp[j]);
-
+                                System.out.println("--cat id select: " + occasion.get(i).getId());
+                                System.out.println("--cat name select: " + occasion.get(i).getCategory());
                                 selectedLanguage[i]=true;
+                                cat[i]=occasion.get(i).getCategory();
+                                cat_id[i]=occasion.get(i).getId();
+                                langList.add(i);
                                 break;
-                            }else {
+                            } else {
                                 selectedLanguage[i]=false;
                             }
                         }
                     }
-                    textView.setTag(id.toString());
 
-                    /*spinner1();
-                    for (int i = 0; i < list_gift.size(); i++) {
-
-                        System.out.println("check loop1");
-                        for (int j = 0; j < occasion.size(); j++) {
-                            System.out.println("check loop2");
-                            System.out.println("check id" + occasion.get(j).getId() + "==" + list_gift.get(i).getGiftCategory());
-
-                            if (occasion.get(j).getId().equals(list_gift.get(i).getGiftCategory())) {
-                                System.out.println("check loop3");
-                                System.out.println("check cat" + occasion.get(j).getCategory());
-                                spin_occaction.setSelection(j + 1);
-                            }
-                        }
-                    }*/
-
-                    //adapter.notifyDataSetChanged();
+                    textView.setText(list_gift.get(0).getGiftCat());
+                    textView.setTag(list_gift.get(0).getGiftCategory());
                 }
                 System.out.println("======response :" + response);
             }
