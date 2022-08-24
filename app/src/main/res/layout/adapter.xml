@@ -14,13 +14,14 @@
         app:cardCornerRadius="7dp">
 
         <ImageView
+            android:id="@+id/favourite"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:layout_gravity="end"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:src="@drawable/heart_toolbar_2"
-            app:tint="@color/red"/>
+            android:background="@drawable/favorite_grey"/>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

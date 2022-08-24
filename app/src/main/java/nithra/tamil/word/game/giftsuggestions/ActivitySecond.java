@@ -1,7 +1,11 @@
 package nithra.tamil.word.game.giftsuggestions;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -26,6 +31,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.tamil.word.game.giftsuggestions.Retrofit.Fav_Add_Del;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Gift_Cat;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
@@ -40,11 +46,15 @@ public class ActivitySecond extends AppCompatActivity {
     ImageView back;
     Intent intent;
     Bundle extra;
-    String title,title1,title3;
+    String title, title1, title3;
     TextView cat_title;
     SharedPreference sharedPreference = new SharedPreference();
     LinearLayout no_item;
     SwipeRefreshLayout pullToRefresh;
+    SQLiteDatabase mydb;
+    ArrayList<String> gift_id = new ArrayList<>();
+    String send_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,6 +68,31 @@ public class ActivitySecond extends AppCompatActivity {
         no_item = findViewById(R.id.no_item);
         pullToRefresh = findViewById(R.id.pullToRefresh);
 
+        mydb = this.openOrCreateDatabase("mydb", MODE_PRIVATE, null);
+        mydb.execSQL("CREATE TABLE if not exists Bookmarks(id integer NOT NULL PRIMARY KEY AUTOINCREMENT,gift_id TEXT);");
+
+        Cursor c1 = mydb.rawQuery("select gift_id from Bookmarks ", null);
+        if (c1.getCount() > 0) {
+            for (int i = 0; i < c1.getCount(); i++) {
+                if (i == 0) {
+                    send_id = c1.getString(c1.getColumnIndexOrThrow("gift_id"));
+                } else {
+                    send_id = send_id + "," + c1.getString(c1.getColumnIndexOrThrow("gift_id"));
+                }
+                System.out.println("print sendid== " + send_id);
+            }
+        }
+
+
+       /* for (int i = 0; i < 5; i++) {
+            if (i == 0) {
+                send_id = ""+i;
+            } else {
+                send_id = send_id + "," +i;
+            }
+            System.out.println("print sendid== " + send_id);
+        }*/
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +105,7 @@ public class ActivitySecond extends AppCompatActivity {
             title = extra.getString("title");
             title1 = extra.getString("cat_idd");
             title3 = extra.getString("gender_id");
+            System.out.println("gender= " + title3);
         }
 
 
@@ -176,6 +212,30 @@ public class ActivitySecond extends AppCompatActivity {
     }
 
 
+    public void fav() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "fav_id");
+        map.put("android_id", Utils_Class.android_id(this));
+        map.put("gift_id", send_id);
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<Fav_Add_Del>> call = retrofitAPI.fav_add_del(map);
+        call.enqueue(new Callback<ArrayList<Fav_Add_Del>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Fav_Add_Del>> call, Response<ArrayList<Fav_Add_Del>> response) {
+                if (response.isSuccessful()) {
+
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Fav_Add_Del>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         ArrayList<Gift_Cat> gift_show;
         LayoutInflater inflater;
@@ -206,15 +266,37 @@ public class ActivitySecond extends AppCompatActivity {
                     .into(holder.img_slide);
             holder.gridText.setText(gift_show.get(pos).getGiftName());
             //holder.head.setText(title);
-            holder.head.setText(gift_show.get(pos).getDiscount()+"% offer");
+            holder.head.setText(gift_show.get(pos).getDiscount() + "% offer");
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent i=new Intent(ActivitySecond.this,Full_Details.class);
-                    i.putExtra("full_view",gift_show.get(pos).getId());
+                    Intent i = new Intent(ActivitySecond.this, Full_Details.class);
+                    i.putExtra("full_view", gift_show.get(pos).getId());
                     startActivity(i);
                 }
             });
+
+            holder.favourite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //holder.favourite.setBackgroundResource(R.drawable.heart_toolbar_2);
+                   /* Utils_Class.toast_center(getApplicationContext(), "click fav...");
+                    mydb.execSQL("Insert into Bookmark (id) values ('" + gift_show.get(pos).getId() + "')");*/
+                    fav();
+                    Cursor c1 = mydb.rawQuery("select * from Bookmarks where gift_id='" + gift_show.get(pos).getId() + "'", null);
+                    if (c1.getCount() == 0) {
+                        holder.favourite.setBackgroundResource(R.drawable.favorite_red);
+                        mydb.execSQL("Insert into Bookmarks (gift_id) values ('" + gift_show.get(pos).getId() + "')");
+                        Toast.makeText(getApplicationContext(), "பிடித்தமானவைகளில் சேமிக்கப்பட்டது", LENGTH_SHORT).show();
+                    } else {
+                        holder.favourite.setBackgroundResource(R.drawable.favorite_grey);
+                        mydb.execSQL("delete from Bookmarks where gift_id='" + gift_show.get(pos).getId() + "'");
+                        Toast.makeText(getApplicationContext(), "பிடித்தமானவைகளிலிருந்து நீக்கப்பட்டது", LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
         }
 
 
@@ -224,16 +306,17 @@ public class ActivitySecond extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView img_slide;
+            ImageView img_slide, favourite;
             TextView gridText, head;
             CardView category;
 
             public ViewHolder(@NonNull View itemView) {
                 super(itemView);
                 img_slide = itemView.findViewById(R.id.imageGrid);
+                favourite = itemView.findViewById(R.id.favourite);
                 gridText = itemView.findViewById(R.id.gridText);
                 head = itemView.findViewById(R.id.head);
-                category=itemView.findViewById(R.id.category);
+                category = itemView.findViewById(R.id.category);
             }
         }
     }

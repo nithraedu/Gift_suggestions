@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import nithra.tamil.word.game.giftsuggestions.ActivitySecond;
+import nithra.tamil.word.game.giftsuggestions.BuildConfig;
 import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
 import nithra.tamil.word.game.giftsuggestions.Otp.ShopAdd;
 import nithra.tamil.word.game.giftsuggestions.R;
@@ -53,7 +54,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     Adapter3 adapter3;
     LinearLayout notification, profile_view;
     SharedPreference sharedPreference = new SharedPreference();
-
+    TextView code, name;
+    int versionCode = BuildConfig.VERSION_CODE;
+    String versionName = BuildConfig.VERSION_NAME;
     public Home() {
     }
 
@@ -107,6 +110,11 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         ((AppCompatActivity) getActivity()).getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_navigate);
         NavigationView navigationView = view.findViewById(R.id.nav_mm_view);
         navigationView.setNavigationItemSelectedListener(this::onNavigationItemSelected);
+        View v = navigationView.inflateHeaderView(R.layout.header);
+        code = v.findViewById(R.id.code);
+        name = v.findViewById(R.id.name);
+        code.setText("" + versionCode);
+        name.setText(versionName);
 
 
         GridLayoutManager gridLayoutManager2 = new GridLayoutManager(getContext(), 1, GridLayoutManager.HORIZONTAL, false);

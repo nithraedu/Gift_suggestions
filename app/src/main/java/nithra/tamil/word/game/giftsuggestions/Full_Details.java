@@ -102,7 +102,6 @@ public class Full_Details extends AppCompatActivity {
                 dialog.show();
             }
         });
-
     }
 
 
