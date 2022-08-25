@@ -252,6 +252,7 @@
                         android:gravity="center">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/card_web"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/app_color2"
@@ -310,6 +311,7 @@
                         android:gravity="center">
 
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/card_mail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:background="@color/app_color2"

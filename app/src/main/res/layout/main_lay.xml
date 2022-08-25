@@ -116,6 +116,15 @@
             android:layout_height="42dp"
             android:src="@drawable/ic_search_click"/>
     </LinearLayout>
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/pullToRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -164,5 +173,6 @@
             android:padding="5dp" />
 
     </LinearLayout>
-
+        </LinearLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

@@ -21,6 +21,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -57,6 +58,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     TextView code, name;
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
+    SwipeRefreshLayout pullToRefresh;
+
     public Home() {
     }
 
@@ -79,6 +82,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         giftoccasion = new ArrayList<Occasion>();
         RecyclerView list = view.findViewById(R.id.list);
         RecyclerView list2 = view.findViewById(R.id.list2);
+        pullToRefresh = view.findViewById(R.id.pullToRefresh);
 
         String user = sharedPreference.getString(getContext(), "user_status");
 
@@ -128,8 +132,21 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
         adapter3 = new Adapter3(getContext(), giftoccasion);
         list2.setAdapter(adapter3);
+
+
         gift_occasion();
         gender_gift();
+
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                giftoccasion.clear();
+                giftfor.clear();
+                gift_occasion();
+                gender_gift();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
         return view;
     }

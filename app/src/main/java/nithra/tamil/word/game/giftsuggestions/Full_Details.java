@@ -13,6 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -34,8 +36,9 @@ public class Full_Details extends AppCompatActivity {
     Bundle extra;
     String id_gift;
     ImageView back, company_logo, IVPreviewImage;
-    TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name;
+    TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name,website,email;
     LinearLayout phone;
+    CardView card_mail,card_web;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,10 @@ public class Full_Details extends AppCompatActivity {
         company_logo = findViewById(R.id.company_logo);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         phone = findViewById(R.id.phone);
+        website = findViewById(R.id.website);
+        email = findViewById(R.id.email);
+        card_mail = findViewById(R.id.card_mail);
+        card_web = findViewById(R.id.card_web);
         intent = getIntent();
         extra = intent.getExtras();
         id_gift = extra.getString("full_view");
@@ -102,6 +109,50 @@ public class Full_Details extends AppCompatActivity {
                 dialog.show();
             }
         });
+
+
+        card_mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gift_show.get(0).getShopEmail() != null && !gift_show.get(0).getShopEmail().trim().isEmpty()) {
+                    if (Utils_Class.isNetworkAvailable(Full_Details.this)) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{gift_show.get(0).getShopEmail().trim()});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions");
+                        intent.putExtra(Intent.EXTRA_TEXT, "Body Here");
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                    } else {
+                        Utils_Class.toast_center(Full_Details.this, "Check Your Internet Connection...");
+                    }
+                } else {
+                    Utils_Class.toast_center(Full_Details.this, "Email not available...");
+                }
+            }
+        });
+
+        card_web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gift_show.get(0).getShopWebsite() != null && !gift_show.get(0).getShopWebsite().trim().isEmpty()) {
+                    if (Utils_Class.isNetworkAvailable(Full_Details.this)) {
+                        String url = gift_show.get(0).getShopWebsite().trim();
+                        System.out.println("urlprint" + url);
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(Full_Details.this, Uri.parse(url));
+                    } else {
+                        Utils_Class.toast_center(Full_Details.this, "Check Your Internet Connection...");
+                    }
+                } else {
+                    Utils_Class.toast_center(Full_Details.this, "Website not available...");
+                }
+            }
+        });
+
+
     }
 
 
@@ -126,8 +177,8 @@ public class Full_Details extends AppCompatActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
                         giftname.setText(gift_show.get(0).getGiftName());
-                        giftprize.setText("\u20B9 " + gift_show.get(0).getGiftAmount());
-                        offerprize.setText("\u20B9 " + gift_show.get(0).getTotalAmount());
+                        giftprize.setText("\u20B9 " + gift_show.get(0).getTotalAmount());
+                        offerprize.setText("\u20B9 " + gift_show.get(0).getGiftAmount());
                         description.setText(gift_show.get(0).getGiftDescription());
                         detail_shop_name.setText(gift_show.get(0).getShopName());
                         detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry()+ " - " + gift_show.get(0).getPincode());
@@ -136,6 +187,8 @@ public class Full_Details extends AppCompatActivity {
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(company_logo);
                         owner_name.setText(gift_show.get(0).getName());
+                        website.setText(gift_show.get(0).getShopWebsite());
+                        email.setText(gift_show.get(0).getShopEmail());
                         System.out.println("gift_show== " + gift_show.size());
 
                     }

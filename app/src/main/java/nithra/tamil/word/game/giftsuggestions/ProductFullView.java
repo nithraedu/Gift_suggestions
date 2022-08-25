@@ -136,9 +136,9 @@ public class ProductFullView extends AppCompatActivity {
                     giftname.setText(gift.get(0).getGiftName());
                     giftcategory.setText(gift.get(0).getGiftCat());
                     giftgender.setText(gift.get(0).getGiftForPeople());
-                    giftprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
+                    giftprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
                     offerpercen.setText(gift.get(0).getDiscount());
-                    offerprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
+                    offerprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
                     description.setText(gift.get(0).getGiftDescription());
                     Utils_Class.mProgress.dismiss();
 

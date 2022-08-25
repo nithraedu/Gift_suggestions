@@ -56,10 +56,10 @@ public class Favourite extends Fragment {
         fav_show = new ArrayList<Fav_view>();
         mydb = getContext().openOrCreateDatabase("mydb", MODE_PRIVATE, null);
         adapter = new Adapter(getContext(), fav_show);
-        Cursor c = mydb.rawQuery("select * from Bookmark", null);
+       /* Cursor c = mydb.rawQuery("select * from Bookmark", null);
         if (c.getCount() != 0) {
             c.getString(c.getColumnIndexOrThrow("id"));
-        }
+        }*/
         return view;
     }
 

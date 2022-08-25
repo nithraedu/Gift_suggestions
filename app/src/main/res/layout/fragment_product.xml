@@ -249,7 +249,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
-                                android:hint="Offer Percentage"
+                                android:hint="Offer Percentage (%)"
                                 android:theme="@style/AppThemetextinput"
                                 app:boxCornerRadiusBottomEnd="15dp"
                                 app:boxCornerRadiusBottomStart="15dp"

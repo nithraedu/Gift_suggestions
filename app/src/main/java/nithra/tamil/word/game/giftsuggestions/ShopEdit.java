@@ -53,10 +53,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.tamil.word.game.giftsuggestions.Otp.OtpVerify;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.AddSeller;
+import nithra.tamil.word.game.giftsuggestions.Otp.ShopAdd;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftEdit;
-import nithra.tamil.word.game.giftsuggestions.Retrofit.GiftList;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
 import retrofit2.Call;
@@ -65,8 +63,8 @@ import retrofit2.Response;
 
 public class ShopEdit extends AppCompatActivity {
 
-    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district;
-    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude;
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
+    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
     TextView save, remove;
     ImageView IVPreviewImage;
     SharedPreference sharedPreference = new SharedPreference();
@@ -102,6 +100,9 @@ public class ShopEdit extends AppCompatActivity {
         list_shop = new ArrayList<GiftEdit>();
 
         back = findViewById(R.id.back);
+        mailid = findViewById(R.id.mailid);
+        website = findViewById(R.id.website);
+        emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +131,8 @@ public class ShopEdit extends AppCompatActivity {
                 shop_name = shopname.getText().toString().trim();
                 shop_add = shopaddress.getText().toString().trim();
                 mob_num = mobilenumber.getText().toString().trim();
+                mail = mailid.getText().toString().trim();
+                web = website.getText().toString().trim();
                 shop_city = city.getText().toString().trim();
                 shop_state = state.getText().toString().trim();
                 shop_country = country.getText().toString().trim();
@@ -142,9 +145,13 @@ public class ShopEdit extends AppCompatActivity {
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Seller Name...");
                 } else if (shop_name.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Shop address...");
+                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Shop name...");
                 } else if (mob_num.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Correct Mobile Number...");
+                } else if (mail.equals("")) {
+                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your Email...");
+                } else if (!mail.matches(emailPattern)) {
+                    Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your address...");
                 } else if (shop_pincode.equals("")) {
@@ -162,7 +169,7 @@ public class ShopEdit extends AppCompatActivity {
                 } else if (shop_longitude.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your longitude...");
                 } else {
-                   submit_res();
+                    submit_res();
 
                 }
 
@@ -200,6 +207,8 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("user_id", sharedPreference.getString(getApplicationContext(), "user_id"));
         map1.put("shop_name", shop_name);
         map1.put("seller_mobile", mob_num);
+        map1.put("shop_email", mail);
+        map1.put("shop_website", web);
         map1.put("name", sell_name);
         map1.put("country", shop_country);
         map1.put("state", shop_state);
@@ -217,7 +226,7 @@ public class ShopEdit extends AppCompatActivity {
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("logo[]",""+ Uri.fromFile(file));
+            map2.put("logo[]", "" + Uri.fromFile(file));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -318,6 +327,8 @@ public class ShopEdit extends AppCompatActivity {
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();
                                         mobilenumber.getText().clear();
+                                        mailid.getText().clear();
+                                        website.getText().clear();
                                         city.getText().clear();
                                         state.getText().clear();
                                         country.getText().clear();
@@ -530,7 +541,6 @@ public class ShopEdit extends AppCompatActivity {
     }
 
 
-
     public void shopedit() {
 
 
@@ -538,7 +548,7 @@ public class ShopEdit extends AppCompatActivity {
         map.put("action", "get_id");
         map.put("id", sharedPreference.getString(this, "user_id"));
 
-        System.out.println("print_map "+map );
+        System.out.println("print_map " + map);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
         Call<ArrayList<GiftEdit>> call = retrofitAPI.edit_gift(map);
         call.enqueue(new Callback<ArrayList<GiftEdit>>() {
@@ -559,6 +569,8 @@ public class ShopEdit extends AppCompatActivity {
                         shopname.setText(list_shop.get(0).getShopName());
                         shopaddress.setText(list_shop.get(0).getAddress());
                         mobilenumber.setText(list_shop.get(0).getSellerMobile());
+                        mailid.setText(list_shop.get(0).getShopEmail());
+                        website.setText(list_shop.get(0).getShopWebsite());
                         city.setText(list_shop.get(0).getCity());
                         state.setText(list_shop.get(0).getState());
                         country.setText(list_shop.get(0).getCountry());

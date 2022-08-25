@@ -54,6 +54,7 @@ public class ActivitySecond extends AppCompatActivity {
     SQLiteDatabase mydb;
     ArrayList<String> gift_id = new ArrayList<>();
     String send_id;
+    int check_fav = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +72,7 @@ public class ActivitySecond extends AppCompatActivity {
         mydb = this.openOrCreateDatabase("mydb", MODE_PRIVATE, null);
         mydb.execSQL("CREATE TABLE if not exists Bookmarks(id integer NOT NULL PRIMARY KEY AUTOINCREMENT,gift_id TEXT);");
 
-        Cursor c1 = mydb.rawQuery("select gift_id from Bookmarks ", null);
+        /*Cursor c1 = mydb.rawQuery("select gift_id from Bookmarks ", null);
         if (c1.getCount() > 0) {
             for (int i = 0; i < c1.getCount(); i++) {
                 if (i == 0) {
@@ -81,7 +82,7 @@ public class ActivitySecond extends AppCompatActivity {
                 }
                 System.out.println("print sendid== " + send_id);
             }
-        }
+        }*/
 
 
        /* for (int i = 0; i < 5; i++) {
@@ -99,6 +100,7 @@ public class ActivitySecond extends AppCompatActivity {
                 finish();
             }
         });
+
         intent = getIntent();
         extra = intent.getExtras();
         if (extra != null) {
@@ -112,7 +114,6 @@ public class ActivitySecond extends AppCompatActivity {
         cat_title.setText("" + title + " Gifts");
 
         Utils_Class.mProgress(ActivitySecond.this, "Loading please wait...", false).show();
-
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2, GridLayoutManager.VERTICAL, false);
         list.setLayoutManager(gridLayoutManager);
@@ -188,7 +189,6 @@ public class ActivitySecond extends AppCompatActivity {
                         gift_show.clear();
                         gift_show.addAll(response.body());
                         System.out.println("gift_show== " + gift_show.size());
-
                         adapter.notifyDataSetChanged();
                     }
                     if (gift_show.size() == 0) {
@@ -199,7 +199,6 @@ public class ActivitySecond extends AppCompatActivity {
                         no_item.setVisibility(View.GONE);
                     }
                     Utils_Class.mProgress.dismiss();
-
                 }
                 System.out.println("======response :" + response);
             }
@@ -212,18 +211,22 @@ public class ActivitySecond extends AppCompatActivity {
     }
 
 
-    public void fav() {
+    public void fav(String id_gift) {
         HashMap<String, String> map = new HashMap<>();
-        map.put("action", "fav_id");
+        map.put("action", "fav_image");
         map.put("android_id", Utils_Class.android_id(this));
-        map.put("gift_id", send_id);
+        map.put("fav_id", id_gift);
+
+        System.out.println("favroute==" + map);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
         Call<ArrayList<Fav_Add_Del>> call = retrofitAPI.fav_add_del(map);
         call.enqueue(new Callback<ArrayList<Fav_Add_Del>>() {
             @Override
             public void onResponse(Call<ArrayList<Fav_Add_Del>> call, Response<ArrayList<Fav_Add_Del>> response) {
                 if (response.isSuccessful()) {
+                    if (response.body().get(0).getStatus().equals("success")) {
 
+                    }
                 }
                 System.out.println("======response :" + response);
             }
@@ -260,6 +263,13 @@ public class ActivitySecond extends AppCompatActivity {
         public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
             int pos = position;
 
+            Cursor c1 = mydb.rawQuery("select * from Bookmarks where gift_id='" + gift_show.get(pos).getId() + "'", null);
+            if (c1.getCount() != 0) {
+                holder.favourite.setBackgroundResource(R.drawable.favorite_red);
+            } else {
+                holder.favourite.setBackgroundResource(R.drawable.favorite_grey);
+            }
+
             Glide.with(context).load(gift_show.get(pos).getGiftImage())
                     //.error(R.drawable.gift_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -282,9 +292,10 @@ public class ActivitySecond extends AppCompatActivity {
                     //holder.favourite.setBackgroundResource(R.drawable.heart_toolbar_2);
                    /* Utils_Class.toast_center(getApplicationContext(), "click fav...");
                     mydb.execSQL("Insert into Bookmark (id) values ('" + gift_show.get(pos).getId() + "')");*/
-                    fav();
+                    //fav(gift_show.get(pos).getId());
                     Cursor c1 = mydb.rawQuery("select * from Bookmarks where gift_id='" + gift_show.get(pos).getId() + "'", null);
                     if (c1.getCount() == 0) {
+                        //check_fav=1;
                         holder.favourite.setBackgroundResource(R.drawable.favorite_red);
                         mydb.execSQL("Insert into Bookmarks (gift_id) values ('" + gift_show.get(pos).getId() + "')");
                         Toast.makeText(getApplicationContext(), "பிடித்தமானவைகளில் சேமிக்கப்பட்டது", LENGTH_SHORT).show();
@@ -296,7 +307,6 @@ public class ActivitySecond extends AppCompatActivity {
 
                 }
             });
-
         }
 
 

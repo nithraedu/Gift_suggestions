@@ -28,7 +28,7 @@ import retrofit2.Response;
 public class SellerProfile extends AppCompatActivity {
     ArrayList<SellerProfilePojo> gift;
     ImageView IVPreviewImage;
-    TextView seller_name, shop_name, mobile, address, pincode, state, district, city, country, latitude, longitude,total_gifts;
+    TextView seller_name, shop_name, mobile, address, pincode, state, district, city, country, latitude, longitude, total_gifts, mail, web;
     SharedPreference sharedPreference = new SharedPreference();
     ImageView back;
     ImageView profile_edit;
@@ -47,6 +47,8 @@ public class SellerProfile extends AppCompatActivity {
         seller_name = findViewById(R.id.seller_name);
         shop_name = findViewById(R.id.shop_name);
         mobile = findViewById(R.id.mobile);
+        mail = findViewById(R.id.mail);
+        web = findViewById(R.id.web);
         address = findViewById(R.id.address);
         pincode = findViewById(R.id.pincode);
         state = findViewById(R.id.state);
@@ -60,6 +62,8 @@ public class SellerProfile extends AppCompatActivity {
         latitude = findViewById(R.id.latitude);
         total_gifts = findViewById(R.id.total_gifts);
 
+        TextView android_id=findViewById(R.id.android_id);
+        android_id.setText(Utils_Class.android_id(this));
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,8 +89,6 @@ public class SellerProfile extends AppCompatActivity {
                 pullToRefresh.setRefreshing(false);
             }
         });
-
-
     }
 
     @Override
@@ -96,7 +98,7 @@ public class SellerProfile extends AppCompatActivity {
             category();
             sharedPreference.putInt(SellerProfile.this, "finish", 0);
         }
-        }
+    }
 
     public void category() {
         HashMap<String, String> map = new HashMap<>();
@@ -120,6 +122,8 @@ public class SellerProfile extends AppCompatActivity {
                     seller_name.setText(gift.get(0).getName());
                     shop_name.setText(gift.get(0).getShopName());
                     mobile.setText(gift.get(0).getSellerMobile());
+                    mail.setText(gift.get(0).getShopEmail());
+                    web.setText(gift.get(0).getShopWebsite());
                     address.setText(gift.get(0).getAddress());
                     pincode.setText(gift.get(0).getPincode());
                     state.setText(gift.get(0).getState());
@@ -128,7 +132,7 @@ public class SellerProfile extends AppCompatActivity {
                     country.setTag(gift.get(0).getCountry());
                     latitude.setText(gift.get(0).getLatitude());
                     longitude.setText(gift.get(0).getLongitude());
-                    total_gifts.setText("My total gifts : "+gift.get(0).getTotalGifts());
+                    total_gifts.setText("My total gifts : " + gift.get(0).getTotalGifts());
                     Utils_Class.mProgress.dismiss();
 
                 }

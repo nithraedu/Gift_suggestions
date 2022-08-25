@@ -16,9 +16,32 @@ public class SellerProfilePojo {
     @SerializedName("shop_name")
     @Expose
     public String shopName;
+
+    public String getShopWebsite() {
+        return shopWebsite;
+    }
+
+    public void setShopWebsite(String shopWebsite) {
+        this.shopWebsite = shopWebsite;
+    }
+
+    public String getShopEmail() {
+        return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
+    }
+
     @SerializedName("seller_mobile")
     @Expose
     public String sellerMobile;
+    @SerializedName("shop_website")
+    @Expose
+    public String shopWebsite;
+    @SerializedName("shop_email")
+    @Expose
+    public String shopEmail;
     @SerializedName("state")
     @Expose
     public String state;

@@ -57,9 +57,9 @@ import nithra.tamil.word.game.giftsuggestions.Utils_Class;
 
 public class ShopAdd extends AppCompatActivity {
 
-    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district;
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
     TextView save, remove;
-    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude;
+    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
     ImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
@@ -93,6 +93,9 @@ public class ShopAdd extends AppCompatActivity {
         pincode = findViewById(R.id.pincode);
         district = findViewById(R.id.district);
         back = findViewById(R.id.back);
+        mailid = findViewById(R.id.mailid);
+        website = findViewById(R.id.website);
+        emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +125,8 @@ public class ShopAdd extends AppCompatActivity {
                 shop_name = shopname.getText().toString().trim();
                 shop_add = shopaddress.getText().toString().trim();
                 mob_num = mobilenumber.getText().toString().trim();
+                mail = mailid.getText().toString().trim();
+                web = website.getText().toString().trim();
                 shop_city = city.getText().toString().trim();
                 shop_state = state.getText().toString().trim();
                 shop_country = country.getText().toString().trim();
@@ -134,10 +139,14 @@ public class ShopAdd extends AppCompatActivity {
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");
                 } else if (shop_name.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Shop address...");
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Shop name...");
                 } else if (mob_num.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Correct Mobile Number...");
-                } else if (shop_add.equals("")) {
+                } else if (mail.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your Email...");
+                } else if (!mail.matches(emailPattern)) {
+                    Toast.makeText(ShopAdd.this, "Invalid email address", Toast.LENGTH_SHORT).show();
+                }else if (shop_add.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
                 } else if (shop_country.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
@@ -189,6 +198,8 @@ public class ShopAdd extends AppCompatActivity {
         map1.put("user_id", sharedPreference.getString(ShopAdd.this, "user_id"));
         map1.put("shop_name", shop_name);
         map1.put("seller_mobile", mob_num);
+        map1.put("shop_email", mail);
+        map1.put("shop_website", web);
         map1.put("name", sell_name);
         map1.put("country", shop_country);
         map1.put("state", shop_state);
@@ -306,6 +317,8 @@ public class ShopAdd extends AppCompatActivity {
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();
                                         mobilenumber.getText().clear();
+                                        mailid.getText().clear();
+                                        website.getText().clear();
                                         city.getText().clear();
                                         state.getText().clear();
                                         country.getText().clear();
