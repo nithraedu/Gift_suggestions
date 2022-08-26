@@ -187,6 +187,8 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     giftoccasion.addAll(response.body());
+                    //sharedPreference.putString(getContext(), "occasio_id", giftoccasion.get(0).getId());
+
                     adapter3.notifyDataSetChanged();
                     Utils_Class.mProgress.dismiss();
 
@@ -306,8 +308,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             View listItem = layoutInflater.inflate(R.layout.adapter_3, parent, false);
             Adapter3.ViewHolder viewHolder = new Adapter3.ViewHolder(listItem);
             return viewHolder;
-
-
         }
 
         @Override

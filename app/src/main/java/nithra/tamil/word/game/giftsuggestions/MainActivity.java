@@ -22,15 +22,22 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.shape.CornerFamily;
 import com.google.android.material.shape.MaterialShapeDrawable;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
-
+import java.util.HashMap;
 
 import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Home;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Location;
 import nithra.tamil.word.game.giftsuggestions.Fragment.Settings;
 import nithra.tamil.word.game.giftsuggestions.Otp.OtpSend;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.Androidid;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnItemSelectedListener, FragMove {
     ViewPager2 viewpager2;
@@ -40,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     BottomAppBar bottomAppBar;
     SharedPreferences pref;
     SharedPreference sharedPreference = new SharedPreference();
-
+    ArrayList<Androidid> and_id;
 
 
     @Override
@@ -69,6 +76,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         frag_adapter.addFragment(new SendOTP());
         frag_adapter.addFragment(new EnterOTP());*/
         bottomAppBar = findViewById(R.id.bottomAppBar);
+        and_id = new ArrayList<Androidid>();
+
+        if (sharedPreference.getInt(getApplicationContext(), "android_id_check") == 0) {
+            android();
+        }
+
 
         MaterialShapeDrawable bottomBarBackground = (MaterialShapeDrawable) bottomAppBar.getBackground();
         bottomBarBackground.setShapeAppearanceModel(
@@ -110,14 +123,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             public void onClick(View view) {
 
 
-
                 if (sharedPreference.getInt(getApplicationContext(), "yes") == 0) {
                     //viewpager2.setCurrentItem(6, false);
-                    Intent i=new Intent(MainActivity.this, OtpSend.class);
+                    Intent i = new Intent(MainActivity.this, OtpSend.class);
                     startActivity(i);
 
                 } else {
-                    Intent i=new Intent(MainActivity.this, MyProduct.class);
+                    Intent i = new Intent(MainActivity.this, MyProduct.class);
                     startActivity(i);
                     // viewpager2.setCurrentItem(5, false);
                     //viewpager2.setCurrentItem(2, false);
@@ -155,6 +167,35 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
 
         viewpager2.setAdapter(frag_adapter);
+    }
+
+
+    public void android() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "check_android_id");
+        map.put("android_id", Utils_Class.android_id(this));
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<Androidid>> call = retrofitAPI.androidid(map);
+        call.enqueue(new Callback<ArrayList<Androidid>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Androidid>> call, Response<ArrayList<Androidid>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    if (response.body().get(0).getStatus().equals("success")) {
+                        and_id.addAll(response.body());
+                        sharedPreference.putInt(getApplicationContext(), "android_id_check", 1);
+                        sharedPreference.putString(getApplicationContext(), "android_userid", and_id.get(0).getUserId());
+                    }
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Androidid>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
     }
 
 

@@ -7,9 +7,9 @@ public class Fav_view {
     @SerializedName("id")
     @Expose
     public String id;
-    @SerializedName("fav_id")
+    @SerializedName("gift_id")
     @Expose
-    public String favId;
+    public String giftId;
     @SerializedName("user_id")
     @Expose
     public String userId;
@@ -76,6 +76,9 @@ public class Fav_view {
     @SerializedName("status")
     @Expose
     public String status;
+    @SerializedName("fav")
+    @Expose
+    public Integer fav;
 
     public String getId() {
         return id;
@@ -85,12 +88,12 @@ public class Fav_view {
         this.id = id;
     }
 
-    public String getFavId() {
-        return favId;
+    public String getGiftId() {
+        return giftId;
     }
 
-    public void setFavId(String favId) {
-        this.favId = favId;
+    public void setGiftId(String giftId) {
+        this.giftId = giftId;
     }
 
     public String getUserId() {
@@ -267,5 +270,13 @@ public class Fav_view {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getFav() {
+        return fav;
+    }
+
+    public void setFav(Integer fav) {
+        this.fav = fav;
     }
 }

@@ -4,6 +4,9 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Gift_Cat {
+    @SerializedName("seller_id")
+    @Expose
+    public String sellerId;
     @SerializedName("id")
     @Expose
     public String id;
@@ -19,29 +22,6 @@ public class Gift_Cat {
     @SerializedName("seller_mobile")
     @Expose
     public String sellerMobile;
-    @SerializedName("shop_website")
-    @Expose
-    public String shopWebsite;
-    @SerializedName("shop_email")
-    @Expose
-    public String shopEmail;
-
-    public String getShopWebsite() {
-        return shopWebsite;
-    }
-
-    public void setShopWebsite(String shopWebsite) {
-        this.shopWebsite = shopWebsite;
-    }
-
-    public String getShopEmail() {
-        return shopEmail;
-    }
-
-    public void setShopEmail(String shopEmail) {
-        this.shopEmail = shopEmail;
-    }
-
     @SerializedName("state")
     @Expose
     public String state;
@@ -60,6 +40,12 @@ public class Gift_Cat {
     @SerializedName("longitude")
     @Expose
     public String longitude;
+    @SerializedName("shop_website")
+    @Expose
+    public String shopWebsite;
+    @SerializedName("shop_email")
+    @Expose
+    public String shopEmail;
     @SerializedName("district")
     @Expose
     public String district;
@@ -96,6 +82,17 @@ public class Gift_Cat {
     @SerializedName("status")
     @Expose
     public String status;
+    @SerializedName("fav")
+    @Expose
+    public Integer fav;
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
 
     public String getId() {
         return id;
@@ -183,6 +180,22 @@ public class Gift_Cat {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getShopWebsite() {
+        return shopWebsite;
+    }
+
+    public void setShopWebsite(String shopWebsite) {
+        this.shopWebsite = shopWebsite;
+    }
+
+    public String getShopEmail() {
+        return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
     }
 
     public String getDistrict() {
@@ -279,5 +292,13 @@ public class Gift_Cat {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getFav() {
+        return fav;
+    }
+
+    public void setFav(Integer fav) {
+        this.fav = fav;
     }
 }

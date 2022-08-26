@@ -38,14 +38,12 @@ public class OtpSend extends AppCompatActivity {
     String name_otp,gmail_otp,emailPattern;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
-    SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.fragment_send_o_t_p);
-        pref = this.getSharedPreferences("register", Context.MODE_PRIVATE);
 
         getotp = findViewById(R.id.getotp);
         name=findViewById(R.id.name);

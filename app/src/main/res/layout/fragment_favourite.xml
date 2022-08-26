@@ -20,6 +20,7 @@
             android:layout_height="25dp"
             android:layout_gravity="center"
             android:backgroundTint="#0069ff"
+            android:visibility="gone"
             android:src="@drawable/ic_baseline_arrow_back_24" />
 
         <TextView
@@ -29,7 +30,7 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:text="Cat_Title"
+            android:text="Favourite"
             android:textColor="@color/black"
             android:textSize="20dp"
             android:layout_marginLeft="5dp"
@@ -59,7 +60,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
-            android:text="Gifts Not Available"
+            android:text="No Favourite"
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="20dp"
