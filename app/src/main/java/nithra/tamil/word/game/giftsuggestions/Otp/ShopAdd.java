@@ -135,6 +135,8 @@ public class ShopAdd extends AppCompatActivity {
                 shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();
 
+                String url="http://"+web;
+                String url1="https://"+web;
 
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");

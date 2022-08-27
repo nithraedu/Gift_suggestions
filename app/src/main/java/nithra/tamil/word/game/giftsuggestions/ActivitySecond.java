@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Fav_Add_Del;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Gift_Cat;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
@@ -36,8 +37,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ActivitySecond extends AppCompatActivity {
-    Adapter adapter;
-    ArrayList<Gift_Cat> gift_show;
+    public  static Adapter adapter;
+    public  static  ArrayList<Gift_Cat> gift_show;
     ArrayList<Fav_Add_Del> fav_add_dels;
     RecyclerView list;
     ImageView back;
@@ -66,9 +67,9 @@ public class ActivitySecond extends AppCompatActivity {
         no_item = findViewById(R.id.no_item);
         pullToRefresh = findViewById(R.id.pullToRefresh);
         fav_add_dels = new ArrayList<Fav_Add_Del>();
-        mydb = this.openOrCreateDatabase("mydb", MODE_PRIVATE, null);
+      /*  mydb = this.openOrCreateDatabase("mydb", MODE_PRIVATE, null);
         mydb.execSQL("CREATE TABLE if not exists Bookmarks(id integer NOT NULL PRIMARY KEY AUTOINCREMENT,gift_id TEXT);");
-
+*/
         /*Cursor c1 = mydb.rawQuery("select gift_id from Bookmarks ", null);
         if (c1.getCount() > 0) {
             for (int i = 0; i < c1.getCount(); i++) {
@@ -192,10 +193,10 @@ public class ActivitySecond extends AppCompatActivity {
                         adapter.notifyDataSetChanged();
                     }
                     if (gift_show.size() == 0) {
-                        list.setVisibility(View.GONE);
+                        pullToRefresh.setVisibility(View.GONE);
                         no_item.setVisibility(View.VISIBLE);
                     } else {
-                        list.setVisibility(View.VISIBLE);
+                        pullToRefresh.setVisibility(View.VISIBLE);
                         no_item.setVisibility(View.GONE);
                     }
                     Utils_Class.mProgress.dismiss();
@@ -227,13 +228,19 @@ public class ActivitySecond extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     if (response.body().get(0).getStatus().equals("Success")) {
-                        if (response.body().get(0).getFvAction().equals("1")) {
+                        if (response.body().get(0).getFvAction()==1) {
                             gift_show.get(pos).setFav(1);
+                            //Favourite.set_flag=1;
+                            Utils_Class.toast_center(ActivitySecond.this, "Your gift added to favourite...");
+                            System.out.println("print__id1== "+gift_show.get(pos).getId());
                         } else {
                             gift_show.get(pos).setFav(0);
+                            Utils_Class.toast_center(ActivitySecond.this, "Your gift removed from favourite...");
                         }
                         adapter.notifyDataSetChanged();
                     }
+                    Utils_Class.mProgress.dismiss();
+
                 }
                 System.out.println("======response :" + response);
             }
@@ -288,6 +295,7 @@ public class ActivitySecond extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent i = new Intent(ActivitySecond.this, Full_Details.class);
                     i.putExtra("full_view", gift_show.get(pos).getId());
+                    //i.putExtra("favourite",gift_show.get(pos).getFav());
                     startActivity(i);
                 }
             });
@@ -297,6 +305,7 @@ public class ActivitySecond extends AppCompatActivity {
                 public void onClick(View v) {
 
                     fav(gift_show.get(pos).getId(), pos);
+
                 }
             });
         }

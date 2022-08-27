@@ -15,6 +15,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.cardview.widget.CardView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -23,6 +24,9 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.tamil.word.game.giftsuggestions.Fragment.Favourite;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.Fav_Add_Del;
+import nithra.tamil.word.game.giftsuggestions.Retrofit.Fav_view;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.Gift_Cat;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitAPI;
 import nithra.tamil.word.game.giftsuggestions.Retrofit.RetrofitApiClient;
@@ -35,10 +39,13 @@ public class Full_Details extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back, company_logo, IVPreviewImage;
-    TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name,website,email;
-    LinearLayout phone;
-    CardView card_mail,card_web;
+    ImageView back, company_logo, IVPreviewImage, fav;
+    TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name, website, email, head;
+    LinearLayout phone, web_gone;
+    CardView card_mail, card_web;
+    SharedPreference sharedPreference = new SharedPreference();
+    ArrayList<Fav_view> fav_show;
+    SwipeRefreshLayout pullToRefresh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,11 +70,19 @@ public class Full_Details extends AppCompatActivity {
         email = findViewById(R.id.email);
         card_mail = findViewById(R.id.card_mail);
         card_web = findViewById(R.id.card_web);
+        web_gone = findViewById(R.id.web_gone);
+        head = findViewById(R.id.head);
+        fav = findViewById(R.id.fav);
+        fav_show = new ArrayList<Fav_view>();
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+
         intent = getIntent();
         extra = intent.getExtras();
         id_gift = extra.getString("full_view");
 
         giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
+
+        Utils_Class.mProgress(Full_Details.this, "Loading please wait...", false).show();
 
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -76,7 +91,16 @@ public class Full_Details extends AppCompatActivity {
                 finish();
             }
         });
+
         get_cat();
+
+
+        fav.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fav1();
+            }
+        });
 
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -151,7 +175,13 @@ public class Full_Details extends AppCompatActivity {
                 }
             }
         });
-
+        /*pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                get_cat();
+                pullToRefresh.setRefreshing(false);
+            }
+        });*/
 
     }
 
@@ -181,7 +211,8 @@ public class Full_Details extends AppCompatActivity {
                         offerprize.setText("\u20B9 " + gift_show.get(0).getGiftAmount());
                         description.setText(gift_show.get(0).getGiftDescription());
                         detail_shop_name.setText(gift_show.get(0).getShopName());
-                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry()+ " - " + gift_show.get(0).getPincode());
+                        //detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry() + " - " + gift_show.get(0).getPincode());
+                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry());
                         Glide.with(getApplicationContext()).load(gift_show.get(0).getLogo())
                                 //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -189,7 +220,19 @@ public class Full_Details extends AppCompatActivity {
                         owner_name.setText(gift_show.get(0).getName());
                         website.setText(gift_show.get(0).getShopWebsite());
                         email.setText(gift_show.get(0).getShopEmail());
+                        head.setText(gift_show.get(0).getDiscount() + "% offer");
+
                         System.out.println("gift_show== " + gift_show.size());
+
+                        if (gift_show.get(0).getShopWebsite().equals("")) {
+                            web_gone.setVisibility(View.GONE);
+                        }
+
+                        if (gift_show.get(0).getFav()==1) {
+                            fav.setBackgroundResource(R.drawable.favorite_red);
+                        } else {
+                            fav.setBackgroundResource(R.drawable.favorite_grey);
+                        }
 
                     }
 
@@ -205,5 +248,51 @@ public class Full_Details extends AppCompatActivity {
             }
         });
     }
+
+
+    public void fav1() {
+       // fav_show.clear();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "favourite");
+        map.put("gift_id", id_gift);
+        map.put("user_id", sharedPreference.getString(Full_Details.this, "android_userid"));
+
+        System.out.println("favroute==" + map);
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<Fav_Add_Del>> call = retrofitAPI.fav_add_del(map);
+        call.enqueue(new Callback<ArrayList<Fav_Add_Del>>() {
+            @Override
+            public void onResponse(Call<ArrayList<Fav_Add_Del>> call, Response<ArrayList<Fav_Add_Del>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    if (response.body().get(0).getStatus().equals("Success")) {
+                        if (response.body().get(0).getFvAction() == 1) {
+                            gift_show.get(0).setFav(1);
+                            ActivitySecond.gift_show.get(0).setFav(1);
+                            Favourite.fav_show.get(0).setFav(1);
+                            fav.setBackgroundResource(R.drawable.favorite_red);
+                            Utils_Class.toast_center(Full_Details.this, "Your gift added to favourite...");
+                        } else {
+                            gift_show.get(0).setFav(0);
+                            ActivitySecond.gift_show.get(0).setFav(0);
+                            Favourite.fav_show.get(0).setFav(0);
+                            fav.setBackgroundResource(R.drawable.favorite_grey);
+                            Utils_Class.toast_center(Full_Details.this, "Your gift removed from favourite...");
+                        }
+                        ActivitySecond.adapter.notifyDataSetChanged();
+                        Favourite.adapter.notifyDataSetChanged();
+                    }
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<Fav_Add_Del>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
 
 }

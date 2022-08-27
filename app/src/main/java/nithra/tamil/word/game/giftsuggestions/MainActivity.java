@@ -274,6 +274,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     }
 
+    @Override
+    public void home() {
+        viewpager2.setCurrentItem(0, false);
+        home.setBackgroundResource(R.drawable.background2);
+        favourite.setBackgroundResource(0);
+        location.setBackgroundResource(0);
+        settings.setBackgroundResource(0);
+    }
+
     public class Frag_Adapter extends FragmentStateAdapter {
 
         private ArrayList<Fragment> fragmentList = new ArrayList<>();

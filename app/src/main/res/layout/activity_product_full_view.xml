@@ -31,7 +31,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:maxLines="1"
-            android:text="Product Details"
+            android:text="Gift Details"
             android:textColor="@color/white"
             android:textSize="20dp"
             android:textStyle="bold" />

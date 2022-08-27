@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,7 +33,7 @@ public class SellerProfile extends AppCompatActivity {
     SharedPreference sharedPreference = new SharedPreference();
     ImageView back;
     ImageView profile_edit;
-
+    LinearLayout web_gone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +62,9 @@ public class SellerProfile extends AppCompatActivity {
         longitude = findViewById(R.id.longitude);
         latitude = findViewById(R.id.latitude);
         total_gifts = findViewById(R.id.total_gifts);
+        web_gone = findViewById(R.id.web_gone);
 
-        TextView android_id=findViewById(R.id.android_id);
+        TextView android_id = findViewById(R.id.android_id);
         android_id.setText(Utils_Class.android_id(this));
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -134,6 +136,10 @@ public class SellerProfile extends AppCompatActivity {
                     longitude.setText(gift.get(0).getLongitude());
                     total_gifts.setText("My total gifts : " + gift.get(0).getTotalGifts());
                     Utils_Class.mProgress.dismiss();
+
+                    if (gift.get(0).getShopWebsite().equals("")) {
+                        web_gone.setVisibility(View.GONE);
+                    }
 
                 }
                 System.out.println("======response :" + response);
