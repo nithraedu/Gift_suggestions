@@ -6,7 +6,7 @@ android {
     compileSdk 31
 
     defaultConfig {
-        applicationId "nithra.tamil.word.game.giftsuggestions"
+        applicationId "nithra.gift.suggestion.shop.birthday.marriage"
         minSdk 21
         targetSdk 31
         versionCode 1

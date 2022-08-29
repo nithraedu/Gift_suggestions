@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="nithra.tamil.word.game.giftsuggestions">
+    package="nithra.gift.suggestion.shop.birthday.marriage">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,40 +27,40 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".Full_Details"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.Full_Details"
             android:exported="false" />
         <activity
-            android:name=".SellerProfile"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.SellerProfile"
             android:exported="false" />
         <activity
-            android:name=".ProductFullView"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.ProductFullView"
             android:exported="false" />
         <activity
-            android:name=".ShopEdit"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.ShopEdit"
             android:exported="false" />
         <activity
-            android:name=".ProductEdit"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.ProductEdit"
             android:exported="false" />
         <activity
-            android:name=".MyProduct"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.MyProduct"
             android:exported="false" />
         <activity
-            android:name=".ActivitySecond"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.ActivitySecond"
             android:exported="false" />
         <activity
-            android:name=".Otp.ShopAdd"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd"
             android:exported="false" />
         <activity
-            android:name=".Otp.ProductAdd"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd"
             android:exported="false" />
         <activity
-            android:name=".Otp.OtpVerify"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpVerify"
             android:exported="false" />
         <activity
-            android:name=".Otp.OtpSend"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpSend"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name="nithra.gift.suggestion.shop.birthday.marriage.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GiftSuggestions"
