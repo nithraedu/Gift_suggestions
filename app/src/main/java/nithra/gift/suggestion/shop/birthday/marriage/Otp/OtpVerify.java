@@ -3,10 +3,13 @@ package nithra.gift.suggestion.shop.birthday.marriage.Otp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -29,11 +32,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OtpVerify extends AppCompatActivity {
-    TextView enterotp;
-    EditText enter_otp;
-    String verify;
+    TextView enterotp,edit_email;
+    EditText enter_otp, otp_1, otp_2, otp_3, otp_4;
+    String verify, edit_otp;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
+    ImageView edit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,16 +47,23 @@ public class OtpVerify extends AppCompatActivity {
         setContentView(R.layout.fragment_enter_o_t_p);
 
         TextView _tv = findViewById(R.id.timer);
-        send_otp=new ArrayList<SendOtppojo>();
+        send_otp = new ArrayList<SendOtppojo>();
 
         enterotp = findViewById(R.id.enterotp);
-        enter_otp=findViewById(R.id.enter_otp);
+        edit_email = findViewById(R.id.edit_email);
+        otp_1 = findViewById(R.id.otp_1);
+        otp_2 = findViewById(R.id.otp_2);
+        otp_3 = findViewById(R.id.otp_3);
+        otp_4 = findViewById(R.id.otp_4);
+        edit = findViewById(R.id.edit);
 
-
+        enter_otp = findViewById(R.id.enter_otp);
+        edit_email.setText(sharedPreference.getString(OtpVerify.this, "user_mail"));
         new CountDownTimer(120000, 1000) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 _tv.setText("If you didn't receive a otp? " + millisUntilFinished / 1000);
             }
+
             public void onFinish() {
                 _tv.setText("If you didn't receive a otp? Resend");
                 sharedPreference.putString(OtpVerify.this, "register_otp", "" + 0);
@@ -80,29 +92,84 @@ public class OtpVerify extends AppCompatActivity {
             }
         });
 
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+               finish();
+            }
+        });
+
+        otp_1.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                otp_2.requestFocus();
+            }
+        });
+
+        otp_2.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                otp_3.requestFocus();
+
+            }
+        });
+
+        otp_3.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                otp_4.requestFocus();
+            }
+        });
+
         enterotp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-
-                if (enter_otp.getText().toString().equals("")) {
+                edit_otp = otp_1.getText().toString().trim() + otp_2.getText().toString().trim() + otp_3.getText().toString().trim() + otp_4.getText().toString().trim();
+                if (otp_1.getText().toString().equals("") && otp_2.getText().toString().equals("") && otp_3.getText().toString().equals("") && otp_4.getText().toString().equals("")) {
                     Utils_Class.toast_center(OtpVerify.this, "Enter your otp");
-                } else if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(enter_otp.getText().toString())) {
-
+                } else if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(edit_otp)) {
+                    System.out.println("printop" + edit_otp);
                     otp_verify();
-
-
                 } else {
                     Utils_Class.toast_center(OtpVerify.this, "Invalid otp");
                 }
-
-
             }
         });
     }
 
     public void otp_verify() {
-        verify = enter_otp.getText().toString().trim();
+        verify = edit_otp.trim();
+
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "check_otp");
         map.put("user_id", sharedPreference.getString(OtpVerify.this, "user_id"));
@@ -119,17 +186,17 @@ public class OtpVerify extends AppCompatActivity {
                     sharedPreference.putInt(OtpVerify.this, "yes", 1);
                     sharedPreference.putInt(OtpVerify.this, "profile", 1);
                     enter_otp.getText().clear();
-                    String user=sharedPreference.getString(OtpVerify.this, "user_status");
+                    String user = sharedPreference.getString(OtpVerify.this, "user_status");
 
                     if (user.equals("exiting")) {
                         sharedPreference.putInt(OtpVerify.this, "profile", 2);
-                        Intent i=new Intent(OtpVerify.this, MyProduct.class);
+                        Intent i = new Intent(OtpVerify.this, MyProduct.class);
                         startActivity(i);
                         finish();
                         //fragMove.product();
                         //fragMove.seller();
-                    }else if(user.equals("new")){
-                        Intent i=new Intent(OtpVerify.this, ShopAdd.class);
+                    } else if (user.equals("new")) {
+                        Intent i = new Intent(OtpVerify.this, ShopAdd.class);
                         startActivity(i);
                         finish();
                         //fragMove.seller();

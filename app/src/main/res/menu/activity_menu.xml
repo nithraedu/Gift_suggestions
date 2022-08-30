@@ -22,6 +22,10 @@
             android:id="@+id/nav_policy"
             android:icon="@drawable/policy_icon"
             android:title="Privacy Policy" />
+        <item
+            android:id="@+id/add_shop_nav"
+            android:icon="@drawable/policy_icon"
+            android:title="Add Your Shop" />
     </group>
 
 </menu>

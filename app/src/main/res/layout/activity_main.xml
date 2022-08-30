@@ -10,8 +10,7 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="100dp" />
+        android:layout_height="match_parent" />
 
 
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -21,6 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:layout_margin="10dp"
+        android:visibility="gone"
         android:backgroundTint="@color/bottom_bg"
         app:fabCradleMargin="5dp"
         app:fabCradleRoundedCornerRadius="50dp">
@@ -102,6 +102,7 @@
         android:backgroundTint="@color/bottom_icon"
         android:src="@drawable/add_white"
         app:tint="@color/white"
+        android:visibility="gone"
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="35dp" />
 

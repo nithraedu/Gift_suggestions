@@ -76,7 +76,7 @@ public class ProductAdd extends AppCompatActivity {
     TextView save;
     Spinner spin_occaction, spin_gender;
     TextView myproduct;
-    ImageView IVPreviewImage;
+    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
     SharedPreference sharedPreference = new SharedPreference();
     String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
     ArrayList<String> spin;
@@ -84,7 +84,7 @@ public class ProductAdd extends AppCompatActivity {
     ArrayList<GiftFor> giftfor;
     ArrayList<Occasion> occasion;
     ArrayList<AddGift> add_gift;
-    Uri uri_1;
+    Uri uri_1,uri_2,uri_3;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
@@ -117,6 +117,8 @@ public class ProductAdd extends AppCompatActivity {
         save = findViewById(R.id.save);
         myproduct = findViewById(R.id.myproduct);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
+        IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
+        IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
         giftfor = new ArrayList<GiftFor>();
@@ -327,6 +329,23 @@ public class ProductAdd extends AppCompatActivity {
 
             }
         });
+        IVPreviewImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult1();
+
+
+            }
+        });
+        IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult2();
+
+
+            }
+        });
+
         myproduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -355,6 +374,48 @@ public class ProductAdd extends AppCompatActivity {
                         Intent data = result.getData();
                         IVPreviewImage.setImageURI(data.getData());
                         uri_1 = data.getData();
+                    }
+                }
+            });
+
+    public void openSomeActivityForResult1() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher2.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        IVPreviewImage1.setImageURI(data.getData());
+                        uri_2 = data.getData();
+                    }
+                }
+            });
+
+    public void openSomeActivityForResult2() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher3.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher3 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        IVPreviewImage2.setImageURI(data.getData());
+                        uri_3 = data.getData();
                     }
                 }
             });

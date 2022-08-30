@@ -28,10 +28,11 @@ import retrofit2.Response;
 
 public class OtpSend extends AppCompatActivity {
     TextView getotp;
-    EditText name,gmail;
-    String name_otp,gmail_otp,emailPattern;
+    EditText name, gmail;
+    String name_otp, gmail_otp, emailPattern;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,16 +41,22 @@ public class OtpSend extends AppCompatActivity {
         setContentView(R.layout.fragment_send_o_t_p);
 
         getotp = findViewById(R.id.getotp);
-        name=findViewById(R.id.name);
-        gmail=findViewById(R.id.gmail);
-        send_otp=new ArrayList<SendOtppojo>();
+        name = findViewById(R.id.name);
+        gmail = findViewById(R.id.gmail);
+        send_otp = new ArrayList<SendOtppojo>();
+
+        /*if (sharedPreference.getInt(OtpSend.this, "clear") == 1) {
+            gmail.setText(sharedPreference.getString(OtpSend.this, "user_mail"));
+
+        }*/
+
         getotp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Utils_Class.mProgress(OtpSend.this, "Loading please wait...", false).show();
 
                 otp_generate();
-                sharedPreference.putString(OtpSend.this, "resend", "" +gmail_otp);
+                sharedPreference.putString(OtpSend.this, "resend", "" + gmail_otp);
 
             }
         });
@@ -61,7 +68,7 @@ public class OtpSend extends AppCompatActivity {
         gmail_otp = gmail.getText().toString().trim();
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
-        System.out.println("print"+gmail_otp);
+        System.out.println("print" + gmail_otp);
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "check_seller");
         map.put("name", name_otp);
@@ -83,22 +90,23 @@ public class OtpSend extends AppCompatActivity {
                     if (response.body().get(0).getStatus().equals("Success")) {
                         if (name_otp.equals("")) {
                             Utils_Class.toast_center(OtpSend.this, "Please Enter Your Name...");
-                        }else if (gmail_otp.equals("")) {
+                        } else if (gmail_otp.equals("")) {
                             Utils_Class.toast_center(OtpSend.this, "Please Enter Your Email...");
                         } else if (!gmail_otp.matches(emailPattern)) {
                             Toast.makeText(OtpSend.this, "Invalid email address", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
                             String result = new Gson().toJson(response.body());
                             System.out.println("======response result:" + result);
                             send_otp.addAll(response.body());
                             sharedPreference.putString(OtpSend.this, "register_otp", "" + send_otp.get(0).getOtp());
                             sharedPreference.putString(OtpSend.this, "user_id", "" + send_otp.get(0).getId());
                             sharedPreference.putString(OtpSend.this, "user_status", "" + send_otp.get(0).getUserStatus());
-
+                            sharedPreference.putString(OtpSend.this, "user_mail", "" + send_otp.get(0).getGmail());
                             name.getText().clear();
                             gmail.getText().clear();
-                            Intent i=new Intent(OtpSend.this, OtpVerify.class);
+
+
+                            Intent i = new Intent(OtpSend.this, OtpVerify.class);
                             startActivity(i);
                             finish();
                             //fragMove.enterotp();

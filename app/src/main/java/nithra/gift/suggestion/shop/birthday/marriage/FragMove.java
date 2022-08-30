@@ -5,4 +5,5 @@ public interface FragMove {
     void seller();
     void enterotp();
     void home();
+    void fav();
 }

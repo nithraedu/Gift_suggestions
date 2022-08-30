@@ -283,6 +283,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         settings.setBackgroundResource(0);
     }
 
+    @Override
+    public void fav() {
+        viewpager2.setCurrentItem(1, false);
+
+    }
+
     public class Frag_Adapter extends FragmentStateAdapter {
 
         private ArrayList<Fragment> fragmentList = new ArrayList<>();

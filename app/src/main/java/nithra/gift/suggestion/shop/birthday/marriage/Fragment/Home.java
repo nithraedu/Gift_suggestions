@@ -33,6 +33,9 @@ import java.util.HashMap;
 
 import nithra.gift.suggestion.shop.birthday.marriage.ActivitySecond;
 import nithra.gift.suggestion.shop.birthday.marriage.BuildConfig;
+import nithra.gift.suggestion.shop.birthday.marriage.FragMove;
+import nithra.gift.suggestion.shop.birthday.marriage.MainActivity;
+import nithra.gift.suggestion.shop.birthday.marriage.MyProduct;
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpSend;
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
@@ -40,6 +43,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
+import nithra.gift.suggestion.shop.birthday.marriage.SellerEntry;
 import nithra.gift.suggestion.shop.birthday.marriage.SellerProfile;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
@@ -53,12 +57,14 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     ArrayList<Occasion> giftoccasion;
     Adapter2 adapter2;
     Adapter3 adapter3;
-    LinearLayout notification, profile_view;
+    LinearLayout notification, profile_view,favourite;
     SharedPreference sharedPreference = new SharedPreference();
     TextView code, name;
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
     SwipeRefreshLayout pullToRefresh;
+    FragMove fragMove;
+
 
     public Home() {
     }
@@ -78,11 +84,15 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         drawer = view.findViewById(R.id.drawer_layout);
         notification = view.findViewById(R.id.notification);
         profile_view = view.findViewById(R.id.profile_view);
+        favourite = view.findViewById(R.id.favourite);
         giftfor = new ArrayList<GiftFor>();
         giftoccasion = new ArrayList<Occasion>();
         RecyclerView list = view.findViewById(R.id.list);
         RecyclerView list2 = view.findViewById(R.id.list2);
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
+        fragMove = (FragMove) getContext();
+
+
 
         String user = sharedPreference.getString(getContext(), "user_status");
 
@@ -99,6 +109,13 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                     Intent i = new Intent(getContext(), OtpSend.class);
                     startActivity(i);
                 }
+            }
+        });
+
+        favourite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                fragMove.fav();
             }
         });
 
@@ -166,6 +183,16 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
         } else if (id == R.id.nav_policy) {
 
+
+        }else if (id == R.id.add_shop_nav) {
+            if (sharedPreference.getInt(getContext(), "yes") == 0) {
+                Intent i = new Intent(getContext(), SellerEntry.class);
+                startActivity(i);
+
+            } else {
+                Intent i = new Intent(getContext(), MyProduct.class);
+                startActivity(i);
+            }
 
         }
 
