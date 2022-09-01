@@ -436,14 +436,31 @@ public class ProductAdd extends AppCompatActivity {
         map1.put("discount", discount);
         map1.put("total_amount", total_amount);
 
-        File file = null;
+        File file1,file2,file3 = null;
         try {
-            file = getFile(ProductAdd.this, uri_1);
-            path = file.getPath().replace(file.getName(), "");
-            System.out.println("---file name : " + file.getName());
+            file1 = getFile(ProductAdd.this, uri_1);
+            path = file1.getPath().replace(file1.getName(), "");
+            System.out.println("---file name : " + file1.getName());
             System.out.println("---file path : " + path);
-            System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("gift_image[]", "" + Uri.fromFile(file));
+            System.out.println("---file path : " + file1.getAbsolutePath());
+
+            file2 = getFile(ProductAdd.this, uri_2);
+            path = file2.getPath().replace(file2.getName(), "");
+            System.out.println("---file name : " + file2.getName());
+            System.out.println("---file path : " + path);
+            System.out.println("---file path : " + file2.getAbsolutePath());
+
+
+            file3 = getFile(ProductAdd.this, uri_3);
+            path = file3.getPath().replace(file3.getName(), "");
+            System.out.println("---file name : " + file3.getName());
+            System.out.println("---file path : " + path);
+            System.out.println("---file path : " + file3.getAbsolutePath());
+
+            map2.put("gift_image[0]", "" + Uri.fromFile(file1));
+            map2.put("gift_image[1]", "" + Uri.fromFile(file2));
+            map2.put("gift_image[2]", "" + Uri.fromFile(file3));
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -453,10 +470,19 @@ public class ProductAdd extends AppCompatActivity {
         System.out.println("print map2 : " + map2);
 
 
-        UploadAsync();
+       UploadAsync();
 
 
     }
+
+ /*   public void choose_imge() {
+        try {
+            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(Main_Reg2.this);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            Utils.toast_center(Main_Reg2.this, "Try again...");
+        }
+    }*/
 
 
     public void gender_gift() {

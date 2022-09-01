@@ -282,7 +282,11 @@ public class ActivitySecond extends AppCompatActivity {
                 holder.favourite.setBackgroundResource(R.drawable.favorite_grey);
             }
 
-            Glide.with(context).load(gift_show.get(pos).getGiftImage())
+            String currentString = gift_show.get(pos).getGiftImage();
+            String[] separated = currentString.split(",");
+
+
+            Glide.with(context).load(separated[0])
                     //.error(R.drawable.gift_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);

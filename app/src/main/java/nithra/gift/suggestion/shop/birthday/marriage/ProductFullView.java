@@ -1,15 +1,19 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Paint;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -28,22 +32,28 @@ import retrofit2.Response;
 
 public class ProductFullView extends AppCompatActivity {
     ArrayList<GetGift> gift;
-    ImageView IVPreviewImage;
-    TextView giftname,giftcategory,giftgender,giftprize,offerprize,offerpercen,description;
+    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
+    TextView giftname,giftcategory,giftgender,giftprize,offerprize,offerpercen,description,head,detail_shop_name,detail_add;
     SharedPreference sharedPreference = new SharedPreference();
     Intent intent;
     Bundle extra;
     String id_gift;
     ImageView back,profile_edit;
+    TextView btShowmore;
+    CardView card_mail, card_web;
+    LinearLayout phone;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_product_full_view);
+        setContentView(R.layout.seller_view);
         gift = new ArrayList<GetGift>();
         IVPreviewImage=findViewById(R.id.IVPreviewImage);
+        IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
+        IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
         giftname=findViewById(R.id.giftname);
         giftcategory=findViewById(R.id.giftcategory);
         giftgender=findViewById(R.id.giftgender);
@@ -51,14 +61,35 @@ public class ProductFullView extends AppCompatActivity {
         offerprize=findViewById(R.id.offerprize);
         offerpercen=findViewById(R.id.offerpercen);
         description=findViewById(R.id.description);
+        head = findViewById(R.id.head);
+        detail_shop_name = findViewById(R.id.detail_shop_name);
+        detail_add = findViewById(R.id.detail_add);
         intent = getIntent();
         extra = intent.getExtras();
         id_gift = extra.getString("id");
         back = findViewById(R.id.back);
         profile_edit = findViewById(R.id.profile_edit);
+        btShowmore = findViewById(R.id.btShowmore);
+        card_mail = findViewById(R.id.card_mail);
+        card_web = findViewById(R.id.card_web);
+        phone = findViewById(R.id.phone);
 
         giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
+
+        btShowmore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (btShowmore.getText().toString().equalsIgnoreCase("Show more...")) {
+                    description.setMaxLines(Integer.MAX_VALUE);//your TextView
+                    btShowmore.setText("Show less");
+                } else {
+                    description.setMaxLines(3);//your TextView
+                    btShowmore.setText("Show more...");
+                }
+            }
+        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,9 +107,68 @@ public class ProductFullView extends AppCompatActivity {
             }
         });
 
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String phone = gift.get(0).getSellerMobile().trim();
+                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                startActivity(intent);
+              /*  if (phone.equals("")) {
+                    Utils_Class.toast_center(Category_Full_View.this, "Mobile number not available");
+                } else {
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }*/
+            }
+        });
+
+
+        card_mail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gift.get(0).getShopEmail() != null && !gift.get(0).getShopEmail().trim().isEmpty()) {
+                    if (Utils_Class.isNetworkAvailable(ProductFullView.this)) {
+                        Intent intent = new Intent(Intent.ACTION_SENDTO);
+                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{gift.get(0).getShopEmail().trim()});
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions");
+                        intent.putExtra(Intent.EXTRA_TEXT, "Body Here");
+                        if (intent.resolveActivity(getPackageManager()) != null) {
+                            startActivity(intent);
+                        }
+                    } else {
+                        Utils_Class.toast_center(ProductFullView.this, "Check Your Internet Connection...");
+                    }
+                } else {
+                    Utils_Class.toast_center(ProductFullView.this, "Email not available...");
+                }
+            }
+        });
+
+        card_web.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (gift.get(0).getShopWebsite() != null && !gift.get(0).getShopWebsite().trim().isEmpty()) {
+                    if (Utils_Class.isNetworkAvailable(ProductFullView.this)) {
+                        String url = gift.get(0).getShopWebsite().trim();
+                        System.out.println("urlprint" + url);
+                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                        CustomTabsIntent customTabsIntent = builder.build();
+                        customTabsIntent.launchUrl(ProductFullView.this, Uri.parse(url));
+                    } else {
+                        Utils_Class.toast_center(ProductFullView.this, "Check Your Internet Connection...");
+                    }
+                } else {
+                    Utils_Class.toast_center(ProductFullView.this, "Website not available...");
+                }
+            }
+        });
+
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String currentString = gift.get(0).getGiftImage();
+                String[] separated = currentString.split(",");
                 ImageView img_view;
                 Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
                 dialog.setContentView(R.layout.image_view);
@@ -86,7 +176,7 @@ public class ProductFullView extends AppCompatActivity {
                 //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setCanceledOnTouchOutside(true);
                 img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(gift.get(0).getGiftImage())
+                Glide.with(getApplicationContext()).load(separated[0])
                         //.error(R.drawable.gift_1)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img_view);
@@ -94,6 +184,45 @@ public class ProductFullView extends AppCompatActivity {
 
             }
         });
+
+        IVPreviewImage1 .setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentString = gift.get(0).getGiftImage();
+                String[] separated = currentString.split(",");
+                ImageView img_view;
+                Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
+                dialog.setContentView(R.layout.image_view);
+                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(true);
+                img_view = dialog.findViewById(R.id.img_view);
+                Glide.with(getApplicationContext()).load(separated[1])
+                        //.error(R.drawable.gift_1)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(img_view);
+                dialog.show();
+            }
+        });
+
+        IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentString = gift.get(0).getGiftImage();
+                String[] separated = currentString.split(",");
+                ImageView img_view;
+                Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
+                dialog.setContentView(R.layout.image_view);
+                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(true);
+                img_view = dialog.findViewById(R.id.img_view);
+                Glide.with(getApplicationContext()).load(separated[2])
+                        //.error(R.drawable.gift_1)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(img_view);
+                dialog.show();
+            }
+        });
+
 
         Utils_Class.mProgress(ProductFullView.this, "Loading please wait...", false).show();
 
@@ -127,17 +256,38 @@ public class ProductFullView extends AppCompatActivity {
                     System.out.println("======response result:" + result);
                     gift.clear();
                     gift.addAll(response.body());
-                    Glide.with(getApplicationContext()).load(gift.get(0).getGiftImage())
+                    String currentString = gift.get(0).getGiftImage();
+                    String[] separated = currentString.split(",");
+
+                    Glide.with(getApplicationContext()).load(separated[0])
                             //.error(R.drawable.gift_1)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
+                    Glide.with(getApplicationContext()).load(separated[1])
+                            //.error(R.drawable.gift_1)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(IVPreviewImage1);
+                    Glide.with(getApplicationContext()).load(separated[2])
+                            //.error(R.drawable.gift_1)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(IVPreviewImage2);
                     giftname.setText(gift.get(0).getGiftName());
                     giftcategory.setText(gift.get(0).getGiftCat());
                     giftgender.setText(gift.get(0).getGiftForPeople());
                     giftprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
-                    offerpercen.setText(gift.get(0).getDiscount());
+//                    offerpercen.setText(gift.get(0).getDiscount());
                     offerprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
                     description.setText(gift.get(0).getGiftDescription());
+                    head.setText(gift.get(0).getDiscount() + "% offer");
+                    detail_shop_name.setText(gift.get(0).getShopName());
+                    detail_add.setText(gift.get(0).getAddress()+ ", " + gift.get(0).getCity() + ", " + gift.get(0).getDistrict() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountry());
+
+                    if (description.getLineCount() > 3) {
+                        btShowmore.setVisibility(View.VISIBLE);
+                    } else {
+                        btShowmore.setVisibility(View.GONE);
+                    }
+
                     Utils_Class.mProgress.dismiss();
 
                 }

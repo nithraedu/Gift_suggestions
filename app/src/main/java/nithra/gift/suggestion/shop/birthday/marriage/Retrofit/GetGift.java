@@ -7,9 +7,45 @@ public class GetGift {
     @SerializedName("id")
     @Expose
     public String id;
-    @SerializedName("user_id")
+    @SerializedName("seller_id")
     @Expose
-    public String userId;
+    public String sellerId;
+    @SerializedName("seller_mobile")
+    @Expose
+    public String sellerMobile;
+    @SerializedName("shop_name")
+    @Expose
+    public String shopName;
+    @SerializedName("address")
+    @Expose
+    public String address;
+    @SerializedName("state")
+    @Expose
+    public String state;
+    @SerializedName("city")
+    @Expose
+    public String city;
+    @SerializedName("district")
+    @Expose
+    public String district;
+    @SerializedName("latitude")
+    @Expose
+    public String latitude;
+    @SerializedName("shop_website")
+    @Expose
+    public String shopWebsite;
+    @SerializedName("shop_email")
+    @Expose
+    public String shopEmail;
+    @SerializedName("longitude")
+    @Expose
+    public String longitude;
+    @SerializedName("pincode")
+    @Expose
+    public String pincode;
+    @SerializedName("country")
+    @Expose
+    public String country;
     @SerializedName("gift_name")
     @Expose
     public String giftName;
@@ -28,12 +64,6 @@ public class GetGift {
     @SerializedName("gift_description")
     @Expose
     public String giftDescription;
-    @SerializedName("category")
-    @Expose
-    public String category;
-    @SerializedName("people")
-    @Expose
-    public String people;
     @SerializedName("gift_category")
     @Expose
     public String giftCategory;
@@ -43,29 +73,15 @@ public class GetGift {
     @SerializedName("status")
     @Expose
     public String status;
-
+    @SerializedName("fav")
+    @Expose
+    public Integer fav;
     @SerializedName("gift_cat")
     @Expose
     public String giftCat;
     @SerializedName("gift_for_people")
     @Expose
     public String giftForPeople;
-
-    public String getGiftForPeople() {
-        return giftForPeople;
-    }
-
-    public void setGiftForPeople(String giftForPeople) {
-        this.giftForPeople = giftForPeople;
-    }
-
-    public String getGiftCat() {
-        return giftCat;
-    }
-
-    public void setGiftCat(String giftCat) {
-        this.giftCat = giftCat;
-    }
 
     public String getId() {
         return id;
@@ -75,12 +91,108 @@ public class GetGift {
         this.id = id;
     }
 
-    public String getUserId() {
-        return userId;
+    public String getSellerId() {
+        return sellerId;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
+
+    public String getSellerMobile() {
+        return sellerMobile;
+    }
+
+    public void setSellerMobile(String sellerMobile) {
+        this.sellerMobile = sellerMobile;
+    }
+
+    public String getShopName() {
+        return shopName;
+    }
+
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getShopWebsite() {
+        return shopWebsite;
+    }
+
+    public void setShopWebsite(String shopWebsite) {
+        this.shopWebsite = shopWebsite;
+    }
+
+    public String getShopEmail() {
+        return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getGiftName() {
@@ -131,22 +243,6 @@ public class GetGift {
         this.giftDescription = giftDescription;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getPeople() {
-        return people;
-    }
-
-    public void setPeople(String people) {
-        this.people = people;
-    }
-
     public String getGiftCategory() {
         return giftCategory;
     }
@@ -169,5 +265,29 @@ public class GetGift {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Integer getFav() {
+        return fav;
+    }
+
+    public void setFav(Integer fav) {
+        this.fav = fav;
+    }
+
+    public String getGiftCat() {
+        return giftCat;
+    }
+
+    public void setGiftCat(String giftCat) {
+        this.giftCat = giftCat;
+    }
+
+    public String getGiftForPeople() {
+        return giftForPeople;
+    }
+
+    public void setGiftForPeople(String giftForPeople) {
+        this.giftForPeople = giftForPeople;
     }
 }

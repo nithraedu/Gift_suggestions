@@ -59,6 +59,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
@@ -73,7 +74,7 @@ public class ProductEdit extends AppCompatActivity {
     TextView save;
     Spinner spin_occaction, spin_gender;
     TextView myproduct;
-    ImageView IVPreviewImage;
+    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
@@ -82,7 +83,7 @@ public class ProductEdit extends AppCompatActivity {
     ArrayList<GiftFor> giftfor;
     ArrayList<Occasion> occasion;
     ArrayList<GetGift> list_gift;
-    Uri uri_1;
+    Uri uri_1,uri_2,uri_3;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
@@ -117,6 +118,8 @@ public class ProductEdit extends AppCompatActivity {
         save = findViewById(R.id.save);
         myproduct = findViewById(R.id.myproduct);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
+        IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
+        IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
         back = findViewById(R.id.back);
@@ -326,7 +329,30 @@ public class ProductEdit extends AppCompatActivity {
 
             }
         });
+
+
+        IVPreviewImage1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult1();
+
+
+            }
+        });
+        IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openSomeActivityForResult2();
+
+
+            }
+        });
+
+
     }
+
+
+
 
     public void openSomeActivityForResult() {
         Intent intent = new Intent();
@@ -350,6 +376,51 @@ public class ProductEdit extends AppCompatActivity {
             });
 
 
+
+    public void openSomeActivityForResult1() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher2.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        IVPreviewImage1.setImageURI(data.getData());
+                        uri_2 = data.getData();
+                    }
+                }
+            });
+
+    public void openSomeActivityForResult2() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        someActivityResultLauncher3.launch(intent);
+    }
+
+    ActivityResultLauncher<Intent> someActivityResultLauncher3 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        IVPreviewImage2.setImageURI(data.getData());
+                        uri_3 = data.getData();
+                    }
+                }
+            });
+
+
+
     public void submit_res() {
         map1.clear();
         map2.clear();
@@ -366,14 +437,30 @@ public class ProductEdit extends AppCompatActivity {
         map1.put("discount", discount);
         map1.put("total_amount", total_amount);
 
-        File file = null;
+        File file1,file2,file3 = null;
         try {
-            file = getFile(getApplicationContext(), uri_1);
-            path = file.getPath().replace(file.getName(), "");
-            System.out.println("---file name : " + file.getName());
+            file1 = getFile(ProductEdit.this, uri_1);
+            path = file1.getPath().replace(file1.getName(), "");
+            System.out.println("---file name : " + file1.getName());
             System.out.println("---file path : " + path);
-            System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("gift_image[0]", "" + Uri.fromFile(file));
+            System.out.println("---file path : " + file1.getAbsolutePath());
+
+            file2 = getFile(ProductEdit.this, uri_2);
+            path = file2.getPath().replace(file2.getName(), "");
+            System.out.println("---file name : " + file2.getName());
+            System.out.println("---file path : " + path);
+            System.out.println("---file path : " + file2.getAbsolutePath());
+
+
+            file3 = getFile(ProductEdit.this, uri_3);
+            path = file3.getPath().replace(file3.getName(), "");
+            System.out.println("---file name : " + file3.getName());
+            System.out.println("---file path : " + path);
+            System.out.println("---file path : " + file3.getAbsolutePath());
+
+            map2.put("gift_image[0]", "" + Uri.fromFile(file1));
+            map2.put("gift_image[1]", "" + Uri.fromFile(file2));
+            map2.put("gift_image[2]", "" + Uri.fromFile(file3));
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -412,10 +499,22 @@ public class ProductEdit extends AppCompatActivity {
                         gender_gift();
                         gift_occasion();
 
-                        Glide.with(getApplicationContext()).load(list_gift.get(0).getGiftImage())
-                                //.error(R.drawable.warning)
+                        String currentString = list_gift.get(0).getGiftImage();
+                        System.out.println("print_image== "+list_gift.get(0).getGiftImage());
+                        String[] separated = currentString.split(",");
+                        Glide.with(getApplicationContext()).load(separated[0])
+                                //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
+                        Glide.with(getApplicationContext()).load(separated[1])
+                                //.error(R.drawable.gift_1)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(IVPreviewImage1);
+                        Glide.with(getApplicationContext()).load(separated[2])
+                                //.error(R.drawable.gift_1)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(IVPreviewImage2);
+
                         productname.setText(list_gift.get(0).getGiftName());
                         prod_prize.setText(list_gift.get(0).getTotalAmount());
                         offer_prize.setText(list_gift.get(0).getGiftAmount());

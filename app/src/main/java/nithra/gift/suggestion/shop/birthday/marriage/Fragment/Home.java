@@ -45,6 +45,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.SellerEntry;
 import nithra.gift.suggestion.shop.birthday.marriage.SellerProfile;
+import nithra.gift.suggestion.shop.birthday.marriage.SellerProfileProductList;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
 import retrofit2.Call;
@@ -103,7 +104,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                     Intent i = new Intent(getContext(), ShopAdd.class);
                     startActivity(i);
                 } else if (sharedPreference.getInt(getContext(), "profile") == 2) {
-                    Intent i = new Intent(getContext(), SellerProfile.class);
+                    Intent i = new Intent(getContext(), SellerProfileProductList.class);
                     startActivity(i);
                 } else {
                     Intent i = new Intent(getContext(), OtpSend.class);
