@@ -82,6 +82,11 @@
             </intent-filter>
         </activity>
 
+      <activity android:name=".crop_image.CropImageActivity"
+          android:theme="@style/corppp"/>
+        <activity android:name=".crop_image.CropImageActivity1"
+            android:theme="@style/corppp"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"

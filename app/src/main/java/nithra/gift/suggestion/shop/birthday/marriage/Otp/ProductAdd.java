@@ -3,6 +3,7 @@ package nithra.gift.suggestion.shop.birthday.marriage.Otp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
@@ -66,6 +68,8 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
+import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImage;
+import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -324,36 +328,113 @@ public class ProductAdd extends AppCompatActivity {
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSomeActivityForResult();
+                //openSomeActivityForResult();
 
-
+                choose_imge();
             }
         });
         IVPreviewImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSomeActivityForResult1();
+                //openSomeActivityForResult1();
 
-
+                choose_imge1();
             }
         });
         IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSomeActivityForResult2();
+                //openSomeActivityForResult2();
 
-
+                choose_imge2();
             }
         });
 
-        myproduct.setOnClickListener(new View.OnClickListener() {
+       /* myproduct.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(ProductAdd.this, MyProduct.class);
                 startActivity(intent);
             }
-        });
+        });*/
 
+    }
+
+
+    public void choose_imge() {
+        try {
+            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 100);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("print_Catch== "+e);
+           Utils_Class.toast_center(ProductAdd.this, "Try again...");
+        }
+    }
+
+    public void choose_imge1() {
+        try {
+            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 101);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("print_Catch== "+e);
+            Utils_Class.toast_center(ProductAdd.this, "Try again...");
+        }
+    }
+
+    public void choose_imge2() {
+        try {
+            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 102);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("print_Catch== "+e);
+            Utils_Class.toast_center(ProductAdd.this, "Try again...");
+        }
+    }
+
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // handle result of CropImageActivity
+        if (requestCode == 100) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+
+                Uri uri = result.getUri();
+                IVPreviewImage.setImageURI(uri);
+                uri_1 = uri;
+                System.out.println("print_uri== ");
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
+            }
+        }else  if (requestCode == 101) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+
+                Uri uri1 = result.getUri();
+                IVPreviewImage1.setImageURI(uri1);
+                uri_2 = uri1;
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
+            }
+        }else  if (requestCode == 102) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
+
+                Uri uri2 = result.getUri();
+                IVPreviewImage2.setImageURI(uri2);
+                uri_3 = uri2;
+
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
+            }
+        }
     }
 
 
@@ -377,6 +458,7 @@ public class ProductAdd extends AppCompatActivity {
                     }
                 }
             });
+
 
     public void openSomeActivityForResult1() {
         Intent intent = new Intent();
@@ -421,6 +503,7 @@ public class ProductAdd extends AppCompatActivity {
             });
 
 
+
     public void submit_res() {
         map1.clear();
         map2.clear();
@@ -457,6 +540,10 @@ public class ProductAdd extends AppCompatActivity {
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file3.getAbsolutePath());
 
+            for (int i=0;i<file1.length();i++){
+
+            }
+
             map2.put("gift_image[0]", "" + Uri.fromFile(file1));
             map2.put("gift_image[1]", "" + Uri.fromFile(file2));
             map2.put("gift_image[2]", "" + Uri.fromFile(file3));
@@ -475,14 +562,6 @@ public class ProductAdd extends AppCompatActivity {
 
     }
 
- /*   public void choose_imge() {
-        try {
-            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(Main_Reg2.this);
-        } catch (ActivityNotFoundException e) {
-            e.printStackTrace();
-            Utils.toast_center(Main_Reg2.this, "Try again...");
-        }
-    }*/
 
 
     public void gender_gift() {

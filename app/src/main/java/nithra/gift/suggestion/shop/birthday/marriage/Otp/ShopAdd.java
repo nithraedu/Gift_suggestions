@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,6 +29,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -50,10 +54,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.gift.suggestion.shop.birthday.marriage.MyProduct;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetCountry;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
+import nithra.gift.suggestion.shop.birthday.marriage.SellerProfileProductList;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ShopAdd extends AppCompatActivity {
 
@@ -69,7 +79,10 @@ public class ShopAdd extends AppCompatActivity {
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
-
+    Spinner spin_country;
+    ArrayList<GetCountry> country_get;
+    ArrayList<String> spin;
+    String coun_try;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +108,10 @@ public class ShopAdd extends AppCompatActivity {
         back = findViewById(R.id.back);
         mailid = findViewById(R.id.mailid);
         website = findViewById(R.id.website);
+        spin_country = findViewById(R.id.spin_country);
+        country_get = new ArrayList<GetCountry>();
+        spin = new ArrayList<>();
+
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +120,7 @@ public class ShopAdd extends AppCompatActivity {
                 finish();
             }
         });
-
+        spin_country();
 
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,8 +152,8 @@ public class ShopAdd extends AppCompatActivity {
                 shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();
 
-                String url="http://"+web;
-                String url1="https://"+web;
+                String url = "http://" + web;
+                String url1 = "https://" + web;
 
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");
@@ -148,7 +165,7 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your Email...");
                 } else if (!mail.matches(emailPattern)) {
                     Toast.makeText(ShopAdd.this, "Invalid email address", Toast.LENGTH_SHORT).show();
-                }else if (shop_add.equals("")) {
+                } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
                 } else if (shop_country.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
@@ -168,6 +185,58 @@ public class ShopAdd extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    public void spin_country() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_country");
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GetCountry>> call = retrofitAPI.country(map);
+        call.enqueue(new Callback<ArrayList<GetCountry>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GetCountry>> call, Response<ArrayList<GetCountry>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    country_get.addAll(response.body());
+                    spinner1();
+                    //adapter.notifyDataSetChanged();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GetCountry>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+
+    public void spinner1() {
+        spin.add(0, "Select category");
+        for (int i = 0; i < country_get.size(); i++) {
+            spin.add(country_get.get(i).getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ShopAdd.this, android.R.layout.simple_spinner_item, spin);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_country.setAdapter(adapter);
+        spin_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    coun_try = country_get.get(i - 1).getName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -203,7 +272,8 @@ public class ShopAdd extends AppCompatActivity {
         map1.put("shop_email", mail);
         map1.put("shop_website", web);
         map1.put("name", sell_name);
-        map1.put("country", shop_country);
+        //map1.put("country", shop_country);
+        map1.put("country", country_get.get(spin_country.getSelectedItemPosition() - 1).getId());
         map1.put("state", shop_state);
         map1.put("address", shop_add);
         map1.put("pincode", shop_pincode);
@@ -331,7 +401,7 @@ public class ShopAdd extends AppCompatActivity {
                                         sharedPreference.putInt(ShopAdd.this, "yes", 1);
                                         sharedPreference.putInt(ShopAdd.this, "profile", 2);
                                         Toast.makeText(ShopAdd.this, "Your shop added successfully, Thank you", Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(ShopAdd.this, MyProduct.class);
+                                        Intent i = new Intent(ShopAdd.this, SellerProfileProductList.class);
                                         startActivity(i);
                                         finish();
                                         //fragMove.product();

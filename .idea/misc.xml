@@ -69,6 +69,8 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/adapter_3.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/adapter_myproduct.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/buyer_view.xml" value="0.25" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/crop_image_activity.xml" value="0.24895833333333334" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/crop_image_view.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/fragment_add.xml" value="0.264" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/fragment_enter_o_t_p.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/fragment_favourite.xml" value="0.2359375" />
@@ -85,6 +87,7 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/seller_view.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/menu/activity_menu.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/menu/bottom.xml" value="0.25" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/menu/crop_image_menu.xml" value="0.25" />
       </map>
     </option>
   </component>

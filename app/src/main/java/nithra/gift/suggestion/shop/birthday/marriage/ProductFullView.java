@@ -23,6 +23,8 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.DeleteGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
@@ -38,7 +40,7 @@ public class ProductFullView extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back,profile_edit;
+    ImageView back,profile_edit,profile_delete;
     TextView btShowmore;
     CardView card_mail, card_web;
     LinearLayout phone;
@@ -73,6 +75,7 @@ public class ProductFullView extends AppCompatActivity {
         card_mail = findViewById(R.id.card_mail);
         card_web = findViewById(R.id.card_web);
         phone = findViewById(R.id.phone);
+        profile_delete = findViewById(R.id.profile_delete);
 
         giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -97,6 +100,15 @@ public class ProductFullView extends AppCompatActivity {
                 finish();
             }
         });
+
+
+        profile_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                delete_gift();
+            }
+        });
+
         //Utils_Class.mProgress(this, "Loading please wait...", false).show();
         profile_edit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -300,5 +312,36 @@ public class ProductFullView extends AppCompatActivity {
             }
         });
     }
+
+
+    public void delete_gift() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "gift_delete");
+        map.put("id", id_gift);
+        map.put("user_id",  sharedPreference.getString(ProductFullView.this, "user_id"));
+
+        System.out.println("print map : " + map);
+
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<DeleteGift>> call = retrofitAPI.delete_gift(map);
+        call.enqueue(new Callback<ArrayList<DeleteGift>>() {
+            @Override
+            public void onResponse(Call<ArrayList<DeleteGift>> call, Response<ArrayList<DeleteGift>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    Utils_Class.toast_center(getApplicationContext(), "Your product deleted...");
+
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<DeleteGift>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
 
 }

@@ -15,7 +15,10 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,6 +56,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetCountry;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftEdit;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
@@ -73,8 +78,10 @@ public class ShopEdit extends AppCompatActivity {
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
     ImageView back;
-
-
+    Spinner spin_country;
+    ArrayList<GetCountry> country_get;
+    ArrayList<String> spin;
+    String coun_try;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,6 +108,10 @@ public class ShopEdit extends AppCompatActivity {
         back = findViewById(R.id.back);
         mailid = findViewById(R.id.mailid);
         website = findViewById(R.id.website);
+        spin_country = findViewById(R.id.spin_country);
+        country_get = new ArrayList<GetCountry>();
+        spin = new ArrayList<>();
+
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -111,15 +122,12 @@ public class ShopEdit extends AppCompatActivity {
         });
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
 
-
         shopedit();
-
-
+        spin_country();
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 openSomeActivityForResult();
-
             }
         });
 
@@ -139,7 +147,6 @@ public class ShopEdit extends AppCompatActivity {
                 shop_pincode = pincode.getText().toString().trim();
                 shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();
-
 
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Seller Name...");
@@ -169,12 +176,62 @@ public class ShopEdit extends AppCompatActivity {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your longitude...");
                 } else {
                     submit_res();
-
                 }
+            }
+        });
 
+    }
+
+
+    public void spin_country() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_country");
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GetCountry>> call = retrofitAPI.country(map);
+        call.enqueue(new Callback<ArrayList<GetCountry>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GetCountry>> call, Response<ArrayList<GetCountry>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    country_get.addAll(response.body());
+                    spinner1();
+                    //adapter.notifyDataSetChanged();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GetCountry>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+
+    public void spinner1() {
+        spin.add(0, "Select country");
+        for (int i = 0; i < country_get.size(); i++) {
+            spin.add(country_get.get(i).getName());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(ShopEdit.this, android.R.layout.simple_spinner_item, spin);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin_country.setAdapter(adapter);
+        spin_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i != 0) {
+                    coun_try = country_get.get(i - 1).getName();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
             }
         });
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -209,7 +266,8 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("shop_email", mail);
         map1.put("shop_website", web);
         map1.put("name", sell_name);
-        map1.put("country", shop_country);
+        //map1.put("country", shop_country);
+        map1.put("country", country_get.get(spin_country.getSelectedItemPosition() - 1).getId());
         map1.put("state", shop_state);
         map1.put("address", shop_add);
         map1.put("pincode", shop_pincode);
@@ -233,7 +291,6 @@ public class ShopEdit extends AppCompatActivity {
 
         System.out.println("print map1 : " + map1);
         System.out.println("print map2 : " + map2);
-
 
         UploadAsync();
 
@@ -577,6 +634,14 @@ public class ShopEdit extends AppCompatActivity {
                         longitude.setText(list_shop.get(0).getLongitude());
                         pincode.setText(list_shop.get(0).getPincode());
                         district.setText(list_shop.get(0).getDistrict());
+
+                          for (int i = 0; i < list_shop.size(); i++) {
+                            for (int j=0;j<country_get.size();j++) {
+                                if (country_get.get(j).getId() == list_shop.get(i).getId()) {
+                                    spin_country.setSelection(j);
+                                }
+                            }
+                        }
 
                     }
                     Utils_Class.mProgress.dismiss();

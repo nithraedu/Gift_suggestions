@@ -100,7 +100,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         profile_view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sharedPreference.getInt(getContext(), "profile") == 1) {
+               /* if (sharedPreference.getInt(getContext(), "profile") == 1) {
                     Intent i = new Intent(getContext(), ShopAdd.class);
                     startActivity(i);
                 } else if (sharedPreference.getInt(getContext(), "profile") == 2) {
@@ -109,7 +109,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
                 } else {
                     Intent i = new Intent(getContext(), OtpSend.class);
                     startActivity(i);
-                }
+                }*/
             }
         });
 
@@ -186,12 +186,24 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
 
         }else if (id == R.id.add_shop_nav) {
-            if (sharedPreference.getInt(getContext(), "yes") == 0) {
+            /*if (sharedPreference.getInt(getContext(), "yes") == 0) {
                 Intent i = new Intent(getContext(), SellerEntry.class);
                 startActivity(i);
 
             } else {
                 Intent i = new Intent(getContext(), MyProduct.class);
+                startActivity(i);
+            }*/
+
+
+            if (sharedPreference.getInt(getContext(), "profile") == 1) {
+                Intent i = new Intent(getContext(), ShopAdd.class);
+                startActivity(i);
+            } else if (sharedPreference.getInt(getContext(), "profile") == 2) {
+                Intent i = new Intent(getContext(), SellerProfileProductList.class);
+                startActivity(i);
+            } else {
+                Intent i = new Intent(getContext(), SellerEntry.class);
                 startActivity(i);
             }
 

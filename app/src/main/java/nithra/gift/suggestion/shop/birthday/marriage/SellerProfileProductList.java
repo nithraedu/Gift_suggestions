@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -35,13 +37,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SellerProfileProductList extends AppCompatActivity {
-    ImageView IVPreviewImage;
+    ImageView IVPreviewImage, back;
     TextView seller_name, shop_name, city, profile_edit, add_product;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SellerProfilePojo> gift;
     Adapter adapter;
     ArrayList<GiftList> gift_ada;
     RecyclerView list;
+    SwipeRefreshLayout pullToRefresh;
+    LinearLayout no_item;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,19 +62,24 @@ public class SellerProfileProductList extends AppCompatActivity {
         gift = new ArrayList<SellerProfilePojo>();
         gift_ada = new ArrayList<GiftList>();
         list = findViewById(R.id.list);
-        profile_edit.setOnClickListener(new View.OnClickListener() {
+        back = findViewById(R.id.back);
+        pullToRefresh = findViewById(R.id.pullToRefresh);
+        no_item = findViewById(R.id.no_item);
+
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (sharedPreference.getInt(SellerProfileProductList.this, "profile") == 1) {
-                    Intent i = new Intent(SellerProfileProductList.this, ShopAdd.class);
-                    startActivity(i);
-                } else if (sharedPreference.getInt(SellerProfileProductList.this, "profile") == 2) {
-                    Intent i = new Intent(SellerProfileProductList.this, ProductAdd.class);
-                    startActivity(i);
-                }
+                finish();
             }
         });
 
+        profile_edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getApplicationContext(), ShopEdit.class);
+                startActivity(i);
+            }
+        });
 
         add_product.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,14 +87,12 @@ public class SellerProfileProductList extends AppCompatActivity {
                 if (sharedPreference.getInt(SellerProfileProductList.this, "profile") == 1) {
                     Intent i = new Intent(SellerProfileProductList.this, ShopAdd.class);
                     startActivity(i);
-
                 } else if (sharedPreference.getInt(SellerProfileProductList.this, "profile") == 2) {
                     Intent i = new Intent(SellerProfileProductList.this, ProductAdd.class);
                     startActivity(i);
                 }
             }
         });
-
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 1, GridLayoutManager.VERTICAL, false);
         list.setLayoutManager(gridLayoutManager);
         adapter = new Adapter(this, gift_ada);
@@ -93,6 +100,14 @@ public class SellerProfileProductList extends AppCompatActivity {
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
         category();
         category1();
+        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                gift.clear();
+                category1();
+                pullToRefresh.setRefreshing(false);
+            }
+        });
 
     }
 
@@ -116,7 +131,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     seller_name.setText(gift.get(0).getName());
-                    shop_name.setText(gift.get(0).getShopName()+", ");
+                    shop_name.setText(gift.get(0).getShopName() + ", ");
                    /* mobile.setText(gift.get(0).getSellerMobile());
                     mail.setText(gift.get(0).getShopEmail());
                     web.setText(gift.get(0).getShopWebsite());
@@ -165,13 +180,13 @@ public class SellerProfileProductList extends AppCompatActivity {
                         System.out.println("print_size==" + gift_ada.size());
                         adapter.notifyDataSetChanged();
                     }
-                    /*if (gift_ada.size() == 0) {
+                    if (gift_ada.size() == 0) {
                         pullToRefresh.setVisibility(View.GONE);
                         no_item.setVisibility(View.VISIBLE);
                     } else {
                         pullToRefresh.setVisibility(View.VISIBLE);
                         no_item.setVisibility(View.GONE);
-                    }*/
+                    }
                     Utils_Class.mProgress.dismiss();
                 }
                 System.out.println("======response :" + response);
@@ -249,7 +264,7 @@ public class SellerProfileProductList extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView img_slide;
-            TextView gridText,edit_product,head;
+            TextView gridText, edit_product, head;
             CardView category;
 
             public ViewHolder(@NonNull View itemView) {

@@ -25,6 +25,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.CheckOtp;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.SendOtppojo;
+import nithra.gift.suggestion.shop.birthday.marriage.SellerProfileProductList;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
 import retrofit2.Call;
@@ -190,7 +191,7 @@ public class OtpVerify extends AppCompatActivity {
 
                     if (user.equals("exiting")) {
                         sharedPreference.putInt(OtpVerify.this, "profile", 2);
-                        Intent i = new Intent(OtpVerify.this, MyProduct.class);
+                        Intent i = new Intent(OtpVerify.this, SellerProfileProductList.class);
                         startActivity(i);
                         finish();
                         //fragMove.product();

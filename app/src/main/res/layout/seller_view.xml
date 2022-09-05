@@ -17,9 +17,6 @@
             android:scaleType="fitXY"
             android:src="@drawable/fathersday" />
 
-
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -46,6 +43,20 @@
                 android:textColor="@color/white"
                 android:textSize="20dp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/button_circle"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/profile_delete"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_baseline_delete_24"/>
+            </LinearLayout>
+
         <LinearLayout
             android:layout_width="50dp"
             android:layout_height="50dp"

@@ -118,7 +118,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             }
         });
 
-        add_shop.setOnClickListener(new View.OnClickListener() {
+        /*add_shop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -139,10 +139,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 favourite.setBackgroundResource(0);
                 location.setBackgroundResource(0);
                 settings.setBackgroundResource(0);
-              /*bottomAppBar.setVisibility(View.GONE);
-                add_shop.setVisibility(View.GONE);*/
+              *//*bottomAppBar.setVisibility(View.GONE);
+                add_shop.setVisibility(View.GONE);*//*
             }
-        });
+        });*/
 
         location.setOnClickListener(new View.OnClickListener() {
             @Override
