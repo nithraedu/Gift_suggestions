@@ -28,49 +28,50 @@
         android:theme="@style/Theme.GiftSuggestions"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-
-
+        <activity
+            android:name=".ImageSlide"
+            android:exported="false" />
         <activity
             android:name=".SellerEntry"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.Full_Details"
+            android:name=".Full_Details"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.SellerProfile"
+            android:name=".SellerProfile"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.ProductFullView"
+            android:name=".ProductFullView"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.ShopEdit"
+            android:name=".ShopEdit"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.ProductEdit"
+            android:name=".ProductEdit"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.MyProduct"
+            android:name=".MyProduct"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.ActivitySecond"
+            android:name=".ActivitySecond"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd"
+            android:name=".Otp.ShopAdd"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd"
+            android:name=".Otp.ProductAdd"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpVerify"
+            android:name=".Otp.OtpVerify"
             android:exported="false" />
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpSend"
+            android:name=".Otp.OtpSend"
             android:exported="false" />
-        <activity android:name=".SellerProfileProductList"
-            android:exported="false"/>
         <activity
-            android:name="nithra.gift.suggestion.shop.birthday.marriage.MainActivity"
+            android:name=".SellerProfileProductList"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GiftSuggestions"
@@ -81,11 +82,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-      <activity android:name=".crop_image.CropImageActivity"
-          android:theme="@style/corppp"/>
-        <activity android:name=".crop_image.CropImageActivity1"
-            android:theme="@style/corppp"/>
+        <activity
+            android:name=".crop_image.CropImageActivity"
+            android:theme="@style/corppp" />
+        <activity
+            android:name=".crop_image.CropImageActivity1"
+            android:theme="@style/corppp" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

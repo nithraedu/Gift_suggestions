@@ -70,7 +70,7 @@ public class ShopAdd extends AppCompatActivity {
     TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
     TextView save, remove;
     String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
-    ImageView IVPreviewImage;
+    nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String pack = "nithra.tamil.word.game.giftsuggestions";
@@ -147,10 +147,10 @@ public class ShopAdd extends AppCompatActivity {
                 shop_city = city.getText().toString().trim();
                 shop_state = state.getText().toString().trim();
                 shop_country = country.getText().toString().trim();
-                shop_district = district.getText().toString().trim();
+                //shop_district = district.getText().toString().trim();
                 shop_pincode = pincode.getText().toString().trim();
-                shop_latitude = latitude.getText().toString().trim();
-                shop_longitude = longitude.getText().toString().trim();
+ /*               shop_latitude = latitude.getText().toString().trim();
+                shop_longitude = longitude.getText().toString().trim();*/
 
                 String url = "http://" + web;
                 String url1 = "https://" + web;
@@ -165,16 +165,14 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your Email...");
                 } else if (!mail.matches(emailPattern)) {
                     Toast.makeText(ShopAdd.this, "Invalid email address", Toast.LENGTH_SHORT).show();
-                } else if (shop_add.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
-                } else if (shop_country.equals("")) {
+                } else if (spin_country.getSelectedItemPosition() == 0) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
                 } else if (shop_state.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your state...");
-                } else if (shop_district.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your district...");
-                } else if (shop_city.equals("")) {
+                }  else if (shop_city.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your city...");
+                } else if (shop_add.equals("")) {
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
                 } else if (shop_pincode.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
                 } else {
@@ -394,10 +392,10 @@ public class ShopAdd extends AppCompatActivity {
                                         city.getText().clear();
                                         state.getText().clear();
                                         country.getText().clear();
-                                        latitude.getText().clear();
-                                        longitude.getText().clear();
+                                       /* latitude.getText().clear();
+                                        longitude.getText().clear();*/
                                         pincode.getText().clear();
-                                        district.getText().clear();
+                                        //district.getText().clear();
                                         sharedPreference.putInt(ShopAdd.this, "yes", 1);
                                         sharedPreference.putInt(ShopAdd.this, "profile", 2);
                                         Toast.makeText(ShopAdd.this, "Your shop added successfully, Thank you", Toast.LENGTH_SHORT).show();

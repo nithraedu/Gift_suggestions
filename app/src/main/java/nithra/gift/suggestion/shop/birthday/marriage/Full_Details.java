@@ -42,7 +42,7 @@ public class Full_Details extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back, company_logo, IVPreviewImage, fav,IVPreviewImage1,IVPreviewImage2;
+    ImageView back, company_logo, IVPreviewImage, fav;
     TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name, website, email, head;
     LinearLayout phone, web_gone;
     CardView card_mail, card_web;
@@ -71,8 +71,6 @@ public class Full_Details extends AppCompatActivity {
         owner_name = findViewById(R.id.owner_name);
         company_logo = findViewById(R.id.company_logo);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
-        IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
-        IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
         phone = findViewById(R.id.phone);
         website = findViewById(R.id.website);
         email = findViewById(R.id.email);
@@ -146,7 +144,11 @@ public class Full_Details extends AppCompatActivity {
             public void onClick(View v) {
                 String currentString = gift_show.get(0).getGiftImage();
                 String[] separated = currentString.split(",");
-                ImageView img_view;
+                Intent i = new Intent(getApplicationContext(), ImageSlide.class);
+                i.putExtra("pos", currentString);
+                startActivity(i);
+
+               /* ImageView img_view;
                 Dialog dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault);
                 dialog.setContentView(R.layout.image_view);
                 //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -156,48 +158,9 @@ public class Full_Details extends AppCompatActivity {
                         //.error(R.drawable.gift_1)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img_view);
-                dialog.show();
+                dialog.show();*/
             }
         });
-
-        IVPreviewImage1 .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentString = gift_show.get(0).getGiftImage();
-                String[] separated = currentString.split(",");
-                ImageView img_view;
-                Dialog dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault);
-                dialog.setContentView(R.layout.image_view);
-                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(true);
-                img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(separated[1])
-                        //.error(R.drawable.gift_1)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_view);
-                dialog.show();
-            }
-        });
-
-        IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentString = gift_show.get(0).getGiftImage();
-                String[] separated = currentString.split(",");
-                ImageView img_view;
-                Dialog dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault);
-                dialog.setContentView(R.layout.image_view);
-                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(true);
-                img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(separated[2])
-                        //.error(R.drawable.gift_1)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_view);
-                dialog.show();
-            }
-        });
-
 
         card_mail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -274,14 +237,6 @@ public class Full_Details extends AppCompatActivity {
                                 //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
-                        Glide.with(getApplicationContext()).load(separated[1])
-                                //.error(R.drawable.gift_1)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage1);
-                        Glide.with(getApplicationContext()).load(separated[2])
-                                //.error(R.drawable.gift_1)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage2);
 
 
                         giftname.setText(gift_show.get(0).getGiftName());

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <!-- Drop Shadow Stack -->
+ <!--   &lt;!&ndash; Drop Shadow Stack &ndash;&gt;
     <item>
         <shape android:shape="rectangle">
             <padding
@@ -66,7 +66,7 @@
 
             <corners android:radius="5dp" />
         </shape>
-    </item>
+    </item>-->
 
     <!-- Background -->
     <item>

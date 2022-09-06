@@ -80,17 +80,14 @@
                 android:textColor="@color/black"
                 android:visibility="gone" />
 
-            <ImageView
+            <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
                 android:id="@+id/IVPreviewImage"
                 android:layout_width="130dp"
                 android:layout_height="130dp"
                 android:layout_gravity="center"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/ic_circle"
                 android:padding="25dp"
-                android:scaleType="fitXY"
                 android:src="@drawable/ic_default_user_icon" />
 
         </LinearLayout>
@@ -253,18 +250,30 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
-                                android:background="@drawable/background1"
-                                android:paddingTop="10dp"
-                                android:paddingBottom="10dp">
+                                android:orientation="vertical">
 
-                                <Spinner
-                                    android:id="@+id/spin_country"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Country" />
+
+                                <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginLeft="10dp"
-                                    android:layout_marginTop="10dp"
-                                    android:layout_marginRight="10dp"
-                                    android:layout_marginBottom="10dp" />
+                                    android:background="@drawable/background1"
+                                    android:paddingTop="10dp"
+                                    android:paddingBottom="10dp">
+
+
+                                    <Spinner
+                                        android:id="@+id/spin_country"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="10dp"
+                                        android:layout_marginTop="10dp"
+                                        android:layout_marginRight="10dp"
+                                        android:layout_marginBottom="10dp" />
+                                </LinearLayout>
                             </LinearLayout>
 
                             <com.google.android.material.textfield.TextInputLayout
@@ -278,6 +287,7 @@
                                 app:boxCornerRadiusBottomStart="15dp"
                                 app:boxCornerRadiusTopEnd="15dp"
                                 app:boxCornerRadiusTopStart="15dp"
+                                android:visibility="gone"
                                 app:endIconMode="clear_text"
                                 app:hintTextColor="@color/app_color">
 
@@ -330,6 +340,7 @@
                                 app:boxCornerRadiusBottomEnd="15dp"
                                 app:boxCornerRadiusBottomStart="15dp"
                                 app:boxCornerRadiusTopEnd="15dp"
+                                android:visibility="gone"
                                 app:boxCornerRadiusTopStart="15dp"
                                 app:endIconMode="clear_text"
                                 app:hintTextColor="@color/app_color">
@@ -394,6 +405,10 @@
                                     android:layout_gravity="center"
                                     android:gravity="top|left"
                                     android:imeOptions="actionNext"
+                                    android:maxLines="5"
+                                    android:overScrollMode="always"
+                                    android:scrollbarStyle="insideInset"
+                                    android:scrollbars="vertical"
                                     android:inputType="textCapSentences|textMultiLine"
                                     android:minHeight="150dp" />
                             </com.google.android.material.textfield.TextInputLayout>
@@ -404,7 +419,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="10dp"
-                                android:hint="Pincode"
+                                android:hint="Pin/Postal code"
                                 android:theme="@style/AppThemetextinput"
                                 app:boxCornerRadiusBottomEnd="15dp"
                                 app:boxCornerRadiusBottomStart="15dp"
@@ -438,6 +453,7 @@
                                 app:boxCornerRadiusTopEnd="15dp"
                                 app:boxCornerRadiusTopStart="15dp"
                                 app:endIconMode="clear_text"
+                                android:visibility="gone"
                                 app:hintTextColor="@color/app_color">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -464,6 +480,7 @@
                                 app:boxCornerRadiusTopEnd="15dp"
                                 app:boxCornerRadiusTopStart="15dp"
                                 app:endIconMode="clear_text"
+                                android:visibility="gone"
                                 app:hintTextColor="@color/app_color">
 
                                 <com.google.android.material.textfield.TextInputEditText

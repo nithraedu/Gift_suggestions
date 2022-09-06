@@ -381,6 +381,9 @@
                             android:layout_height="match_parent"
                             android:layout_gravity="center"
                             android:gravity="left|top"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
                             android:imeOptions="actionNext"
                             android:inputType="textCapSentences|textMultiLine"
                             android:minHeight="150dp" />

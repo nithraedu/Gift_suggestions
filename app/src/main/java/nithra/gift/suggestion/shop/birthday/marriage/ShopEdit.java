@@ -67,10 +67,10 @@ import retrofit2.Response;
 
 public class ShopEdit extends AppCompatActivity {
 
-    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, latitude, longitude, pincode, district, mailid, website;
     String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
     TextView save, remove;
-    ImageView IVPreviewImage;
+    nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<GiftEdit> list_shop;
     Uri uri_1;
@@ -81,7 +81,7 @@ public class ShopEdit extends AppCompatActivity {
     Spinner spin_country;
     ArrayList<GetCountry> country_get;
     ArrayList<String> spin;
-    String coun_try;
+    String coun_try,country_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +94,6 @@ public class ShopEdit extends AppCompatActivity {
         mobilenumber = findViewById(R.id.mobilenumber);
         city = findViewById(R.id.city);
         state = findViewById(R.id.state);
-        country = findViewById(R.id.country);
         save = findViewById(R.id.save);
         remove = findViewById(R.id.remove);
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
@@ -121,9 +120,7 @@ public class ShopEdit extends AppCompatActivity {
             }
         });
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
-
         shopedit();
-        spin_country();
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,11 +139,10 @@ public class ShopEdit extends AppCompatActivity {
                 web = website.getText().toString().trim();
                 shop_city = city.getText().toString().trim();
                 shop_state = state.getText().toString().trim();
-                shop_country = country.getText().toString().trim();
-                shop_district = district.getText().toString().trim();
+               // shop_district = district.getText().toString().trim();
                 shop_pincode = pincode.getText().toString().trim();
-                shop_latitude = latitude.getText().toString().trim();
-                shop_longitude = longitude.getText().toString().trim();
+               /* shop_latitude = latitude.getText().toString().trim();
+                shop_longitude = longitude.getText().toString().trim();*/
 
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Seller Name...");
@@ -158,22 +154,16 @@ public class ShopEdit extends AppCompatActivity {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your Email...");
                 } else if (!mail.matches(emailPattern)) {
                     Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
+                }  else if (spin_country.getSelectedItemPosition() == 0) {
+                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your country...");
+                } else if (shop_state.equals("")) {
+                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your state...");
+                } else if (shop_city.equals("")) {
+                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your city...");
                 } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your address...");
                 } else if (shop_pincode.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your pincode...");
-                } else if (shop_country.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your country...");
-                } else if (shop_state.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your state...");
-                } else if (shop_district.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your district...");
-                } else if (shop_city.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your city...");
-                } else if (shop_latitude.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your latitude...");
-                } else if (shop_longitude.equals("")) {
-                    Utils_Class.toast_center(getApplicationContext(), "Please Enter Your longitude...");
                 } else {
                     submit_res();
                 }
@@ -196,6 +186,8 @@ public class ShopEdit extends AppCompatActivity {
                     System.out.println("======response result:" + result);
                     country_get.addAll(response.body());
                     spinner1();
+
+
                     //adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
@@ -208,6 +200,61 @@ public class ShopEdit extends AppCompatActivity {
         });
     }
 
+    public void shopedit() {
+
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_id");
+        map.put("id", sharedPreference.getString(this, "user_id"));
+
+        System.out.println("print_map " + map);
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GiftEdit>> call = retrofitAPI.edit_gift(map);
+        call.enqueue(new Callback<ArrayList<GiftEdit>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GiftEdit>> call, Response<ArrayList<GiftEdit>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    if (response.body().get(0).getStatus().equals("Success")) {
+                        list_shop.addAll(response.body());
+
+                        Glide.with(getApplicationContext()).load(list_shop.get(0).getLogo())
+                                //.error(R.drawable.warning)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                .into(IVPreviewImage);
+                        sellername.setText(list_shop.get(0).getName());
+                        shopname.setText(list_shop.get(0).getShopName());
+                        shopaddress.setText(list_shop.get(0).getAddress());
+                        mobilenumber.setText(list_shop.get(0).getSellerMobile());
+                        mailid.setText(list_shop.get(0).getShopEmail());
+                        website.setText(list_shop.get(0).getShopWebsite());
+                        city.setText(list_shop.get(0).getCity());
+                        state.setText(list_shop.get(0).getState());
+                        latitude.setText(list_shop.get(0).getLatitude());
+                        longitude.setText(list_shop.get(0).getLongitude());
+                        pincode.setText(list_shop.get(0).getPincode());
+                        //district.setText(list_shop.get(0).getDistrict());
+                        country_id = list_shop.get(0).getCountry();
+                        spin_country();
+
+                        System.out.println("one");
+
+
+
+
+                    }
+                    Utils_Class.mProgress.dismiss();
+
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GiftEdit>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
 
     public void spinner1() {
         spin.add(0, "Select country");
@@ -232,6 +279,20 @@ public class ShopEdit extends AppCompatActivity {
             }
         });
         adapter.notifyDataSetChanged();
+
+
+        for (int j=0;j<country_get.size();j++) {
+            System.out.println("id1== "+country_get.get(j).getId());
+            System.out.println("id2== "+country_id);
+            if (country_get.get(j).getId().trim().equals(country_id)) {
+                System.out.println("id3== "+country_get.get(j).getId());
+                spin_country.setSelection(j + 1);
+                break;
+            }
+
+        }
+
+
 
     }
 
@@ -271,8 +332,8 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("state", shop_state);
         map1.put("address", shop_add);
         map1.put("pincode", shop_pincode);
-        map1.put("latitude", shop_latitude);
-        map1.put("longitude", shop_longitude);
+       /* map1.put("latitude", shop_latitude);
+        map1.put("longitude", shop_longitude);*/
         map1.put("district", shop_district);
         map1.put("city", shop_city);
 
@@ -387,11 +448,10 @@ public class ShopEdit extends AppCompatActivity {
                                         website.getText().clear();
                                         city.getText().clear();
                                         state.getText().clear();
-                                        country.getText().clear();
                                         latitude.getText().clear();
                                         longitude.getText().clear();
                                         pincode.getText().clear();
-                                        district.getText().clear();
+                                        //district.getText().clear();
                                         //sharedPreference.putInt(getApplicationContext(), "yes", 1);
                                         Toast.makeText(getApplicationContext(), "Your shop Updated successfully, Thank you", Toast.LENGTH_SHORT).show();
                                         sharedPreference.putInt(ShopEdit.this, "finish", 1);
@@ -597,64 +657,5 @@ public class ShopEdit extends AppCompatActivity {
     }
 
 
-    public void shopedit() {
-
-
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "get_id");
-        map.put("id", sharedPreference.getString(this, "user_id"));
-
-        System.out.println("print_map " + map);
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<GiftEdit>> call = retrofitAPI.edit_gift(map);
-        call.enqueue(new Callback<ArrayList<GiftEdit>>() {
-            @Override
-            public void onResponse(Call<ArrayList<GiftEdit>> call, Response<ArrayList<GiftEdit>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    if (response.body().get(0).getStatus().equals("Success")) {
-                        list_shop.addAll(response.body());
-
-                        Glide.with(getApplicationContext()).load(list_shop.get(0).getLogo())
-                                //.error(R.drawable.warning)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage);
-
-                        sellername.setText(list_shop.get(0).getName());
-                        shopname.setText(list_shop.get(0).getShopName());
-                        shopaddress.setText(list_shop.get(0).getAddress());
-                        mobilenumber.setText(list_shop.get(0).getSellerMobile());
-                        mailid.setText(list_shop.get(0).getShopEmail());
-                        website.setText(list_shop.get(0).getShopWebsite());
-                        city.setText(list_shop.get(0).getCity());
-                        state.setText(list_shop.get(0).getState());
-                        country.setText(list_shop.get(0).getCountry());
-                        latitude.setText(list_shop.get(0).getLatitude());
-                        longitude.setText(list_shop.get(0).getLongitude());
-                        pincode.setText(list_shop.get(0).getPincode());
-                        district.setText(list_shop.get(0).getDistrict());
-
-                          for (int i = 0; i < list_shop.size(); i++) {
-                            for (int j=0;j<country_get.size();j++) {
-                                if (country_get.get(j).getId() == list_shop.get(i).getId()) {
-                                    spin_country.setSelection(j);
-                                }
-                            }
-                        }
-
-                    }
-                    Utils_Class.mProgress.dismiss();
-
-                }
-                System.out.println("======response :" + response);
-            }
-
-            @Override
-            public void onFailure(Call<ArrayList<GiftEdit>> call, Throwable t) {
-                System.out.println("======response t:" + t);
-            }
-        });
-    }
 
 }

@@ -1,10 +1,7 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
-
-import android.app.Dialog;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -16,6 +13,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.cardview.widget.CardView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
@@ -23,7 +24,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.DeleteGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
@@ -34,16 +34,17 @@ import retrofit2.Response;
 
 public class ProductFullView extends AppCompatActivity {
     ArrayList<GetGift> gift;
-    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
-    TextView giftname,giftcategory,giftgender,giftprize,offerprize,offerpercen,description,head,detail_shop_name,detail_add;
+    ImageView IVPreviewImage;
+    TextView giftname, giftcategory, giftgender, giftprize, offerprize, offerpercen, description, head, detail_shop_name, detail_add;
     SharedPreference sharedPreference = new SharedPreference();
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back,profile_edit,profile_delete;
+    ImageView back, profile_edit, profile_delete;
     TextView btShowmore;
     CardView card_mail, card_web;
     LinearLayout phone;
+    AlertDialog.Builder builder;
 
 
     @Override
@@ -53,16 +54,14 @@ public class ProductFullView extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.seller_view);
         gift = new ArrayList<GetGift>();
-        IVPreviewImage=findViewById(R.id.IVPreviewImage);
-        IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
-        IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
-        giftname=findViewById(R.id.giftname);
-        giftcategory=findViewById(R.id.giftcategory);
-        giftgender=findViewById(R.id.giftgender);
-        giftprize=findViewById(R.id.giftprize);
-        offerprize=findViewById(R.id.offerprize);
-        offerpercen=findViewById(R.id.offerpercen);
-        description=findViewById(R.id.description);
+        IVPreviewImage = findViewById(R.id.IVPreviewImage);
+        giftname = findViewById(R.id.giftname);
+        giftcategory = findViewById(R.id.giftcategory);
+        giftgender = findViewById(R.id.giftgender);
+        giftprize = findViewById(R.id.giftprize);
+        offerprize = findViewById(R.id.offerprize);
+        offerpercen = findViewById(R.id.offerpercen);
+        description = findViewById(R.id.description);
         head = findViewById(R.id.head);
         detail_shop_name = findViewById(R.id.detail_shop_name);
         detail_add = findViewById(R.id.detail_add);
@@ -76,6 +75,7 @@ public class ProductFullView extends AppCompatActivity {
         card_web = findViewById(R.id.card_web);
         phone = findViewById(R.id.phone);
         profile_delete = findViewById(R.id.profile_delete);
+        builder = new AlertDialog.Builder(ProductFullView.this);
 
         giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
@@ -105,7 +105,21 @@ public class ProductFullView extends AppCompatActivity {
         profile_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delete_gift();
+                builder.setMessage("Are you sure you want delete your gift?").setCancelable(false)
+                        .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+                            }
+                        })
+                        .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                delete_gift();
+
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.show();
+
             }
         });
 
@@ -181,7 +195,12 @@ public class ProductFullView extends AppCompatActivity {
             public void onClick(View v) {
                 String currentString = gift.get(0).getGiftImage();
                 String[] separated = currentString.split(",");
-                ImageView img_view;
+                System.out.println("print_url1== " + currentString);
+                Intent i = new Intent(getApplicationContext(), ImageSlide.class);
+                i.putExtra("pos", currentString);
+                startActivity(i);
+
+                /*ImageView img_view;
                 Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
                 dialog.setContentView(R.layout.image_view);
 
@@ -192,49 +211,9 @@ public class ProductFullView extends AppCompatActivity {
                         //.error(R.drawable.gift_1)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img_view);
-                dialog.show();
-
+                dialog.show();*/
             }
         });
-
-        IVPreviewImage1 .setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentString = gift.get(0).getGiftImage();
-                String[] separated = currentString.split(",");
-                ImageView img_view;
-                Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
-                dialog.setContentView(R.layout.image_view);
-                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(true);
-                img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(separated[1])
-                        //.error(R.drawable.gift_1)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_view);
-                dialog.show();
-            }
-        });
-
-        IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentString = gift.get(0).getGiftImage();
-                String[] separated = currentString.split(",");
-                ImageView img_view;
-                Dialog dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault);
-                dialog.setContentView(R.layout.image_view);
-                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(true);
-                img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(separated[2])
-                        //.error(R.drawable.gift_1)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_view);
-                dialog.show();
-            }
-        });
-
 
         Utils_Class.mProgress(ProductFullView.this, "Loading please wait...", false).show();
 
@@ -270,29 +249,21 @@ public class ProductFullView extends AppCompatActivity {
                     gift.addAll(response.body());
                     String currentString = gift.get(0).getGiftImage();
                     String[] separated = currentString.split(",");
-
+                    System.out.println("print_comma== " + separated);
                     Glide.with(getApplicationContext()).load(separated[0])
                             //.error(R.drawable.gift_1)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
-                    Glide.with(getApplicationContext()).load(separated[1])
-                            //.error(R.drawable.gift_1)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(IVPreviewImage1);
-                    Glide.with(getApplicationContext()).load(separated[2])
-                            //.error(R.drawable.gift_1)
-                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-                            .into(IVPreviewImage2);
                     giftname.setText(gift.get(0).getGiftName());
                     giftcategory.setText(gift.get(0).getGiftCat());
                     giftgender.setText(gift.get(0).getGiftForPeople());
-                    giftprize.setText("\u20B9 " +gift.get(0).getTotalAmount());
+                    giftprize.setText("\u20B9 " + gift.get(0).getTotalAmount());
 //                    offerpercen.setText(gift.get(0).getDiscount());
-                    offerprize.setText("\u20B9 " +gift.get(0).getGiftAmount());
+                    offerprize.setText("\u20B9 " + gift.get(0).getGiftAmount());
                     description.setText(gift.get(0).getGiftDescription());
                     head.setText(gift.get(0).getDiscount() + "% offer");
                     detail_shop_name.setText(gift.get(0).getShopName());
-                    detail_add.setText(gift.get(0).getAddress()+ ", " + gift.get(0).getCity() + ", " + gift.get(0).getDistrict() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountry());
+                    detail_add.setText(gift.get(0).getAddress() + ", " + gift.get(0).getCity() + ", " + gift.get(0).getDistrict() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountry());
 
                     if (description.getLineCount() > 3) {
                         btShowmore.setVisibility(View.VISIBLE);
@@ -318,7 +289,7 @@ public class ProductFullView extends AppCompatActivity {
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "gift_delete");
         map.put("id", id_gift);
-        map.put("user_id",  sharedPreference.getString(ProductFullView.this, "user_id"));
+        map.put("user_id", sharedPreference.getString(ProductFullView.this, "user_id"));
 
         System.out.println("print map : " + map);
 
@@ -331,7 +302,7 @@ public class ProductFullView extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     Utils_Class.toast_center(getApplicationContext(), "Your product deleted...");
-
+                    SellerProfileProductList.adapter.notifyDataSetChanged();
                 }
                 System.out.println("======response :" + response);
             }

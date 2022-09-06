@@ -4,57 +4,64 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class GiftEdit {
+    @SerializedName("total_gifts")
+    @Expose
+    public String totalGifts;
     @SerializedName("id")
     @Expose
     public String id;
     @SerializedName("name")
     @Expose
     public String name;
-    @SerializedName("shop_name")
-    @Expose
-    public String shopName;
     @SerializedName("seller_mobile")
     @Expose
     public String sellerMobile;
+    @SerializedName("shop_name")
+    @Expose
+    public String shopName;
+    @SerializedName("address")
+    @Expose
+    public String address;
+    @SerializedName("logo")
+    @Expose
+    public String logo;
+    @SerializedName("state")
+    @Expose
+    public String state;
+    @SerializedName("city")
+    @Expose
+    public String city;
+    @SerializedName("district")
+    @Expose
+    public String district;
+    @SerializedName("latitude")
+    @Expose
+    public String latitude;
     @SerializedName("shop_website")
     @Expose
     public String shopWebsite;
     @SerializedName("shop_email")
     @Expose
     public String shopEmail;
-    @SerializedName("state")
-    @Expose
-    public String state;
-    @SerializedName("address")
-    @Expose
-    public String address;
-    @SerializedName("pincode")
-    @Expose
-    public String pincode;
-    @SerializedName("latitude")
-    @Expose
-    public String latitude;
-    @SerializedName("logo")
-    @Expose
-    public String logo;
     @SerializedName("longitude")
     @Expose
     public String longitude;
+    @SerializedName("pincode")
+    @Expose
+    public String pincode;
+    @SerializedName("country")
+    @Expose
+    public String country;
+    @SerializedName("status")
+    @Expose
+    public String status;
 
-    public String getShopWebsite() {
-        return shopWebsite;
+    public String getTotalGifts() {
+        return totalGifts;
     }
 
-    public void setShopWebsite(String shopWebsite) {
-        this.shopWebsite = shopWebsite;
-    }
-
-    public String getShopEmail() {
-        return shopEmail;
-    }
-
-    public void setShopEmail(String shopEmail) {
-        this.shopEmail = shopEmail;
+    public void setTotalGifts(String totalGifts) {
+        this.totalGifts = totalGifts;
     }
 
     public String getId() {
@@ -73,14 +80,6 @@ public class GiftEdit {
         this.name = name;
     }
 
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
     public String getSellerMobile() {
         return sellerMobile;
     }
@@ -89,12 +88,12 @@ public class GiftEdit {
         this.sellerMobile = sellerMobile;
     }
 
-    public String getState() {
-        return state;
+    public String getShopName() {
+        return shopName;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setShopName(String shopName) {
+        this.shopName = shopName;
     }
 
     public String getAddress() {
@@ -105,22 +104,6 @@ public class GiftEdit {
         this.address = address;
     }
 
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
     public String getLogo() {
         return logo;
     }
@@ -129,28 +112,12 @@ public class GiftEdit {
         this.logo = logo;
     }
 
-    public String getLongitude() {
-        return longitude;
+    public String getState() {
+        return state;
     }
 
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getCity() {
@@ -161,6 +128,62 @@ public class GiftEdit {
         this.city = city;
     }
 
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getShopWebsite() {
+        return shopWebsite;
+    }
+
+    public void setShopWebsite(String shopWebsite) {
+        this.shopWebsite = shopWebsite;
+    }
+
+    public String getShopEmail() {
+        return shopEmail;
+    }
+
+    public void setShopEmail(String shopEmail) {
+        this.shopEmail = shopEmail;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getPincode() {
+        return pincode;
+    }
+
+    public void setPincode(String pincode) {
+        this.pincode = pincode;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
     public String getStatus() {
         return status;
     }
@@ -168,17 +191,4 @@ public class GiftEdit {
     public void setStatus(String status) {
         this.status = status;
     }
-
-    @SerializedName("district")
-    @Expose
-    public String district;
-    @SerializedName("country")
-    @Expose
-    public String country;
-    @SerializedName("city")
-    @Expose
-    public String city;
-    @SerializedName("status")
-    @Expose
-    public String status;
 }

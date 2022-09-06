@@ -19,7 +19,6 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import nithra.gift.suggestion.shop.birthday.marriage.MyProduct;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.CheckOtp;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
@@ -33,12 +32,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class OtpVerify extends AppCompatActivity {
-    TextView enterotp,edit_email;
+    TextView enterotp, edit_email;
     EditText enter_otp, otp_1, otp_2, otp_3, otp_4;
     String verify, edit_otp;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
     ImageView edit;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +49,7 @@ public class OtpVerify extends AppCompatActivity {
 
         TextView _tv = findViewById(R.id.timer);
         send_otp = new ArrayList<SendOtppojo>();
+        back = findViewById(R.id.back);
 
         enterotp = findViewById(R.id.enterotp);
         edit_email = findViewById(R.id.edit_email);
@@ -59,6 +60,16 @@ public class OtpVerify extends AppCompatActivity {
         edit = findViewById(R.id.edit);
 
         enter_otp = findViewById(R.id.enter_otp);
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OtpVerify.this, OtpSend.class);
+                startActivity(i);
+                finish();
+            }
+        });
+
         edit_email.setText(sharedPreference.getString(OtpVerify.this, "user_mail"));
         new CountDownTimer(120000, 1000) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
@@ -96,7 +107,9 @@ public class OtpVerify extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-               finish();
+                Intent i = new Intent(OtpVerify.this, OtpSend.class);
+                startActivity(i);
+                finish();
             }
         });
 

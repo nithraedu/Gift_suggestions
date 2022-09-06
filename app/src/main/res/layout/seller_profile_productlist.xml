@@ -42,15 +42,14 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <ImageView
+        <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
             android:id="@+id/IVPreviewImage"
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@drawable/button_circle"
+            android:background="@drawable/ic_circle"
             android:padding="25dp"
-            android:scaleType="fitXY"
             android:src="@drawable/add" />
 
         <TextView

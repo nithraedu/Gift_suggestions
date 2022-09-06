@@ -1,6 +1,5 @@
 package nithra.gift.suggestion.shop.birthday.marriage.Otp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -25,10 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -59,7 +54,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.gift.suggestion.shop.birthday.marriage.MyProduct;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.AddGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
@@ -80,7 +74,7 @@ public class ProductAdd extends AppCompatActivity {
     TextView save;
     Spinner spin_occaction, spin_gender;
     TextView myproduct;
-    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
+    ImageView IVPreviewImage, IVPreviewImage1, IVPreviewImage2;
     SharedPreference sharedPreference = new SharedPreference();
     String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
     ArrayList<String> spin;
@@ -88,13 +82,13 @@ public class ProductAdd extends AppCompatActivity {
     ArrayList<GiftFor> giftfor;
     ArrayList<Occasion> occasion;
     ArrayList<AddGift> add_gift;
-    Uri uri_1,uri_2,uri_3;
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
     ImageView back;
+    ArrayList<File> file_array = new ArrayList<>();
 
-
+    Uri uri;
     TextView textView, textView1;
     boolean[] selectedLanguage;
     boolean[] selectedLanguage1;
@@ -280,7 +274,6 @@ public class ProductAdd extends AppCompatActivity {
                             langList1.clear();
                             textView1.setText("");
                             textView1.setTag("");
-
                         }
                     }
                 });
@@ -299,9 +292,8 @@ public class ProductAdd extends AppCompatActivity {
                 discount = offer_percentage.getText().toString().trim();
                 gift_amount = offer_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
-                if (uri_1 == null) {
-                    Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
-                } else if (gift_name.equals("")) {
+
+                if (gift_name.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Name...");
                 } else if (gift_occasion.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Occasion...");
@@ -313,15 +305,13 @@ public class ProductAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
+                } else if (uri == null) {
+                    Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
                 } else {
-
                     submit_res();
-
                 }
-
-
             }
         });
 
@@ -366,8 +356,8 @@ public class ProductAdd extends AppCompatActivity {
             CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 100);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            System.out.println("print_Catch== "+e);
-           Utils_Class.toast_center(ProductAdd.this, "Try again...");
+            System.out.println("print_Catch== " + e);
+            Utils_Class.toast_center(ProductAdd.this, "Try again...");
         }
     }
 
@@ -376,7 +366,7 @@ public class ProductAdd extends AppCompatActivity {
             CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 101);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            System.out.println("print_Catch== "+e);
+            System.out.println("print_Catch== " + e);
             Utils_Class.toast_center(ProductAdd.this, "Try again...");
         }
     }
@@ -386,11 +376,10 @@ public class ProductAdd extends AppCompatActivity {
             CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ProductAdd.this, 102);
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
-            System.out.println("print_Catch== "+e);
+            System.out.println("print_Catch== " + e);
             Utils_Class.toast_center(ProductAdd.this, "Try again...");
         }
     }
-
 
 
     @Override
@@ -400,45 +389,73 @@ public class ProductAdd extends AppCompatActivity {
         if (requestCode == 100) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-
-
-                Uri uri = result.getUri();
+                uri = result.getUri();
                 IVPreviewImage.setImageURI(uri);
-                uri_1 = uri;
+                try {
+                    File file = getFile(ProductAdd.this, uri, "img1.jpg");
+                    path = file.getPath().replace(file.getName(), "");
+                    System.out.println("---file name : " + file.getName());
+                    System.out.println("---file path : " + path);
+                    System.out.println("---file path : " + file.getAbsolutePath());
+                    if (file_array.contains(file)) {
+                        // file_array.remove(file);
+                    }
+                    file_array.add(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 System.out.println("print_uri== ");
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
             }
-        }else  if (requestCode == 101) {
+        } else if (requestCode == 101) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-
-
                 Uri uri1 = result.getUri();
                 IVPreviewImage1.setImageURI(uri1);
-                uri_2 = uri1;
+                try {
+                    File file = getFile(ProductAdd.this, uri1, "img2.jpg");
+                    path = file.getPath().replace(file.getName(), "");
+                    System.out.println("---file name : " + file.getName());
+                    System.out.println("---file path : " + path);
+                    System.out.println("---file path : " + file.getAbsolutePath());
+                    if (file_array.contains(file)) {
+                        //  file_array.remove(file);
+                    }
+                    file_array.add(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
             }
-        }else  if (requestCode == 102) {
+        } else if (requestCode == 102) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-
-
                 Uri uri2 = result.getUri();
                 IVPreviewImage2.setImageURI(uri2);
-                uri_3 = uri2;
-
+                try {
+                    File file = getFile(ProductAdd.this, uri2, "img3.jpg");
+                    path = file.getPath().replace(file.getName(), "");
+                    System.out.println("---file name : " + file.getName());
+                    System.out.println("---file path : " + path);
+                    System.out.println("---file path : " + file.getAbsolutePath());
+                    if (file_array.contains(file)) {
+                        // file_array.remove(file);
+                    }
+                    file_array.add(file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
             }
         }
     }
 
-
-    public void openSomeActivityForResult() {
+  /*  public void openSomeActivityForResult() {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -500,9 +517,7 @@ public class ProductAdd extends AppCompatActivity {
                         uri_3 = data.getData();
                     }
                 }
-            });
-
-
+            });*/
 
     public void submit_res() {
         map1.clear();
@@ -519,9 +534,10 @@ public class ProductAdd extends AppCompatActivity {
         map1.put("discount", discount);
         map1.put("total_amount", total_amount);
 
-        File file1,file2,file3 = null;
+       /* File file1, file2, file3 = null;
+        File file = null;*/
         try {
-            file1 = getFile(ProductAdd.this, uri_1);
+          /*  file1 = getFile(ProductAdd.this, uri_1);
             path = file1.getPath().replace(file1.getName(), "");
             System.out.println("---file name : " + file1.getName());
             System.out.println("---file path : " + path);
@@ -540,13 +556,15 @@ public class ProductAdd extends AppCompatActivity {
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file3.getAbsolutePath());
 
-            for (int i=0;i<file1.length();i++){
-
-            }
-
             map2.put("gift_image[0]", "" + Uri.fromFile(file1));
             map2.put("gift_image[1]", "" + Uri.fromFile(file2));
-            map2.put("gift_image[2]", "" + Uri.fromFile(file3));
+            map2.put("gift_image[2]", "" + Uri.fromFile(file3));*/
+
+            for (int i = 0; i < file_array.size(); i++) {
+                map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array.get(i)));
+            }
+            System.out.println("check_size== " + file_array.size());
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -556,12 +574,10 @@ public class ProductAdd extends AppCompatActivity {
         System.out.println("print map1 : " + map1);
         System.out.println("print map2 : " + map2);
 
-
-       UploadAsync();
+        UploadAsync();
 
 
     }
-
 
 
     public void gender_gift() {
@@ -695,14 +711,14 @@ public class ProductAdd extends AppCompatActivity {
     }
 
 
-    public static File getFile(Context context, Uri uri) throws IOException {
+    public static File getFile(Context context, Uri uri, String image) throws IOException {
         String root = context.getFilesDir().getPath() + File.separatorChar + "Images";
         File folder = new File(root);
         // have the object build the directory structure, if needed.
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        File destinationFilename = new File(root + File.separatorChar + queryName(context, uri));
+        File destinationFilename = new File(root + File.separatorChar + image);
         try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
             createFileFromStream(ins, destinationFilename);
         } catch (Exception ex) {
@@ -729,11 +745,13 @@ public class ProductAdd extends AppCompatActivity {
     private static String queryName(Context context, Uri uri) {
         Cursor returnCursor =
                 context.getContentResolver().query(uri, null, null, null, null);
-        assert returnCursor != null;
-        int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-        returnCursor.moveToFirst();
-        String name = returnCursor.getString(nameIndex);
-        returnCursor.close();
+        String name = null;
+        if (returnCursor != null) {
+            int nameIndex = returnCursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+            returnCursor.moveToFirst();
+            name = returnCursor.getString(nameIndex);
+            returnCursor.close();
+        }
         return name;
     }
 

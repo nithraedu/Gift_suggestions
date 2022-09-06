@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.R;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.SendOtppojo;
+import nithra.gift.suggestion.shop.birthday.marriage.SellerEntry;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
 import retrofit2.Call;
@@ -32,6 +34,7 @@ public class OtpSend extends AppCompatActivity {
     String name_otp, gmail_otp, emailPattern;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
+    ImageView back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +42,21 @@ public class OtpSend extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.fragment_send_o_t_p);
+        back = findViewById(R.id.back);
 
         getotp = findViewById(R.id.getotp);
         name = findViewById(R.id.name);
         gmail = findViewById(R.id.gmail);
         send_otp = new ArrayList<SendOtppojo>();
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(OtpSend.this, SellerEntry.class);
+                startActivity(i);
+                finish();
+            }
+        });
 
         /*if (sharedPreference.getInt(OtpSend.this, "clear") == 1) {
             gmail.setText(sharedPreference.getString(OtpSend.this, "user_mail"));
@@ -53,9 +66,20 @@ public class OtpSend extends AppCompatActivity {
         getotp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Utils_Class.mProgress(OtpSend.this, "Loading please wait...", false).show();
+                name_otp = name.getText().toString().trim();
+                gmail_otp = gmail.getText().toString().trim();
+                emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+                if (name_otp.equals("")) {
+                    Utils_Class.toast_center(OtpSend.this, "Please Enter Your Name...");
+                } else if (gmail_otp.equals("")) {
+                    Utils_Class.toast_center(OtpSend.this, "Please Enter Your Email...");
+                } else if (!gmail_otp.matches(emailPattern)) {
+                    Toast.makeText(OtpSend.this, "Invalid email address", Toast.LENGTH_SHORT).show();
+                } else {
+                    otp_generate();
 
-                otp_generate();
+                }
+
                 sharedPreference.putString(OtpSend.this, "resend", "" + gmail_otp);
 
             }
@@ -63,10 +87,8 @@ public class OtpSend extends AppCompatActivity {
     }
 
     public void otp_generate() {
+        Utils_Class.mProgress(OtpSend.this, "Loading please wait...", false).show();
 
-        name_otp = name.getText().toString().trim();
-        gmail_otp = gmail.getText().toString().trim();
-        emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         System.out.println("print" + gmail_otp);
         HashMap<String, String> map = new HashMap<>();
@@ -88,29 +110,23 @@ public class OtpSend extends AppCompatActivity {
                     fragMove.enterotp();*/
 
                     if (response.body().get(0).getStatus().equals("Success")) {
-                        if (name_otp.equals("")) {
-                            Utils_Class.toast_center(OtpSend.this, "Please Enter Your Name...");
-                        } else if (gmail_otp.equals("")) {
-                            Utils_Class.toast_center(OtpSend.this, "Please Enter Your Email...");
-                        } else if (!gmail_otp.matches(emailPattern)) {
-                            Toast.makeText(OtpSend.this, "Invalid email address", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String result = new Gson().toJson(response.body());
-                            System.out.println("======response result:" + result);
-                            send_otp.addAll(response.body());
-                            sharedPreference.putString(OtpSend.this, "register_otp", "" + send_otp.get(0).getOtp());
-                            sharedPreference.putString(OtpSend.this, "user_id", "" + send_otp.get(0).getId());
-                            sharedPreference.putString(OtpSend.this, "user_status", "" + send_otp.get(0).getUserStatus());
-                            sharedPreference.putString(OtpSend.this, "user_mail", "" + send_otp.get(0).getGmail());
-                            name.getText().clear();
-                            gmail.getText().clear();
+
+                        String result = new Gson().toJson(response.body());
+                        System.out.println("======response result:" + result);
+                        send_otp.addAll(response.body());
+                        sharedPreference.putString(OtpSend.this, "register_otp", "" + send_otp.get(0).getOtp());
+                        sharedPreference.putString(OtpSend.this, "user_id", "" + send_otp.get(0).getId());
+                        sharedPreference.putString(OtpSend.this, "user_status", "" + send_otp.get(0).getUserStatus());
+                        sharedPreference.putString(OtpSend.this, "user_mail", "" + send_otp.get(0).getGmail());
+                            /*name.getText().clear();
+                            gmail.getText().clear();*/
 
 
-                            Intent i = new Intent(OtpSend.this, OtpVerify.class);
-                            startActivity(i);
-                            finish();
-                            //fragMove.enterotp();
-                        }
+                        Intent i = new Intent(OtpSend.this, OtpVerify.class);
+                        startActivity(i);
+                        finish();
+                        //fragMove.enterotp();
+
                     }
                     Utils_Class.mProgress.dismiss();
 

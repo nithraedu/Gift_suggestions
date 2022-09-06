@@ -1,5 +1,6 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -37,11 +38,12 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SellerProfileProductList extends AppCompatActivity {
-    ImageView IVPreviewImage, back;
+    ImageView  back;
+    nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
     TextView seller_name, shop_name, city, profile_edit, add_product;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SellerProfilePojo> gift;
-    Adapter adapter;
+    public static Adapter adapter;
     ArrayList<GiftList> gift_ada;
     RecyclerView list;
     SwipeRefreshLayout pullToRefresh;
@@ -65,6 +67,25 @@ public class SellerProfileProductList extends AppCompatActivity {
         back = findViewById(R.id.back);
         pullToRefresh = findViewById(R.id.pullToRefresh);
         no_item = findViewById(R.id.no_item);
+
+        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ImageView img_view;
+                Dialog dialog = new Dialog(SellerProfileProductList.this, android.R.style.Theme_DeviceDefault);
+                dialog.setContentView(R.layout.image_view);
+                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(true);
+                img_view = dialog.findViewById(R.id.img_view);
+                Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
+                        //.error(R.drawable.gift_1)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(img_view);
+                dialog.show();
+            }
+        });
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,7 +120,6 @@ public class SellerProfileProductList extends AppCompatActivity {
         list.setAdapter(adapter);
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
         category();
-        category1();
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -108,6 +128,13 @@ public class SellerProfileProductList extends AppCompatActivity {
                 pullToRefresh.setRefreshing(false);
             }
         });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        category1();
 
     }
 
