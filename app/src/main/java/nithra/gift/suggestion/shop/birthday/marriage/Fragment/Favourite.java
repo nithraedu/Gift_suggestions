@@ -2,6 +2,7 @@ package nithra.gift.suggestion.shop.birthday.marriage.Fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -211,13 +212,19 @@ public class Favourite extends Fragment {
             } else {
                 holder.favourite.setBackgroundResource(R.drawable.favorite_grey);
             }
+            holder.giftprize.setPaintFlags(holder.giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
-            Glide.with(context).load(fav_show.get(pos).getGiftImage())
+            String currentString = fav_show.get(pos).getGiftImage();
+            String[] separated = currentString.split(",");
+
+            Glide.with(context).load(separated[0])
                     //.error(R.drawable.gift_1)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(fav_show.get(pos).getGiftName());
             holder.head.setText(fav_show.get(pos).getDiscount() + "% offer");
+            holder. giftprize.setText("\u20B9 " + fav_show.get(pos).getTotalAmount());
+            holder. offerprize.setText("\u20B9 " + fav_show.get(pos).getGiftAmount());
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -246,7 +253,7 @@ public class Favourite extends Fragment {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView img_slide, favourite;
-            TextView gridText, head;
+            TextView gridText, head,giftprize, offerprize;
             CardView category;
 
             public ViewHolder(@NonNull View itemView) {
@@ -256,6 +263,8 @@ public class Favourite extends Fragment {
                 head = itemView.findViewById(R.id.head);
                 category = itemView.findViewById(R.id.category);
                 favourite = itemView.findViewById(R.id.favourite);
+                giftprize = itemView.findViewById(R.id.giftprize);
+                offerprize = itemView.findViewById(R.id.offerprize);
             }
         }
     }

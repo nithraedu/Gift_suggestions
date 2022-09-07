@@ -19,15 +19,18 @@ public class GetGift {
     @SerializedName("address")
     @Expose
     public String address;
+    @SerializedName("country_id")
+    @Expose
+    public String countryId;
+    @SerializedName("country_name")
+    @Expose
+    public String countryName;
     @SerializedName("state")
     @Expose
     public String state;
     @SerializedName("city")
     @Expose
     public String city;
-    @SerializedName("district")
-    @Expose
-    public String district;
     @SerializedName("latitude")
     @Expose
     public String latitude;
@@ -43,9 +46,6 @@ public class GetGift {
     @SerializedName("pincode")
     @Expose
     public String pincode;
-    @SerializedName("country")
-    @Expose
-    public String country;
     @SerializedName("gift_name")
     @Expose
     public String giftName;
@@ -123,6 +123,22 @@ public class GetGift {
         this.address = address;
     }
 
+    public String getCountryId() {
+        return countryId;
+    }
+
+    public void setCountryId(String countryId) {
+        this.countryId = countryId;
+    }
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
     public String getState() {
         return state;
     }
@@ -137,14 +153,6 @@ public class GetGift {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
     }
 
     public String getLatitude() {
@@ -185,14 +193,6 @@ public class GetGift {
 
     public void setPincode(String pincode) {
         this.pincode = pincode;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 
     public String getGiftName() {

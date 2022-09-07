@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 
 public class ImageSlide extends AppCompatActivity {
     ViewPager2 viewpager2;
@@ -24,6 +24,7 @@ public class ImageSlide extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String pos_gift;
+    LinearLayout swipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,13 +33,37 @@ public class ImageSlide extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_image_slide);
         viewpager2 = findViewById(R.id.viewpager2);
+        swipe = findViewById(R.id.swipe);
 
         intent = getIntent();
         extra = intent.getExtras();
         pos_gift = extra.getString("pos");
         String[] separated = pos_gift.split(",");
 
-        System.out.println("print_url== "+separated[0]);
+
+        viewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if (separated.length-1==position) {
+                    swipe.setVisibility(View.INVISIBLE);
+                } else {
+                    swipe.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+            }
+        });
+
+        System.out.println("print_url== " + separated[0]);
         adapter = new Adapter(this, viewpager2, separated);
         viewpager2.setAdapter(adapter);
     }
@@ -77,7 +102,7 @@ public class ImageSlide extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-           ImageView img_view;
+            ImageView img_view;
 
             public ViewHolder(@NonNull View view) {
                 super(view);

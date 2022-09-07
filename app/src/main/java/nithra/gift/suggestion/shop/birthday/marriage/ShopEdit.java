@@ -69,7 +69,9 @@ public class ShopEdit extends AppCompatActivity {
 
     TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, latitude, longitude, pincode, district, mailid, website;
     String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
-    TextView save, remove;
+    TextView save;
+    ImageView remove;
+
     nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<GiftEdit> list_shop;
@@ -125,6 +127,12 @@ public class ShopEdit extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openSomeActivityForResult();
+            }
+        });
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
             }
         });
 

@@ -50,7 +50,7 @@ public class Full_Details extends AppCompatActivity {
     ArrayList<Fav_view> fav_show;
     SwipeRefreshLayout pullToRefresh;
     int pos_id;
-    TextView btShowmore;
+    TextView btShowmore,btShowmore1;
 
 
     @Override
@@ -80,6 +80,7 @@ public class Full_Details extends AppCompatActivity {
         head = findViewById(R.id.head);
         fav = findViewById(R.id.fav);
         btShowmore = findViewById(R.id.btShowmore);
+        btShowmore1 = findViewById(R.id.btShowmore1);
         fav_show = new ArrayList<Fav_view>();
         // pullToRefresh = findViewById(R.id.pullToRefresh);
 
@@ -105,6 +106,21 @@ public class Full_Details extends AppCompatActivity {
                 }
             }
         });
+
+        btShowmore1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (btShowmore1.getText().toString().equalsIgnoreCase("Show more...")) {
+                    detail_add.setMaxLines(Integer.MAX_VALUE);//your TextView
+                    btShowmore1.setText("Show less");
+                } else {
+                    detail_add.setMaxLines(3);//your TextView
+                    btShowmore1.setText("Show more...");
+                }
+            }
+        });
+
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -245,7 +261,7 @@ public class Full_Details extends AppCompatActivity {
                         description.setText(gift_show.get(0).getGiftDescription());
                         detail_shop_name.setText(gift_show.get(0).getShopName());
                         //detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry() + " - " + gift_show.get(0).getPincode());
-                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry());
+                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry());
                        /* Glide.with(getApplicationContext()).load(gift_show.get(0).getLogo())
                                 //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
@@ -271,6 +287,12 @@ public class Full_Details extends AppCompatActivity {
                             btShowmore.setVisibility(View.VISIBLE);
                         } else {
                             btShowmore.setVisibility(View.GONE);
+                        }
+
+                        if (detail_add.getLineCount() > 3) {
+                            btShowmore1.setVisibility(View.VISIBLE);
+                        } else {
+                            btShowmore1.setVisibility(View.GONE);
                         }
                     }
 

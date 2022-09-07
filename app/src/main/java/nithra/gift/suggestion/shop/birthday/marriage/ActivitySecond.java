@@ -3,6 +3,7 @@ package nithra.gift.suggestion.shop.birthday.marriage;
 import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -281,6 +282,7 @@ public class ActivitySecond extends AppCompatActivity {
             } else {
                 holder.favourite.setBackgroundResource(R.drawable.favorite_grey);
             }
+            holder.giftprize.setPaintFlags(holder.giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 
             String currentString = gift_show.get(pos).getGiftImage();
             String[] separated = currentString.split(",");
@@ -293,6 +295,8 @@ public class ActivitySecond extends AppCompatActivity {
             holder.gridText.setText(gift_show.get(pos).getGiftName());
             //holder.head.setText(title);
             holder.head.setText(gift_show.get(pos).getDiscount() + "% offer");
+            holder. giftprize.setText("\u20B9 " + gift_show.get(pos).getTotalAmount());
+            holder. offerprize.setText("\u20B9 " + gift_show.get(pos).getGiftAmount());
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -322,7 +326,7 @@ public class ActivitySecond extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             ImageView img_slide, favourite;
-            TextView gridText, head;
+            TextView gridText, head,giftprize, offerprize;
             CardView category;
 
             public ViewHolder(@NonNull View itemView) {
@@ -332,6 +336,8 @@ public class ActivitySecond extends AppCompatActivity {
                 gridText = itemView.findViewById(R.id.gridText);
                 head = itemView.findViewById(R.id.head);
                 category = itemView.findViewById(R.id.category);
+                giftprize = itemView.findViewById(R.id.giftprize);
+                offerprize = itemView.findViewById(R.id.offerprize);
             }
         }
     }

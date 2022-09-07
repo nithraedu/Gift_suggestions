@@ -50,7 +50,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/ic_circle"
             android:padding="25dp"
-            android:src="@drawable/add" />
+            android:src="@drawable/ic_default_user_icon" />
 
         <TextView
             android:id="@+id/seller_name"

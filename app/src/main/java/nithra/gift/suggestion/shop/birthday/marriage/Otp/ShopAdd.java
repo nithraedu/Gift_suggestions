@@ -68,7 +68,8 @@ import retrofit2.Response;
 public class ShopAdd extends AppCompatActivity {
 
     TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
-    TextView save, remove;
+    TextView save;
+    ImageView remove;
     String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
     nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
@@ -126,13 +127,12 @@ public class ShopAdd extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 openSomeActivityForResult();
-
             }
         });
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                IVPreviewImage.setImageResource(R.drawable.add);
+                IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
             }
         });
         save.setOnClickListener(new View.OnClickListener() {
@@ -177,13 +177,9 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
                 } else {
                     submit_res();
-
                 }
-
-
             }
         });
-
     }
 
     public void spin_country() {

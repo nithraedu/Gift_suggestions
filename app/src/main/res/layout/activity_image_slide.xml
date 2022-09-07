@@ -9,7 +9,29 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpager2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
+        android:layout_height="match_parent"
+        android:layout_weight="1"/>
+    <LinearLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:layout_margin="10dp">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Swipe to next image"
+        android:padding="5dp"
+        android:background="#1C771C"
+        android:textColor="@color/white"/>
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:background="#1C771C"
+            android:src="@drawable/ic_baseline_arrow_forward_24" />
+    </LinearLayout>
 
 </LinearLayout>

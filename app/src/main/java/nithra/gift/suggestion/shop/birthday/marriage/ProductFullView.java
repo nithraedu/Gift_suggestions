@@ -41,7 +41,7 @@ public class ProductFullView extends AppCompatActivity {
     Bundle extra;
     String id_gift;
     ImageView back, profile_edit, profile_delete;
-    TextView btShowmore;
+    TextView btShowmore,btShowmore1;
     CardView card_mail, card_web;
     LinearLayout phone;
     AlertDialog.Builder builder;
@@ -71,6 +71,7 @@ public class ProductFullView extends AppCompatActivity {
         back = findViewById(R.id.back);
         profile_edit = findViewById(R.id.profile_edit);
         btShowmore = findViewById(R.id.btShowmore);
+        btShowmore1 = findViewById(R.id.btShowmore1);
         card_mail = findViewById(R.id.card_mail);
         card_web = findViewById(R.id.card_web);
         phone = findViewById(R.id.phone);
@@ -90,6 +91,20 @@ public class ProductFullView extends AppCompatActivity {
                 } else {
                     description.setMaxLines(3);//your TextView
                     btShowmore.setText("Show more...");
+                }
+            }
+        });
+
+        btShowmore1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (btShowmore1.getText().toString().equalsIgnoreCase("Show more...")) {
+                    detail_add.setMaxLines(Integer.MAX_VALUE);//your TextView
+                    btShowmore1.setText("Show less");
+                } else {
+                    detail_add.setMaxLines(3);//your TextView
+                    btShowmore1.setText("Show more...");
                 }
             }
         });
@@ -263,12 +278,17 @@ public class ProductFullView extends AppCompatActivity {
                     description.setText(gift.get(0).getGiftDescription());
                     head.setText(gift.get(0).getDiscount() + "% offer");
                     detail_shop_name.setText(gift.get(0).getShopName());
-                    detail_add.setText(gift.get(0).getAddress() + ", " + gift.get(0).getCity() + ", " + gift.get(0).getDistrict() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountry());
+                    detail_add.setText(gift.get(0).getAddress() + ", " + gift.get(0).getCity() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountryName());
 
                     if (description.getLineCount() > 3) {
                         btShowmore.setVisibility(View.VISIBLE);
                     } else {
                         btShowmore.setVisibility(View.GONE);
+                    }
+                    if (detail_add.getLineCount() > 3) {
+                        btShowmore1.setVisibility(View.VISIBLE);
+                    } else {
+                        btShowmore1.setVisibility(View.GONE);
                     }
 
                     Utils_Class.mProgress.dismiss();

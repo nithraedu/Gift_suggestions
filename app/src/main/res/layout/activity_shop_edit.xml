@@ -71,22 +71,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <TextView
+                <ImageView
                     android:id="@+id/remove"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginTop="5dp"
-                    android:text="Remove image"
-                    android:textColor="@color/black"
-                    android:visibility="gone" />
+                    android:layout_marginLeft="50dp"
+                    android:visibility="gone"
+                    android:src="@drawable/ic_baseline_close_24"/>
 
                 <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
                     android:id="@+id/IVPreviewImage"
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
                     android:background="@drawable/ic_circle"
                     android:padding="25dp"
                     android:src="@drawable/ic_default_user_icon" />
@@ -208,7 +206,7 @@
                                 android:layout_height="match_parent"
                                 android:layout_gravity="center"
                                 android:imeOptions="actionNext"
-                                android:inputType="textCapSentences"
+                                android:inputType="textEmailAddress"
                                 android:maxLines="1"
                                 android:paddingTop="20dp"
                                 android:paddingBottom="20dp" />
@@ -331,10 +329,10 @@
                             android:layout_margin="10dp"
                             android:hint="District"
                             android:theme="@style/AppThemetextinput"
+                            android:visibility="gone"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
                             app:boxCornerRadiusTopEnd="15dp"
-                            android:visibility="gone"
                             app:boxCornerRadiusTopStart="15dp"
                             app:endIconMode="clear_text"
                             app:hintTextColor="@color/app_color">
@@ -442,11 +440,11 @@
                             android:layout_margin="10dp"
                             android:hint="Latitude"
                             android:theme="@style/AppThemetextinput"
+                            android:visibility="gone"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
                             app:boxCornerRadiusTopEnd="15dp"
                             app:boxCornerRadiusTopStart="15dp"
-                            android:visibility="gone"
                             app:endIconMode="clear_text"
                             app:hintTextColor="@color/app_color">
 
@@ -469,10 +467,10 @@
                             android:layout_margin="10dp"
                             android:hint="Longitude"
                             android:theme="@style/AppThemetextinput"
+                            android:visibility="gone"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
                             app:boxCornerRadiusTopEnd="15dp"
-                            android:visibility="gone"
                             app:boxCornerRadiusTopStart="15dp"
                             app:endIconMode="clear_text"
                             app:hintTextColor="@color/app_color">

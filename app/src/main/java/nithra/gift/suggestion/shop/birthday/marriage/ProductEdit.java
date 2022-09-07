@@ -1,6 +1,5 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
@@ -25,10 +24,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -61,7 +56,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.gift.suggestion.shop.birthday.marriage.ProductEdit;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
@@ -78,7 +72,7 @@ public class ProductEdit extends AppCompatActivity {
     TextView save;
     Spinner spin_occaction, spin_gender;
     TextView myproduct;
-    ImageView IVPreviewImage,IVPreviewImage1,IVPreviewImage2;
+    ImageView IVPreviewImage, IVPreviewImage1, IVPreviewImage2;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String gift_name, gift_occasion, gift_gender, gift_category, gift_for, gift_amount, discount, total_amount, gift_description;
@@ -93,7 +87,7 @@ public class ProductEdit extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back;
+    ImageView back,remove,remove1,remove2;
 
     TextView textView, textView1;
     boolean[] selectedLanguage;
@@ -105,7 +99,10 @@ public class ProductEdit extends AppCompatActivity {
     ArrayList<Integer> langList = new ArrayList<>();
     ArrayList<Integer> langList1 = new ArrayList<>();
     ArrayList<File> file_array = new ArrayList<>();
-    Uri uri;
+    Uri uri,uri1,uri2;
+    String[] separated;
+    String image_change="";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +121,9 @@ public class ProductEdit extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
         IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
+        remove = findViewById(R.id.remove);
+        remove1 = findViewById(R.id.remove1);
+        remove2 = findViewById(R.id.remove2);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
         back = findViewById(R.id.back);
@@ -144,6 +144,50 @@ public class ProductEdit extends AppCompatActivity {
         Utils_Class.mProgress(ProductEdit.this, "Loading please wait...", false).show();
 
         giftedit();
+
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage.setImageResource(R.drawable.ic_image_upload);
+                if(file_array.isEmpty()) {
+
+                    file_array.remove(0);
+                }
+                if (!image_change.contains(separated[0])){
+                    image_change+=separated[0]+",";
+                }
+            }
+        });
+
+        remove1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage1.setImageResource(R.drawable.ic_image_upload);
+                if(file_array.isEmpty()) {
+                    file_array.remove(1);
+                }
+                if (separated.length>1) {
+                    if (!image_change.contains(separated[1])) {
+                        image_change += separated[1] + ",";
+                    }
+                }
+            }
+        });
+        remove2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage2.setImageResource(R.drawable.ic_image_upload);
+                if(file_array.isEmpty()) {
+                    file_array.remove(2);
+                }
+                if (separated.length>2) {
+                    if (!image_change.contains(separated[2])) {
+                        image_change += separated[2] + ",";
+                    }
+                }
+            }
+        });
+
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -296,14 +340,14 @@ public class ProductEdit extends AppCompatActivity {
             public void onClick(View v) {
                 gift_name = productname.getText().toString().trim();
                 gift_occasion = textView.getTag().toString().trim();
-                System.out.println("---check_occ___ "+gift_occasion);
-                gift_gender = textView1.getTag().toString().trim().replace("\r\n","");
-                System.out.println("---check_occ1___ "+gift_gender);
+                System.out.println("---check_occ___ " + gift_occasion);
+                gift_gender = textView1.getTag().toString().trim().replace("\r\n", "");
+                System.out.println("---check_occ1___ " + gift_gender);
                 total_amount = prod_prize.getText().toString().trim();
                 discount = offer_percentage.getText().toString().trim();
                 gift_amount = offer_prize.getText().toString().trim();
                 gift_description = prod_des.getText().toString().trim();
-                 if (gift_name.equals("")) {
+                if (gift_name.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Name...");
                 } else if (gift_occasion.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please select Occasion...");
@@ -315,10 +359,9 @@ public class ProductEdit extends AppCompatActivity {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Amount...");
-                } else if (uri== null) {
+                } /*else if (uri== null) {
                     Utils_Class.toast_center(ProductEdit.this, "Please set Gift image ...");
-                }
-                else if (gift_description.equals("")) {
+                }*/ else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Description...");
                 } else {
 
@@ -339,8 +382,6 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 choose_imge1();
-
-
             }
         });
         IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
@@ -391,8 +432,12 @@ public class ProductEdit extends AppCompatActivity {
         if (requestCode == 100) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                 uri = result.getUri();
+                uri = result.getUri();
                 IVPreviewImage.setImageURI(uri);
+                if (!image_change.contains(separated[0])){
+                    image_change+=separated[0]+",";
+                }
+
                 try {
                     File file = getFile(ProductEdit.this, uri, "img1.jpg");
                     path = file.getPath().replace(file.getName(), "");
@@ -402,7 +447,7 @@ public class ProductEdit extends AppCompatActivity {
                     if (file_array.contains(file)) {
                         // file_array.remove(file);
                     }
-                    file_array.add(file);
+                    file_array.add(0,file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -414,8 +459,13 @@ public class ProductEdit extends AppCompatActivity {
         } else if (requestCode == 101) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri uri1 = result.getUri();
+                uri1 = result.getUri();
                 IVPreviewImage1.setImageURI(uri1);
+                if (separated.length>1){
+                if (!image_change.contains(separated[1])) {
+                    image_change += separated[1] + ",";
+                }
+                }
                 try {
                     File file = getFile(ProductEdit.this, uri1, "img2.jpg");
                     path = file.getPath().replace(file.getName(), "");
@@ -425,7 +475,7 @@ public class ProductEdit extends AppCompatActivity {
                     if (file_array.contains(file)) {
                         //  file_array.remove(file);
                     }
-                    file_array.add(file);
+                    file_array.add(1,file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -436,8 +486,13 @@ public class ProductEdit extends AppCompatActivity {
         } else if (requestCode == 102) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri uri2 = result.getUri();
+                uri2 = result.getUri();
                 IVPreviewImage2.setImageURI(uri2);
+                if(separated.length>2) {
+                    if (!image_change.contains(separated[2])){
+                        image_change += separated[2] + ",";
+                    }
+                }
                 try {
                     File file = getFile(ProductEdit.this, uri2, "img3.jpg");
                     path = file.getPath().replace(file.getName(), "");
@@ -447,7 +502,7 @@ public class ProductEdit extends AppCompatActivity {
                     if (file_array.contains(file)) {
                         // file_array.remove(file);
                     }
-                    file_array.add(file);
+                    file_array.add(2,file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -540,8 +595,9 @@ public class ProductEdit extends AppCompatActivity {
         map1.put("gift_amount", gift_amount);
         map1.put("discount", discount);
         map1.put("total_amount", total_amount);
+        map1.put("img_delete", ""+image_change);
 
-      //  File file1,file2,file3 = null;
+        //  File file1,file2,file3 = null;
         try {
           /*  file1 = getFile(ProductEdit.this, uri_1);
             path = file1.getPath().replace(file1.getName(), "");
@@ -609,21 +665,25 @@ public class ProductEdit extends AppCompatActivity {
                         gift_occasion();
 
                         String currentString = list_gift.get(0).getGiftImage();
-                        System.out.println("print_image== "+list_gift.get(0).getGiftImage());
-                        String[] separated = currentString.split(",");
+                        System.out.println("print_image== " + list_gift.get(0).getGiftImage());
+                        separated = currentString.split(",");
                         Glide.with(getApplicationContext()).load(separated[0])
                                 //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
-                        Glide.with(getApplicationContext()).load(separated[1])
-                                //.error(R.drawable.gift_1)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage1);
-                        Glide.with(getApplicationContext()).load(separated[2])
-                                //.error(R.drawable.gift_1)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage2);
+                        if (separated.length > 1) {
+                            Glide.with(getApplicationContext()).load(separated[1])
+                                    //.error(R.drawable.gift_1)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(IVPreviewImage1);
+                        }
+                        if (separated.length > 2) {
 
+                            Glide.with(getApplicationContext()).load(separated[2])
+                                    //.error(R.drawable.gift_1)
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(IVPreviewImage2);
+                        }
                         productname.setText(list_gift.get(0).getGiftName());
                         prod_prize.setText(list_gift.get(0).getTotalAmount());
                         offer_prize.setText(list_gift.get(0).getGiftAmount());
@@ -688,18 +748,18 @@ public class ProductEdit extends AppCompatActivity {
                     cat_id1 = new String[giftfor.size()];
                     selectedLanguage1 = new boolean[giftfor.size()];
 
-                    String[] temp=list_gift.get(0).getGiftFor().replace("\r\n","").split(",");
+                    String[] temp = list_gift.get(0).getGiftFor().replace("\r\n", "").split(",");
 
-                    for (int i=0;i<giftfor.size();i++) {
+                    for (int i = 0; i < giftfor.size(); i++) {
                         for (int j = 0; j < temp.length; j++) {
-                            if (giftfor.get(i).getId().equals(temp[j])){
-                                selectedLanguage1[i]=true;
-                                cat1[i]=giftfor.get(i).getPeople();
-                                cat_id1[i]=giftfor.get(i).getId();
+                            if (giftfor.get(i).getId().equals(temp[j])) {
+                                selectedLanguage1[i] = true;
+                                cat1[i] = giftfor.get(i).getPeople();
+                                cat_id1[i] = giftfor.get(i).getId();
                                 langList1.add(i);
                                 break;
-                            }else {
-                                selectedLanguage1[i]=false;
+                            } else {
+                                selectedLanguage1[i] = false;
                             }
                         }
                     }
@@ -771,19 +831,19 @@ public class ProductEdit extends AppCompatActivity {
                     selectedLanguage = new boolean[occasion.size()];
 
                     System.out.println("--cat id all: " + list_gift.get(0).getGiftCategory());
-                    String[] temp=list_gift.get(0).getGiftCategory().split(",");
-                    for (int i=0;i<occasion.size();i++) {
+                    String[] temp = list_gift.get(0).getGiftCategory().split(",");
+                    for (int i = 0; i < occasion.size(); i++) {
                         for (int j = 0; j < temp.length; j++) {
-                            if (occasion.get(i).getId().equals(temp[j])){
+                            if (occasion.get(i).getId().equals(temp[j])) {
                                 System.out.println("--cat id select: " + occasion.get(i).getId());
                                 System.out.println("--cat name select: " + occasion.get(i).getCategory());
-                                selectedLanguage[i]=true;
-                                cat[i]=occasion.get(i).getCategory();
-                                cat_id[i]=occasion.get(i).getId();
+                                selectedLanguage[i] = true;
+                                cat[i] = occasion.get(i).getCategory();
+                                cat_id[i] = occasion.get(i).getId();
                                 langList.add(i);
                                 break;
                             } else {
-                                selectedLanguage[i]=false;
+                                selectedLanguage[i] = false;
                             }
                         }
                     }
@@ -920,7 +980,7 @@ public class ProductEdit extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-                                        IVPreviewImage.setImageResource(R.drawable.gallery);
+                                        //IVPreviewImage.setImageResource(R.drawable.gallery);
                                         textView.setText("");
                                         textView.setTag("");
                                         textView1.setText("");

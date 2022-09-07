@@ -1,7 +1,9 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -29,6 +31,7 @@ import java.util.HashMap;
 
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.DeleteGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftList;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
@@ -79,7 +82,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                 dialog.setCanceledOnTouchOutside(true);
                 img_view = dialog.findViewById(R.id.img_view);
                 Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
-                        //.error(R.drawable.gift_1)
+                        .error(R.drawable.ic_default_user_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img_view);
                 dialog.show();
@@ -119,7 +122,6 @@ public class SellerProfileProductList extends AppCompatActivity {
         adapter = new Adapter(this, gift_ada);
         list.setAdapter(adapter);
         Utils_Class.mProgress(this, "Loading please wait...", false).show();
-        category();
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -135,6 +137,8 @@ public class SellerProfileProductList extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         category1();
+        category();
+
 
     }
 
@@ -226,10 +230,41 @@ public class SellerProfileProductList extends AppCompatActivity {
         });
     }
 
+    public void delete_gift(String id_gift) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "gift_delete");
+        map.put("id", id_gift);
+        map.put("user_id", sharedPreference.getString(SellerProfileProductList.this, "user_id"));
+
+        System.out.println("print map : " + map);
+
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<DeleteGift>> call = retrofitAPI.delete_gift(map);
+        call.enqueue(new Callback<ArrayList<DeleteGift>>() {
+            @Override
+            public void onResponse(Call<ArrayList<DeleteGift>> call, Response<ArrayList<DeleteGift>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    Utils_Class.toast_center(getApplicationContext(), "Your product deleted...");
+                    SellerProfileProductList.adapter.notifyDataSetChanged();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<DeleteGift>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         ArrayList<GiftList> gift;
         LayoutInflater inflater;
         Context context;
+        AlertDialog.Builder builder=new AlertDialog.Builder(SellerProfileProductList.this);
 
         public Adapter(Context ctx, ArrayList<GiftList> images) {
             this.gift = images;
@@ -281,6 +316,25 @@ public class SellerProfileProductList extends AppCompatActivity {
                     startActivity(i);
                 }
             });
+            holder.profile_delete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    builder.setMessage("Are you sure you want delete your gift?").setCancelable(false)
+                            .setPositiveButton("No", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            })
+                            .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    delete_gift(gift.get(pos).getId());
+
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
+            });
         }
 
 
@@ -290,7 +344,7 @@ public class SellerProfileProductList extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView img_slide;
+            ImageView img_slide,profile_delete;
             TextView gridText, edit_product, head;
             CardView category;
 
@@ -301,6 +355,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                 edit_product = itemView.findViewById(R.id.edit_product);
                 category = itemView.findViewById(R.id.category);
                 head = itemView.findViewById(R.id.head);
+                profile_delete = itemView.findViewById(R.id.profile_delete);
             }
         }
     }
