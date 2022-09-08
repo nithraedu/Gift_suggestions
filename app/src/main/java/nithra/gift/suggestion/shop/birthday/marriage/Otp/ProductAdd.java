@@ -343,7 +343,7 @@ public class ProductAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
-                }*/ else if (uri == null || uri1 == null || uri2 == null) {
+                }*/ else if (uri == null) {
                     Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
