@@ -118,7 +118,7 @@ public class SellerProfile extends AppCompatActivity {
                     gift.clear();
                     gift.addAll(response.body());
                     Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
-                            //.error(R.drawable.gift_1)
+                            .error(R.drawable.ic_gift_default_img)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     seller_name.setText(gift.get(0).getName());

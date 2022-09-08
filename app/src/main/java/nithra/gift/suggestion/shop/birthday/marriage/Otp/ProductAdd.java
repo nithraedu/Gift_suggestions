@@ -85,10 +85,11 @@ public class ProductAdd extends AppCompatActivity {
     HashMap<String, String> map1 = new HashMap<>();
     HashMap<String, String> map2 = new HashMap<>();
     String path = "";
-    ImageView back;
-    ArrayList<File> file_array = new ArrayList<>();
+    ImageView back, remove, remove1, remove2;
+    // ArrayList<File> file_array = new ArrayList<>(Arrays.asList(null,null,null));
+    File[] file_array = new File[3];
 
-    Uri uri;
+    Uri uri, uri1, uri2;
     TextView textView, textView1;
     boolean[] selectedLanguage;
     boolean[] selectedLanguage1;
@@ -117,6 +118,9 @@ public class ProductAdd extends AppCompatActivity {
         IVPreviewImage = findViewById(R.id.IVPreviewImage);
         IVPreviewImage1 = findViewById(R.id.IVPreviewImage1);
         IVPreviewImage2 = findViewById(R.id.IVPreviewImage2);
+        remove = findViewById(R.id.remove);
+        remove1 = findViewById(R.id.remove1);
+        remove2 = findViewById(R.id.remove2);
         spin = new ArrayList<>();
         spin1 = new ArrayList<>();
         giftfor = new ArrayList<GiftFor>();
@@ -140,6 +144,40 @@ public class ProductAdd extends AppCompatActivity {
 
         gender_gift();
         gift_occasion();
+
+        remove.setVisibility(View.GONE);
+        remove1.setVisibility(View.GONE);
+        remove2.setVisibility(View.GONE);
+        remove.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage.setImageResource(R.drawable.ic_image_upload);
+
+                file_array[0] = null;
+                remove.setVisibility(View.GONE);
+
+
+            }
+        });
+
+        remove1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage1.setImageResource(R.drawable.ic_image_upload);
+                file_array[1] = null;
+                remove1.setVisibility(View.GONE);
+
+            }
+        });
+        remove2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IVPreviewImage2.setImageResource(R.drawable.ic_image_upload);
+                file_array[2] = null;
+                remove2.setVisibility(View.GONE);
+            }
+        });
+
 
         //textview
 
@@ -299,13 +337,13 @@ public class ProductAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Occasion...");
                 } else if (gift_gender.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please select Gender...");
-                } else if (total_amount.equals("")) {
+                } /*else if (total_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Amount...");
                 } else if (discount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
-                } else if (uri == null) {
+                }*/ else if (uri == null || uri1 == null || uri2 == null) {
                     Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
@@ -397,10 +435,9 @@ public class ProductAdd extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        // file_array.remove(file);
-                    }
-                    file_array.add(file);
+
+                    file_array[0] = file;
+                    remove.setVisibility(View.VISIBLE);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -412,7 +449,7 @@ public class ProductAdd extends AppCompatActivity {
         } else if (requestCode == 101) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri uri1 = result.getUri();
+                uri1 = result.getUri();
                 IVPreviewImage1.setImageURI(uri1);
                 try {
                     File file = getFile(ProductAdd.this, uri1, "img2.jpg");
@@ -420,10 +457,10 @@ public class ProductAdd extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        //  file_array.remove(file);
-                    }
-                    file_array.add(file);
+
+                    file_array[1] = file;
+                    remove1.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -434,7 +471,7 @@ public class ProductAdd extends AppCompatActivity {
         } else if (requestCode == 102) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             if (resultCode == RESULT_OK) {
-                Uri uri2 = result.getUri();
+                uri2 = result.getUri();
                 IVPreviewImage2.setImageURI(uri2);
                 try {
                     File file = getFile(ProductAdd.this, uri2, "img3.jpg");
@@ -442,10 +479,10 @@ public class ProductAdd extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        // file_array.remove(file);
-                    }
-                    file_array.add(file);
+
+                    file_array[2] = file;
+                    remove2.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -530,9 +567,9 @@ public class ProductAdd extends AppCompatActivity {
         map1.put("gift_for", gift_gender);
         map1.put("gift_name", gift_name);
         map1.put("gift_description", gift_description);
-        map1.put("gift_amount", gift_amount);
+       /* map1.put("gift_amount", gift_amount);
         map1.put("discount", discount);
-        map1.put("total_amount", total_amount);
+        map1.put("total_amount", total_amount);*/
 
        /* File file1, file2, file3 = null;
         File file = null;*/
@@ -560,10 +597,10 @@ public class ProductAdd extends AppCompatActivity {
             map2.put("gift_image[1]", "" + Uri.fromFile(file2));
             map2.put("gift_image[2]", "" + Uri.fromFile(file3));*/
 
-            for (int i = 0; i < file_array.size(); i++) {
-                map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array.get(i)));
+            for (int i = 0; i < file_array.length; i++) {
+                map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array[i]));
             }
-            System.out.println("check_size== " + file_array.size());
+            System.out.println("check_size== " + file_array.length);
 
 
         } catch (Exception e) {
@@ -793,7 +830,7 @@ public class ProductAdd extends AppCompatActivity {
 
                                 try {
                                     if (jsonObject.getString("status").contains("Success")) {
-                                        IVPreviewImage.setImageResource(R.drawable.gallery);
+                                        //IVPreviewImage.setImageResource(R.drawable.gallery);
                                         spin_occaction.setSelection(0);
                                         spin_gender.setSelection(0);
                                         productname.getText().clear();

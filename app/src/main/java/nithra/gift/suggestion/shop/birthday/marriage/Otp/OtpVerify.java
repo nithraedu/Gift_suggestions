@@ -108,6 +108,7 @@ public class OtpVerify extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(OtpVerify.this, OtpSend.class);
+                i.putExtra("mail_set",sharedPreference.getString(OtpVerify.this, "user_mail"));
                 startActivity(i);
                 finish();
             }
@@ -182,6 +183,8 @@ public class OtpVerify extends AppCompatActivity {
     }
 
     public void otp_verify() {
+        Utils_Class.mProgress(OtpVerify.this, "Loading please wait...", false).show();
+
         verify = edit_otp.trim();
 
         HashMap<String, String> map = new HashMap<>();
@@ -216,6 +219,7 @@ public class OtpVerify extends AppCompatActivity {
                         //fragMove.seller();
 
                     }
+                    Utils_Class.mProgress.dismiss();
 
                 }
                 System.out.println("======response :" + response);
@@ -230,6 +234,8 @@ public class OtpVerify extends AppCompatActivity {
 
 
     public void otp_generate() {
+        Utils_Class.mProgress(OtpVerify.this, "Loading please wait...", false).show();
+
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "check_seller");
         map.put("gmail", sharedPreference.getString(OtpVerify.this, "resend"));
@@ -246,6 +252,7 @@ public class OtpVerify extends AppCompatActivity {
                     send_otp.addAll(response.body());
                     sharedPreference.putString(OtpVerify.this, "register_otp", "" + send_otp.get(0).getOtp());
 
+                    Utils_Class.mProgress.dismiss();
 
                 }
                 System.out.println("======response :" + response);

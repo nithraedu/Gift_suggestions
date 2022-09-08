@@ -218,7 +218,7 @@ public class Favourite extends Fragment {
             String[] separated = currentString.split(",");
 
             Glide.with(context).load(separated[0])
-                    //.error(R.drawable.gift_1)
+                    .error(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(fav_show.get(pos).getGiftName());

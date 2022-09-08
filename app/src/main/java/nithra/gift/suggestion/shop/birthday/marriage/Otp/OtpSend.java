@@ -35,7 +35,9 @@ public class OtpSend extends AppCompatActivity {
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SendOtppojo> send_otp;
     ImageView back;
-
+    Intent intent;
+    Bundle extra;
+    String mail_set;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,6 +50,13 @@ public class OtpSend extends AppCompatActivity {
         name = findViewById(R.id.name);
         gmail = findViewById(R.id.gmail);
         send_otp = new ArrayList<SendOtppojo>();
+      /*  intent = getIntent();
+        extra = intent.getExtras();
+        mail_set=extra.getString("mail_set");
+        if (!mail_set.isEmpty()) {
+            gmail.setText(mail_set);
+        }
+*/
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

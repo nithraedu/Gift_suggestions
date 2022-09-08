@@ -88,7 +88,8 @@
         <activity
             android:name=".crop_image.CropImageActivity1"
             android:theme="@style/corppp" />
-
+<activity android:name=".Notification.NotificationView"/>
+        <activity android:name=".Notification.ST_Activity"/>
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"

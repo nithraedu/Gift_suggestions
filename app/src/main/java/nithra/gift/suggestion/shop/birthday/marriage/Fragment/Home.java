@@ -294,7 +294,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             int pos = position;
 
             Glide.with(context).load(giftfor.get(pos).getPeopleLogo())
-                    //.error(R.drawable.gift_1)
+                    .error(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.slide_mat);
             holder.gridText.setText(giftfor.get(pos).getPeople());
@@ -354,7 +354,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         public void onBindViewHolder(@NonNull Adapter3.ViewHolder holder, int position) {
             int pos = position;
             Glide.with(context).load(giftoccasion.get(pos).getCategoryLogo())
-                    //.error(R.drawable.gift_1)
+                    .error(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(giftoccasion.get(pos).getCategory());

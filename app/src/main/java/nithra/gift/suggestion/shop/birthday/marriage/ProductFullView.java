@@ -266,7 +266,7 @@ public class ProductFullView extends AppCompatActivity {
                     String[] separated = currentString.split(",");
                     System.out.println("print_comma== " + separated);
                     Glide.with(getApplicationContext()).load(separated[0])
-                            //.error(R.drawable.gift_1)
+                            .error(R.drawable.ic_gift_default_img)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     giftname.setText(gift.get(0).getGiftName());

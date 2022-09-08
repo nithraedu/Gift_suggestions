@@ -87,7 +87,7 @@ public class ProductEdit extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back,remove,remove1,remove2;
+    ImageView back, remove, remove1, remove2;
 
     TextView textView, textView1;
     boolean[] selectedLanguage;
@@ -98,10 +98,11 @@ public class ProductEdit extends AppCompatActivity {
     String[] cat_id1;
     ArrayList<Integer> langList = new ArrayList<>();
     ArrayList<Integer> langList1 = new ArrayList<>();
-    ArrayList<File> file_array = new ArrayList<>();
-    Uri uri,uri1,uri2;
+    // ArrayList<File> file_array = new ArrayList<>(Arrays.asList(null,null,null));
+    File[] file_array = new File[3];
+    Uri uri, uri1, uri2;
     String[] separated;
-    String image_change="";
+    String image_change = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,17 +145,19 @@ public class ProductEdit extends AppCompatActivity {
         Utils_Class.mProgress(ProductEdit.this, "Loading please wait...", false).show();
 
         giftedit();
-
+        remove.setVisibility(View.GONE);
+        remove1.setVisibility(View.GONE);
+        remove2.setVisibility(View.GONE);
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IVPreviewImage.setImageResource(R.drawable.ic_image_upload);
-                if(file_array.isEmpty()) {
 
-                    file_array.remove(0);
-                }
-                if (!image_change.contains(separated[0])){
-                    image_change+=separated[0]+",";
+                file_array[0] = null;
+                remove.setVisibility(View.GONE);
+
+                if (!image_change.contains(separated[0])) {
+                    image_change += separated[0] + ",";
                 }
             }
         });
@@ -163,10 +166,10 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 IVPreviewImage1.setImageResource(R.drawable.ic_image_upload);
-                if(file_array.isEmpty()) {
-                    file_array.remove(1);
-                }
-                if (separated.length>1) {
+                file_array[1] = null;
+                remove1.setVisibility(View.GONE);
+
+                if (separated.length > 1) {
                     if (!image_change.contains(separated[1])) {
                         image_change += separated[1] + ",";
                     }
@@ -177,10 +180,10 @@ public class ProductEdit extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 IVPreviewImage2.setImageResource(R.drawable.ic_image_upload);
-                if(file_array.isEmpty()) {
-                    file_array.remove(2);
-                }
-                if (separated.length>2) {
+                file_array[2] = null;
+                remove2.setVisibility(View.GONE);
+
+                if (separated.length > 2) {
                     if (!image_change.contains(separated[2])) {
                         image_change += separated[2] + ",";
                     }
@@ -353,13 +356,13 @@ public class ProductEdit extends AppCompatActivity {
                     Utils_Class.toast_center(ProductEdit.this, "Please select Occasion...");
                 } else if (gift_gender.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please select Gender...");
-                } else if (total_amount.equals("")) {
+                } /*else if (total_amount.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Amount...");
                 } else if (discount.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Offer Amount...");
-                } /*else if (uri== null) {
+                } *//*else if (uri== null) {
                     Utils_Class.toast_center(ProductEdit.this, "Please set Gift image ...");
                 }*/ else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Description...");
@@ -434,8 +437,8 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri = result.getUri();
                 IVPreviewImage.setImageURI(uri);
-                if (!image_change.contains(separated[0])){
-                    image_change+=separated[0]+",";
+                if (!image_change.contains(separated[0])) {
+                    image_change += separated[0] + ",";
                 }
 
                 try {
@@ -444,10 +447,10 @@ public class ProductEdit extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        // file_array.remove(file);
-                    }
-                    file_array.add(0,file);
+
+                    file_array[0] = file;
+                    remove.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -461,10 +464,10 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri1 = result.getUri();
                 IVPreviewImage1.setImageURI(uri1);
-                if (separated.length>1){
-                if (!image_change.contains(separated[1])) {
-                    image_change += separated[1] + ",";
-                }
+                if (separated.length > 1) {
+                    if (!image_change.contains(separated[1])) {
+                        image_change += separated[1] + ",";
+                    }
                 }
                 try {
                     File file = getFile(ProductEdit.this, uri1, "img2.jpg");
@@ -472,10 +475,10 @@ public class ProductEdit extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        //  file_array.remove(file);
-                    }
-                    file_array.add(1,file);
+
+                    file_array[1] = file;
+                    remove1.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -488,8 +491,8 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri2 = result.getUri();
                 IVPreviewImage2.setImageURI(uri2);
-                if(separated.length>2) {
-                    if (!image_change.contains(separated[2])){
+                if (separated.length > 2) {
+                    if (!image_change.contains(separated[2])) {
                         image_change += separated[2] + ",";
                     }
                 }
@@ -499,10 +502,10 @@ public class ProductEdit extends AppCompatActivity {
                     System.out.println("---file name : " + file.getName());
                     System.out.println("---file path : " + path);
                     System.out.println("---file path : " + file.getAbsolutePath());
-                    if (file_array.contains(file)) {
-                        // file_array.remove(file);
-                    }
-                    file_array.add(2,file);
+
+                    file_array[2] = file;
+                    remove2.setVisibility(View.VISIBLE);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -595,7 +598,7 @@ public class ProductEdit extends AppCompatActivity {
         map1.put("gift_amount", gift_amount);
         map1.put("discount", discount);
         map1.put("total_amount", total_amount);
-        map1.put("img_delete", ""+image_change);
+        map1.put("img_delete", image_change);
 
         //  File file1,file2,file3 = null;
         try {
@@ -622,10 +625,16 @@ public class ProductEdit extends AppCompatActivity {
             map2.put("gift_image[1]", "" + Uri.fromFile(file2));
             map2.put("gift_image[2]", "" + Uri.fromFile(file3));*/
 
-            for (int i = 0; i < file_array.size(); i++) {
-                map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array.get(i)));
+            int set_img = 0;
+            for (int i = 0; i < file_array.length; i++) {
+                System.out.println("check_loop");
+                if (file_array[i] != null) {
+                    map2.put("gift_image[" + set_img + "]", "" + Uri.fromFile(file_array[i]));
+                    set_img++;
+                    System.out.println("print_image==" + Uri.fromFile(file_array[i]));
+                }
             }
-            System.out.println("check_size== " + file_array.size());
+            System.out.println("check_size== " + file_array.length);
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -668,19 +677,20 @@ public class ProductEdit extends AppCompatActivity {
                         System.out.println("print_image== " + list_gift.get(0).getGiftImage());
                         separated = currentString.split(",");
                         Glide.with(getApplicationContext()).load(separated[0])
-                                //.error(R.drawable.gift_1)
+                                .error(R.drawable.ic_gift_default_img)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
                         if (separated.length > 1) {
+                            System.out.println("print_sep1");
                             Glide.with(getApplicationContext()).load(separated[1])
-                                    //.error(R.drawable.gift_1)
+                                    .error(R.drawable.ic_gift_default_img)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(IVPreviewImage1);
                         }
                         if (separated.length > 2) {
-
+                            System.out.println("print_sep2");
                             Glide.with(getApplicationContext()).load(separated[2])
-                                    //.error(R.drawable.gift_1)
+                                    .error(R.drawable.ic_gift_default_img)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(IVPreviewImage2);
                         }

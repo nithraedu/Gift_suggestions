@@ -67,11 +67,11 @@ import retrofit2.Response;
 
 public class ShopAdd extends AppCompatActivity {
 
-    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website;
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website,anothermobilenumber;
     TextView save;
-    ImageView remove;
+    ImageView remove,edit_img;
     String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
-    nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
+   ImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String pack = "nithra.tamil.word.game.giftsuggestions";
@@ -110,10 +110,15 @@ public class ShopAdd extends AppCompatActivity {
         mailid = findViewById(R.id.mailid);
         website = findViewById(R.id.website);
         spin_country = findViewById(R.id.spin_country);
+        edit_img = findViewById(R.id.edit_img);
+        anothermobilenumber = findViewById(R.id.anothermobilenumber);
         country_get = new ArrayList<GetCountry>();
         spin = new ArrayList<>();
 
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+
+        mailid.setText(sharedPreference.getString(ShopAdd.this, "user_mail"));
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,12 +134,18 @@ public class ShopAdd extends AppCompatActivity {
                 openSomeActivityForResult();
             }
         });
-        remove.setOnClickListener(new View.OnClickListener() {
+        edit_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openSomeActivityForResult();
+            }
+        });
+       /* remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
             }
-        });
+        });*/
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,7 +177,7 @@ public class ShopAdd extends AppCompatActivity {
                 } else if (!mail.matches(emailPattern)) {
                     Toast.makeText(ShopAdd.this, "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else if (spin_country.getSelectedItemPosition() == 0) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your country...");
+                    Utils_Class.toast_center(ShopAdd.this, "Please Select Your country...");
                 } else if (shop_state.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your state...");
                 }  else if (shop_city.equals("")) {
@@ -174,7 +185,7 @@ public class ShopAdd extends AppCompatActivity {
                 } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
                 } else if (shop_pincode.equals("")) {
-                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pincode...");
+                    Utils_Class.toast_center(ShopAdd.this, "Please Enter Your pin/postal code...");
                 } else {
                     submit_res();
                 }

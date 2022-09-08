@@ -14,6 +14,7 @@
     <color name="bg">#f6f9fa</color>
     <color name="bottom_bg">#0069ff</color>
     <color name="bottom_icon">#ff3a52</color>
+    <color name="cardbg">#f8f8fa</color>
 
     <color name="gray_light">#4291ff</color>
     <color name="app_color">#0d50d9</color>

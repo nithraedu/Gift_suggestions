@@ -250,7 +250,7 @@ public class Full_Details extends AppCompatActivity {
                         String[] separated = currentString.split(",");
 
                         Glide.with(getApplicationContext()).load(separated[0])
-                                //.error(R.drawable.gift_1)
+                                .error(R.drawable.ic_gift_default_img)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
 

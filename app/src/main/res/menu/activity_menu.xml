@@ -24,8 +24,9 @@
             android:title="Privacy Policy" />
         <item
             android:id="@+id/add_shop_nav"
-            android:icon="@drawable/policy_icon"
-            android:title="Add Your Shop" />
+            android:icon="@drawable/ic_add_shop"
+            android:iconTint="@color/black"
+            android:title="Add Your Shop/Products" />
     </group>
 
 </menu>

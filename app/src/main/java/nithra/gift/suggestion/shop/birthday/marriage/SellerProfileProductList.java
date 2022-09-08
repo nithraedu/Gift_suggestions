@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 public class SellerProfileProductList extends AppCompatActivity {
     ImageView  back;
-    nithra.gift.suggestion.shop.birthday.marriage.CircleImageView IVPreviewImage;
+    ImageView IVPreviewImage;
     TextView seller_name, shop_name, city, profile_edit, add_product;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<SellerProfilePojo> gift;
@@ -75,7 +75,7 @@ public class SellerProfileProductList extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                ImageView img_view;
+               /* ImageView img_view;
                 Dialog dialog = new Dialog(SellerProfileProductList.this, android.R.style.Theme_DeviceDefault);
                 dialog.setContentView(R.layout.image_view);
                 //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
@@ -85,7 +85,11 @@ public class SellerProfileProductList extends AppCompatActivity {
                         .error(R.drawable.ic_default_user_icon)
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(img_view);
-                dialog.show();
+                dialog.show();*/
+
+                Intent i = new Intent(getApplicationContext(), ImageSlide.class);
+                i.putExtra("pos", gift.get(0).getLogo());
+                startActivity(i);
             }
         });
 
@@ -158,7 +162,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                     gift.clear();
                     gift.addAll(response.body());
                     Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
-                            //.error(R.drawable.gift_1)
+                            .error(R.drawable.ic_gift_default_img)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     seller_name.setText(gift.get(0).getName());
@@ -293,7 +297,7 @@ public class SellerProfileProductList extends AppCompatActivity {
             String[] separated = currentString.split(",");
 
             Glide.with(context).load(separated[0])
-                    //.error(R.drawable.gift_1)
+                    .error(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             System.out.println("print_img " + gift.get(pos).getGiftImage());
