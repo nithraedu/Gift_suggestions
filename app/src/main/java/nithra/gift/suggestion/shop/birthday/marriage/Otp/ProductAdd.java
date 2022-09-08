@@ -343,7 +343,7 @@ public class ProductAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
-                }*/ else if (uri == null) {
+                }*/ else if (file_array == null) {
                     Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
@@ -598,7 +598,10 @@ public class ProductAdd extends AppCompatActivity {
             map2.put("gift_image[2]", "" + Uri.fromFile(file3));*/
 
             for (int i = 0; i < file_array.length; i++) {
-                map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array[i]));
+                if (file_array[i] != null) {
+
+                    map2.put("gift_image[" + i + "]", "" + Uri.fromFile(file_array[i]));
+                }
             }
             System.out.println("check_size== " + file_array.length);
 

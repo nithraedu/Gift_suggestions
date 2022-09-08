@@ -145,9 +145,9 @@ public class ProductEdit extends AppCompatActivity {
         Utils_Class.mProgress(ProductEdit.this, "Loading please wait...", false).show();
 
         giftedit();
-        remove.setVisibility(View.GONE);
+     /*   remove.setVisibility(View.GONE);
         remove1.setVisibility(View.GONE);
-        remove2.setVisibility(View.GONE);
+        remove2.setVisibility(View.GONE);*/
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -595,9 +595,9 @@ public class ProductEdit extends AppCompatActivity {
         map1.put("gift_name", gift_name);
         map1.put("id", id_gift);
         map1.put("gift_description", gift_description);
-        map1.put("gift_amount", gift_amount);
+       /* map1.put("gift_amount", gift_amount);
         map1.put("discount", discount);
-        map1.put("total_amount", total_amount);
+        map1.put("total_amount", total_amount);*/
         map1.put("img_delete", image_change);
 
         //  File file1,file2,file3 = null;
