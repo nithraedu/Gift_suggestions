@@ -64,8 +64,7 @@ public class OtpVerify extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(OtpVerify.this, OtpSend.class);
-                startActivity(i);
+
                 finish();
             }
         });
@@ -107,9 +106,9 @@ public class OtpVerify extends AppCompatActivity {
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(OtpVerify.this, OtpSend.class);
+              /*  Intent i = new Intent(OtpVerify.this, OtpSend.class);
                 i.putExtra("mail_set",sharedPreference.getString(OtpVerify.this, "user_mail"));
-                startActivity(i);
+                startActivity(i);*/
                 finish();
             }
         });
@@ -172,12 +171,12 @@ public class OtpVerify extends AppCompatActivity {
                 edit_otp = otp_1.getText().toString().trim() + otp_2.getText().toString().trim() + otp_3.getText().toString().trim() + otp_4.getText().toString().trim();
                 if (otp_1.getText().toString().equals("") && otp_2.getText().toString().equals("") && otp_3.getText().toString().equals("") && otp_4.getText().toString().equals("")) {
                     Utils_Class.toast_center(OtpVerify.this, "Enter your otp");
-                } else if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(edit_otp)) {
+                } else /*if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(edit_otp)) */{
                     System.out.println("printop" + edit_otp);
                     otp_verify();
-                } else {
+                } /*else {
                     Utils_Class.toast_center(OtpVerify.this, "Invalid otp");
-                }
+                }*/
             }
         });
     }
@@ -198,25 +197,34 @@ public class OtpVerify extends AppCompatActivity {
             @Override
             public void onResponse(Call<ArrayList<CheckOtp>> call, Response<ArrayList<CheckOtp>> response) {
                 if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    sharedPreference.putInt(OtpVerify.this, "yes", 1);
-                    sharedPreference.putInt(OtpVerify.this, "profile", 1);
-                    enter_otp.getText().clear();
-                    String user = sharedPreference.getString(OtpVerify.this, "user_status");
 
-                    if (user.equals("exiting")) {
-                        sharedPreference.putInt(OtpVerify.this, "profile", 2);
-                        Intent i = new Intent(OtpVerify.this, SellerProfileProductList.class);
-                        startActivity(i);
-                        finish();
-                        //fragMove.product();
-                        //fragMove.seller();
-                    } else if (user.equals("new")) {
-                        Intent i = new Intent(OtpVerify.this, ShopAdd.class);
-                        startActivity(i);
-                        finish();
-                        //fragMove.seller();
+                    if (response.body().get(0).getStatus().equals("Success")) {
+
+                        String result = new Gson().toJson(response.body());
+                        System.out.println("======response result:" + result);
+                        sharedPreference.putInt(OtpVerify.this, "yes", 1);
+                        sharedPreference.putInt(OtpVerify.this, "profile", 1);
+                        enter_otp.getText().clear();
+                        String user = sharedPreference.getString(OtpVerify.this, "user_status");
+
+                        if (user.equals("exiting")) {
+                            sharedPreference.putInt(OtpVerify.this, "profile", 2);
+                            finishAffinity();
+                            Intent i = new Intent(OtpVerify.this, SellerProfileProductList.class);
+                            startActivity(i);
+                            //finish();
+                            //fragMove.product();
+                            //fragMove.seller();
+                        } else if (user.equals("new")) {
+                            finishAffinity();
+                            Intent i = new Intent(OtpVerify.this, ShopAdd.class);
+                            startActivity(i);
+                            //finish();
+                            //fragMove.seller();
+
+                        }
+                    }if (response.body().get(0).getStatus().equals("failure")) {
+                        Utils_Class.toast_center(OtpVerify.this, "Invalid otp");
 
                     }
                     Utils_Class.mProgress.dismiss();

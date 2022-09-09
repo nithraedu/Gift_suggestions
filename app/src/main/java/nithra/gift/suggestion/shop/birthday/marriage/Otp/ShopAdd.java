@@ -67,11 +67,11 @@ import retrofit2.Response;
 
 public class ShopAdd extends AppCompatActivity {
 
-    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website,anothermobilenumber;
+    TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, country, latitude, longitude, pincode, district, mailid, website, anothermobilenumber;
     TextView save;
-    ImageView remove,edit_img;
-    String sell_name, shop_name, shop_add, mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
-   ImageView IVPreviewImage;
+    ImageView remove, edit_img;
+    String sell_name, shop_name, shop_add, mob_num, another_mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
+    ImageView IVPreviewImage;
     int SELECT_PICTURE = 200;
     SharedPreference sharedPreference = new SharedPreference();
     String pack = "nithra.tamil.word.game.giftsuggestions";
@@ -153,6 +153,7 @@ public class ShopAdd extends AppCompatActivity {
                 shop_name = shopname.getText().toString().trim();
                 shop_add = shopaddress.getText().toString().trim();
                 mob_num = mobilenumber.getText().toString().trim();
+                another_mob_num = anothermobilenumber.getText().toString().trim();
                 mail = mailid.getText().toString().trim();
                 web = website.getText().toString().trim();
                 shop_city = city.getText().toString().trim();
@@ -165,7 +166,9 @@ public class ShopAdd extends AppCompatActivity {
 
                 String url = "http://" + web;
                 String url1 = "https://" + web;
-
+                if (uri_1 == null) {
+                    IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
+                }
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");
                 } else if (shop_name.equals("")) {
@@ -180,7 +183,7 @@ public class ShopAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ShopAdd.this, "Please Select Your country...");
                 } else if (shop_state.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your state...");
-                }  else if (shop_city.equals("")) {
+                } else if (shop_city.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your city...");
                 } else if (shop_add.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Your address...");
@@ -274,6 +277,7 @@ public class ShopAdd extends AppCompatActivity {
         map1.put("user_id", sharedPreference.getString(ShopAdd.this, "user_id"));
         map1.put("shop_name", shop_name);
         map1.put("seller_mobile", mob_num);
+        map1.put("seller_mobile2", another_mob_num);
         map1.put("shop_email", mail);
         map1.put("shop_website", web);
         map1.put("name", sell_name);
@@ -394,6 +398,7 @@ public class ShopAdd extends AppCompatActivity {
                                         shopname.getText().clear();
                                         shopaddress.getText().clear();
                                         mobilenumber.getText().clear();
+                                        anothermobilenumber.getText().clear();
                                         mailid.getText().clear();
                                         website.getText().clear();
                                         city.getText().clear();

@@ -1,15 +1,19 @@
 package nithra.gift.suggestion.shop.birthday.marriage.Fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -28,23 +32,30 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.material.navigation.NavigationView;
 import com.google.gson.Gson;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import nithra.gift.suggestion.shop.birthday.marriage.ActivitySecond;
 import nithra.gift.suggestion.shop.birthday.marriage.BuildConfig;
+import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Feedback;
+import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Method;
+import nithra.gift.suggestion.shop.birthday.marriage.Feedback.RetrofitClient;
 import nithra.gift.suggestion.shop.birthday.marriage.FragMove;
-import nithra.gift.suggestion.shop.birthday.marriage.MainActivity;
-import nithra.gift.suggestion.shop.birthday.marriage.MyProduct;
-import nithra.gift.suggestion.shop.birthday.marriage.Otp.OtpSend;
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
+import nithra.gift.suggestion.shop.birthday.marriage.PrivacyPolicy;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.SellerEntry;
-import nithra.gift.suggestion.shop.birthday.marriage.SellerProfile;
 import nithra.gift.suggestion.shop.birthday.marriage.SellerProfileProductList;
 import nithra.gift.suggestion.shop.birthday.marriage.SharedPreference;
 import nithra.gift.suggestion.shop.birthday.marriage.Utils_Class;
@@ -58,13 +69,14 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
     ArrayList<Occasion> giftoccasion;
     Adapter2 adapter2;
     Adapter3 adapter3;
-    LinearLayout notification, profile_view,favourite;
+    LinearLayout notification, profile_view, favourite;
     SharedPreference sharedPreference = new SharedPreference();
     TextView code, name;
     int versionCode = BuildConfig.VERSION_CODE;
     String versionName = BuildConfig.VERSION_NAME;
     SwipeRefreshLayout pullToRefresh;
     FragMove fragMove;
+    int a = 0;
 
 
     public Home() {
@@ -92,7 +104,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         RecyclerView list2 = view.findViewById(R.id.list2);
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
         fragMove = (FragMove) getContext();
-
 
 
         String user = sharedPreference.getString(getContext(), "user_status");
@@ -181,11 +192,16 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         } else if (id == R.id.nav_rateus) {
 
         } else if (id == R.id.nav_feedback) {
-
+            //feedback();
         } else if (id == R.id.nav_policy) {
+            if (Utils_Class.isNetworkAvailable(getContext())) {
+                Intent i = new Intent(getContext(), PrivacyPolicy.class);
+                startActivity(i);
+            } else {
+                Utils_Class.toast_normal(getContext(), "Please connect to your internet");
+            }
 
-
-        }else if (id == R.id.add_shop_nav) {
+        } else if (id == R.id.add_shop_nav) {
             /*if (sharedPreference.getInt(getContext(), "yes") == 0) {
                 Intent i = new Intent(getContext(), SellerEntry.class);
                 startActivity(i);
@@ -211,6 +227,100 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void feedback() {
+        EditText email_edt, feedback_edt;
+        TextView privacy;
+        TextView submit_btn;
+        Dialog dialog = new Dialog(getContext(), android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth);
+        dialog.setContentView(R.layout.feed_back);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setCanceledOnTouchOutside(false);
+        email_edt = dialog.findViewById(R.id.edit_email);
+        feedback_edt = dialog.findViewById(R.id.editText1);
+        submit_btn = dialog.findViewById(R.id.btnSend);
+        privacy = dialog.findViewById(R.id.policy);
+        privacy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (Utils_Class.isNetworkAvailable(getContext())) {
+                    Intent intent = new Intent(getContext(), PrivacyPolicy.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "please connect to the internet...", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        submit_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String feedback = feedback_edt.getText().toString().trim();
+                String email = email_edt.getText().toString().trim();
+
+                if (feedback.equals("")) {
+                    Toast.makeText(getContext(), "Please type your feedback or suggestion, Thank you", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (!Utils_Class.isNetworkAvailable(getContext())) {
+                    Toast.makeText(getContext(), "please connect to the internet...", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                try {
+                    feedback = URLEncoder.encode(feedback, "UTF-8");
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
+                }
+
+                HashMap<String, String> map = new HashMap<>();
+                map.put("type", "Gift_Suggestions");
+                map.put("feedback", feedback);
+                map.put("email", email);
+                map.put("model", Build.MODEL);
+                map.put("vcode", "1.0");
+                Method method = RetrofitClient.getRetrofit().create(Method.class);
+                Call<List<Feedback>> call = method.getAlldata(map);
+                call.enqueue(new Callback<List<Feedback>>() {
+                    @Override
+                    public void onResponse(Call<List<Feedback>> call, Response<List<Feedback>> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                List<Feedback> feedbacks = response.body();
+                                System.out.println("======response feedbacks:" + feedbacks.get(0).getStatus());
+
+                                JSONArray jsonArray = new JSONArray(new Gson().toJson(response.body()));
+                                JSONObject jsonObject = jsonArray.getJSONObject(0);
+                                System.out.println("======response feedbacks:" + jsonObject.getString("status"));
+                                dialog.dismiss();
+                                Toast.makeText(getContext(), "Feedback sent, Thank you", Toast.LENGTH_SHORT).show();
+
+                            } catch (JSONException e) {
+                                System.out.println("======response e:" + e.toString());
+                                e.printStackTrace();
+                            }
+                        }
+                        System.out.println("======response :" + response);
+                    }
+
+                    @Override
+                    public void onFailure(Call<List<Feedback>> call, Throwable t) {
+                        System.out.println("======response t:" + t);
+                    }
+                });
+            }
+        });
+       /* dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                if (a == 1) {
+                    getActivity().finish();
+                    Intent intent = new Intent(getContext(), ExitScreen.class);
+                    startActivity(intent);
+                }
+            }
+        });*/
+        dialog.show();
     }
 
 
@@ -389,4 +499,6 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             }
         }
     }
+
+
 }

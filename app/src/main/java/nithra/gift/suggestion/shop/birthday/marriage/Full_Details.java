@@ -28,6 +28,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Sellerproducts;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_Add_Del;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_view;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Gift_Cat;
@@ -44,7 +45,7 @@ public class Full_Details extends AppCompatActivity {
     String id_gift;
     ImageView back, company_logo, IVPreviewImage, fav;
     TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name, website, email, head;
-    LinearLayout phone, web_gone;
+    LinearLayout phone;
     CardView card_mail, card_web;
     SharedPreference sharedPreference = new SharedPreference();
     ArrayList<Fav_view> fav_show;
@@ -76,7 +77,6 @@ public class Full_Details extends AppCompatActivity {
         email = findViewById(R.id.email);
         card_mail = findViewById(R.id.card_mail);
         card_web = findViewById(R.id.card_web);
-        web_gone = findViewById(R.id.web_gone);
         head = findViewById(R.id.head);
         fav = findViewById(R.id.fav);
         btShowmore = findViewById(R.id.btShowmore);
@@ -141,9 +141,46 @@ public class Full_Details extends AppCompatActivity {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dialog dialog;
+                dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.call_dialog);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView call1,call2;
+                LinearLayout lay1,lay2;
+                call1 = dialog.findViewById(R.id.call1);
+                call2 = dialog.findViewById(R.id.call2);
+                lay1=dialog.findViewById(R.id.lay1);
+                lay2=dialog.findViewById(R.id.lay2);
+                dialog.show();
+                call1.setText(gift_show.get(0).getSellerMobile().trim());
+                call2.setText(gift_show.get(0).getSellerMobile2().trim());
                 String phone = gift_show.get(0).getSellerMobile().trim();
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                startActivity(intent);
+                String phone1 = gift_show.get(0).getSellerMobile2().trim();
+                if (gift_show.get(0).getSellerMobile2().isEmpty()){
+                    dialog.dismiss();
+//                    lay2.setVisibility(View.GONE);
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }
+
+                lay1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+
+                lay2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone1, null));
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
               /*  if (phone.equals("")) {
                     Utils_Class.toast_center(Category_Full_View.this, "Mobile number not available");
                 } else {
@@ -274,7 +311,7 @@ public class Full_Details extends AppCompatActivity {
                         System.out.println("gift_show== " + gift_show.size());
 
                         if (gift_show.get(0).getShopWebsite().equals("")) {
-                            web_gone.setVisibility(View.GONE);
+                            card_web.setVisibility(View.GONE);
                         }
 
                         if (gift_show.get(0).getFav() == 1) {
@@ -329,18 +366,18 @@ public class Full_Details extends AppCompatActivity {
                     if (response.body().get(0).getStatus().equals("Success")) {
                         if (response.body().get(0).getFvAction() == 1) {
                             gift_show.get(0).setFav(1);
-                            ActivitySecond.gift_show.get(pos_id).setFav(1);
+                            Sellerproducts.gift_show.get(pos_id).setFav(1);
                             //Favourite.fav_show.get(0).setFav(1);
                             fav.setBackgroundResource(R.drawable.favorite_red);
                             Utils_Class.toast_center(Full_Details.this, "Your gift added to favourite...");
                         } else {
                             gift_show.get(0).setFav(0);
-                            ActivitySecond.gift_show.get(pos_id).setFav(0);
+                            Sellerproducts.gift_show.get(pos_id).setFav(0);
                             //Favourite.fav_show.get(0).setFav(0);
                             fav.setBackgroundResource(R.drawable.favorite_grey);
                             Utils_Class.toast_center(Full_Details.this, "Your gift removed from favourite...");
                         }
-                        ActivitySecond.adapter.notifyDataSetChanged();
+                        Sellerproducts.adapter.notifyDataSetChanged();
                         //Favourite.adapter.notifyDataSetChanged();
                     }
                 }

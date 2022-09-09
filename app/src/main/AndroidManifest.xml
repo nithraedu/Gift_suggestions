@@ -29,6 +29,21 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".SplashScreen"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ExitScreen"
+            android:exported="false" />
+        <activity
+            android:name=".PrivacyPolicy"
+            android:exported="false" />
+        <activity
             android:name=".ImageSlide"
             android:exported="false" />
         <activity
@@ -76,11 +91,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.GiftSuggestions"
             android:windowSoftInputMode="adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".crop_image.CropImageActivity"
@@ -88,8 +99,7 @@
         <activity
             android:name=".crop_image.CropImageActivity1"
             android:theme="@style/corppp" />
-<activity android:name=".Notification.NotificationView"/>
-        <activity android:name=".Notification.ST_Activity"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}"

@@ -21,7 +21,12 @@
     <color name="app_color2">#0d4fd8</color>
 
     <color name="home_bg">#f7f7f7</color>
+    <color name="gray">#C2C1C1</color>
 
+    <color name="bannercolorandtabselectedcolor">#EFEEB4</color>
+    <color name="tabnonselectedcolor">#8AC4B0</color>
+    <color name="bg_design">#E6E6E6</color>
+    <color name="text_design">#999999</color>
 
 
     <color name="blood_donor_lib_colorPrimary">#cd0000</color>

@@ -10,9 +10,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -23,8 +25,11 @@ public class ImageSlide extends AppCompatActivity {
     Adapter adapter;
     Intent intent;
     Bundle extra;
-    String pos_gift;
+    String pos_gift,name;
     LinearLayout swipe;
+    CardView back_arrow, forward_arrow;
+    ImageView back;
+    TextView gift_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,13 +39,38 @@ public class ImageSlide extends AppCompatActivity {
         setContentView(R.layout.activity_image_slide);
         viewpager2 = findViewById(R.id.viewpager2);
         swipe = findViewById(R.id.swipe);
-
+        back_arrow = findViewById(R.id.back_arrow);
+        forward_arrow = findViewById(R.id.forward_arrow);
+        back = findViewById(R.id.back);
+        gift_name = findViewById(R.id.gift_name);
         intent = getIntent();
         extra = intent.getExtras();
         pos_gift = extra.getString("pos");
+        name = extra.getString("name");
         String[] separated = pos_gift.split(",");
 
 
+        gift_name.setText(name);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        forward_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewpager2.setCurrentItem((viewpager2.getCurrentItem() + 1), true);
+            }
+        });
+
+        back_arrow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewpager2.setCurrentItem((viewpager2.getCurrentItem() - 1), true);
+            }
+        });
         viewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -50,10 +80,36 @@ public class ImageSlide extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
-                if (separated.length-1==position) {
+               /* if (separated.length - 1 == position) {
                     swipe.setVisibility(View.INVISIBLE);
                 } else {
                     swipe.setVisibility(View.VISIBLE);
+                }*/
+
+               /* if (position == 0) {
+                    back_arrow.setVisibility(View.INVISIBLE);
+                } else if (separated.length - 1== position) {
+                    forward_arrow.setVisibility(View.INVISIBLE);
+                } else {
+                    back_arrow.setVisibility(View.VISIBLE);
+                    forward_arrow.setVisibility(View.VISIBLE);
+                }
+*/
+
+                if (position == 0) {
+                    if (separated.length == 1) {
+                        forward_arrow.setVisibility(View.INVISIBLE);
+                        back_arrow.setVisibility(View.INVISIBLE);
+                    } else {
+                        back_arrow.setVisibility(View.INVISIBLE);
+                        forward_arrow.setVisibility(View.VISIBLE);
+                    }
+                } else if ((separated.length - 1) == position) {
+                    forward_arrow.setVisibility(View.INVISIBLE);
+                    back_arrow.setVisibility(View.VISIBLE);
+                } else {
+                    back_arrow.setVisibility(View.VISIBLE);
+                    forward_arrow.setVisibility(View.VISIBLE);
                 }
             }
 

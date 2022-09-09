@@ -145,9 +145,10 @@ public class ProductEdit extends AppCompatActivity {
         Utils_Class.mProgress(ProductEdit.this, "Loading please wait...", false).show();
 
         giftedit();
-     /*   remove.setVisibility(View.GONE);
+        remove.setVisibility(View.GONE);
         remove1.setVisibility(View.GONE);
-        remove2.setVisibility(View.GONE);*/
+        remove2.setVisibility(View.GONE);
+
         remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -676,23 +677,38 @@ public class ProductEdit extends AppCompatActivity {
                         String currentString = list_gift.get(0).getGiftImage();
                         System.out.println("print_image== " + list_gift.get(0).getGiftImage());
                         separated = currentString.split(",");
-                        Glide.with(getApplicationContext()).load(separated[0])
-                                .error(R.drawable.ic_gift_default_img)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage);
-                        if (separated.length > 1) {
-                            System.out.println("print_sep1");
-                            Glide.with(getApplicationContext()).load(separated[1])
+                        if (separated[0]!=null) {
+                            Glide.with(getApplicationContext()).load(separated[0])
                                     .error(R.drawable.ic_gift_default_img)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(IVPreviewImage1);
+                                    .into(IVPreviewImage);
+                            remove.setVisibility(View.VISIBLE);
                         }
-                        if (separated.length > 2) {
-                            System.out.println("print_sep2");
-                            Glide.with(getApplicationContext()).load(separated[2])
-                                    .error(R.drawable.ic_gift_default_img)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .into(IVPreviewImage2);
+
+
+                            if (separated.length > 1) {
+                                if (separated[1]!=null) {
+                                System.out.println("print_sep1");
+                                Glide.with(getApplicationContext()).load(separated[1])
+                                        .error(R.drawable.ic_gift_default_img)
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(IVPreviewImage1);
+                                remove1.setVisibility(View.VISIBLE);
+
+                            }
+                        }
+
+                            if (separated.length > 2) {
+                                if (separated[2]!=null) {
+
+                                    System.out.println("print_sep2");
+                                Glide.with(getApplicationContext()).load(separated[2])
+                                        .error(R.drawable.ic_gift_default_img)
+                                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                        .into(IVPreviewImage2);
+                                remove2.setVisibility(View.VISIBLE);
+
+                            }
                         }
                         productname.setText(list_gift.get(0).getGiftName());
                         prod_prize.setText(list_gift.get(0).getTotalAmount());

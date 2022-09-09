@@ -1,6 +1,7 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
@@ -151,9 +152,49 @@ public class ProductFullView extends AppCompatActivity {
         phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Dialog dialog;
+                dialog = new Dialog(ProductFullView.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.call_dialog);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                TextView call1,call2;
+                LinearLayout lay1,lay2;
+                call1 = dialog.findViewById(R.id.call1);
+                call2 = dialog.findViewById(R.id.call2);
+                lay1=dialog.findViewById(R.id.lay1);
+                lay2=dialog.findViewById(R.id.lay2);
+                dialog.show();
+                call1.setText(gift.get(0).getSellerMobile().trim());
+                call2.setText(gift.get(0).getSellerMobile2().trim());
                 String phone = gift.get(0).getSellerMobile().trim();
-                Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                startActivity(intent);
+                String phone1 = gift.get(0).getSellerMobile2().trim();
+                if (gift.get(0).getSellerMobile2().isEmpty()){
+                    dialog.dismiss();
+//                    lay2.setVisibility(View.GONE);
+                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                    startActivity(intent);
+                }
+
+
+                lay1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+
+                lay2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone1, null));
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                });
+
+
               /*  if (phone.equals("")) {
                     Utils_Class.toast_center(Category_Full_View.this, "Mobile number not available");
                 } else {
@@ -270,8 +311,8 @@ public class ProductFullView extends AppCompatActivity {
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     giftname.setText(gift.get(0).getGiftName());
-                    giftcategory.setText(gift.get(0).getGiftCat());
-                    giftgender.setText(gift.get(0).getGiftForPeople());
+                    giftcategory.setText(gift.get(0).getGiftCat().replace(",",", "));
+                    giftgender.setText(gift.get(0).getGiftForPeople().replace(",",", "));
                     giftprize.setText("\u20B9 " + gift.get(0).getTotalAmount());
 //                    offerpercen.setText(gift.get(0).getDiscount());
                     offerprize.setText("\u20B9 " + gift.get(0).getGiftAmount());

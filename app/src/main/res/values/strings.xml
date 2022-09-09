@@ -18,5 +18,7 @@
 
     <string name="crop_image_activity_no_permissions">Cancelling, required permissions are not granted</string>
 
+    <string name="feedback">Send your feedback or suggestion to improve this Inventions &amp; Inventors app</string>
+    <string name="privacy"><u>*Privacy Policy</u></string>
 
 </resources>

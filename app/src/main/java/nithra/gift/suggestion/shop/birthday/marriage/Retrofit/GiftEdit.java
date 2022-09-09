@@ -16,6 +16,9 @@ public class GiftEdit {
     @SerializedName("seller_mobile")
     @Expose
     public String sellerMobile;
+    @SerializedName("seller_mobile2")
+    @Expose
+    public String sellerMobile2;
     @SerializedName("shop_name")
     @Expose
     public String shopName;
@@ -86,6 +89,14 @@ public class GiftEdit {
 
     public void setSellerMobile(String sellerMobile) {
         this.sellerMobile = sellerMobile;
+    }
+
+    public String getSellerMobile2() {
+        return sellerMobile2;
+    }
+
+    public void setSellerMobile2(String sellerMobile2) {
+        this.sellerMobile2 = sellerMobile2;
     }
 
     public String getShopName() {

@@ -133,7 +133,7 @@ public class OtpSend extends AppCompatActivity {
 
                         Intent i = new Intent(OtpSend.this, OtpVerify.class);
                         startActivity(i);
-                        finish();
+                        //finish();
                         //fragMove.enterotp();
 
                     }

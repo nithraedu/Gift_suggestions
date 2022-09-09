@@ -1,7 +1,6 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -41,7 +40,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class SellerProfileProductList extends AppCompatActivity {
-    ImageView  back;
+    ImageView back;
     ImageView IVPreviewImage;
     TextView seller_name, shop_name, city, profile_edit, add_product;
     SharedPreference sharedPreference = new SharedPreference();
@@ -97,7 +96,10 @@ public class SellerProfileProductList extends AppCompatActivity {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+                finishAffinity();
+                Intent i = new Intent(SellerProfileProductList.this, MainActivity.class);
+                startActivity(i);
+               // finish();
             }
         });
 
@@ -268,7 +270,7 @@ public class SellerProfileProductList extends AppCompatActivity {
         ArrayList<GiftList> gift;
         LayoutInflater inflater;
         Context context;
-        AlertDialog.Builder builder=new AlertDialog.Builder(SellerProfileProductList.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(SellerProfileProductList.this);
 
         public Adapter(Context ctx, ArrayList<GiftList> images) {
             this.gift = images;
@@ -348,7 +350,7 @@ public class SellerProfileProductList extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView img_slide,profile_delete;
+            ImageView img_slide, profile_delete;
             TextView gridText, edit_product, head;
             CardView category;
 
