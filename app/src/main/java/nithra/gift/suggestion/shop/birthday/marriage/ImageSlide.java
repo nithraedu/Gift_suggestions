@@ -28,7 +28,7 @@ public class ImageSlide extends AppCompatActivity {
     String pos_gift,name;
     LinearLayout swipe;
     CardView back_arrow, forward_arrow;
-    ImageView back;
+    LinearLayout back;
     TextView gift_name;
 
     @Override

@@ -84,7 +84,7 @@
                     android:layout_width="130dp"
                     android:layout_height="130dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/ic_circle"
+                    android:background="@drawable/circle_profile"
                     android:padding="25dp"
                     app:srcCompat="@drawable/ic_default_user_icon" />
 
@@ -93,7 +93,7 @@
                     android:layout_width="35dp"
                     android:layout_height="35dp"
                     android:padding="8dp"
-                    android:layout_marginTop="-20dp"
+                    android:layout_marginTop="-25dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_image_upload"
                     android:backgroundTint="#0069ff"

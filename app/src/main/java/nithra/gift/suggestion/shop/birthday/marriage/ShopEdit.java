@@ -159,9 +159,9 @@ public class ShopEdit extends AppCompatActivity {
                 shop_pincode = pincode.getText().toString().trim();
                /* shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();*/
-                if (uri_1 == null) {
+                /*if (uri_1 == null) {
                     IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
-                }
+                }*/
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Seller Name...");
                 } else if (shop_name.equals("")) {
@@ -238,6 +238,7 @@ public class ShopEdit extends AppCompatActivity {
 
                         Glide.with(getApplicationContext()).load(list_shop.get(0).getLogo())
                                 .error(R.drawable.ic_gift_default_img)
+                                .placeholder(R.drawable.ic_gift_default_img)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
                         sellername.setText(list_shop.get(0).getName());

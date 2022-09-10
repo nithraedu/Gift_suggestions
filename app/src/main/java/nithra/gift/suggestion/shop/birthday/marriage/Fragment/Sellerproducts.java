@@ -279,6 +279,7 @@ public class Sellerproducts extends Fragment {
 
             Glide.with(context).load(separated[0])
                     .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(gift_show.get(pos).getGiftName());

@@ -48,7 +48,7 @@
             android:layout_height="130dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:background="@drawable/ic_circle"
+            android:background="@drawable/circle_profile"
             android:padding="25dp"
             android:src="@drawable/ic_default_user_icon" />
 

@@ -27,7 +27,8 @@ import java.util.HashMap;
 
 import nithra.gift.suggestion.shop.birthday.marriage.ImageSlide;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Gift_Cat;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftList;
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftList;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.SellerProfilePojo;
@@ -41,7 +42,7 @@ public class NithraProducts extends Fragment {
     RecyclerView list;
     LinearLayout no_item;
     SwipeRefreshLayout pullToRefresh;
-    ArrayList<Gift_Cat> gift_show;
+    ArrayList<GiftList> gift_show;
     Intent intent;
     Bundle extra;
     String title, title1, title3;
@@ -60,7 +61,7 @@ public class NithraProducts extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_nithra_products, container, false);
-        gift_show = new ArrayList<Gift_Cat>();
+        gift_show = new ArrayList<GiftList>();
         list = view.findViewById(R.id.list);
         no_item = view.findViewById(R.id.no_item);
         pullToRefresh = view.findViewById(R.id.pullToRefresh);
@@ -100,14 +101,14 @@ public class NithraProducts extends Fragment {
 
     public void get_cat() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("action", "get_cat");
+        map.put("action", "nithra");
         map.put("gift_category", title1);
         map.put("user_id", "" + 33);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<Gift_Cat>> call = retrofitAPI.gift_cat(map);
-        call.enqueue(new Callback<ArrayList<Gift_Cat>>() {
+        Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
+        call.enqueue(new Callback<ArrayList<GiftList>>() {
             @Override
-            public void onResponse(Call<ArrayList<Gift_Cat>> call, Response<ArrayList<Gift_Cat>> response) {
+            public void onResponse(Call<ArrayList<GiftList>> call, Response<ArrayList<GiftList>> response) {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
@@ -132,7 +133,7 @@ public class NithraProducts extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Gift_Cat>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<GiftList>> call, Throwable t) {
                 System.out.println("======response t:" + t);
                 mProgress.dismiss();
 
@@ -142,14 +143,14 @@ public class NithraProducts extends Fragment {
 
     public void get_cat1() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("action", "get_cat");
+        map.put("action", "nithra");
         map.put("gift_for", title3);
         map.put("user_id", ""+33);
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<Gift_Cat>> call = retrofitAPI.gift_cat(map);
-        call.enqueue(new Callback<ArrayList<Gift_Cat>>() {
+        Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
+        call.enqueue(new Callback<ArrayList<GiftList>>() {
             @Override
-            public void onResponse(Call<ArrayList<Gift_Cat>> call, Response<ArrayList<Gift_Cat>> response) {
+            public void onResponse(Call<ArrayList<GiftList>> call, Response<ArrayList<GiftList>> response) {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
@@ -173,7 +174,7 @@ public class NithraProducts extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<ArrayList<Gift_Cat>> call, Throwable t) {
+            public void onFailure(Call<ArrayList<GiftList>> call, Throwable t) {
                 System.out.println("======response t:" + t);
                 mProgress.dismiss();
 
@@ -182,11 +183,90 @@ public class NithraProducts extends Fragment {
     }
 
 
+ /*   public void category1() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_gift_list");
+        map.put("gift_for", title3);
+        map.put("user_id", ""+33);
+
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
+        call.enqueue(new Callback<ArrayList<GiftList>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GiftList>> call, Response<ArrayList<GiftList>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    if (response.body().get(0).getStatus().equals("Success")) {
+                        gift_ada.clear();
+                        gift_ada.addAll(response.body());
+                        System.out.println("print_size==" + gift_ada.size());
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (gift_ada.size() == 0) {
+                        pullToRefresh.setVisibility(View.GONE);
+                        no_item.setVisibility(View.VISIBLE);
+                    } else {
+                        pullToRefresh.setVisibility(View.VISIBLE);
+                        no_item.setVisibility(View.GONE);
+                    }
+                    Utils_Class.mProgress.dismiss();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GiftList>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }
+
+    public void category2() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("action", "get_gift_list");
+        map.put("gift_category", title1);
+        map.put("user_id", ""+33);
+
+        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
+        Call<ArrayList<GiftList>> call = retrofitAPI.gift_giftlist(map);
+        call.enqueue(new Callback<ArrayList<GiftList>>() {
+            @Override
+            public void onResponse(Call<ArrayList<GiftList>> call, Response<ArrayList<GiftList>> response) {
+                if (response.isSuccessful()) {
+                    String result = new Gson().toJson(response.body());
+                    System.out.println("======response result:" + result);
+                    if (response.body().get(0).getStatus().equals("Success")) {
+                        gift_ada.clear();
+                        gift_ada.addAll(response.body());
+                        System.out.println("print_size==" + gift_ada.size());
+                        adapter.notifyDataSetChanged();
+                    }
+                    if (gift_ada.size() == 0) {
+                        pullToRefresh.setVisibility(View.GONE);
+                        no_item.setVisibility(View.VISIBLE);
+                    } else {
+                        pullToRefresh.setVisibility(View.VISIBLE);
+                        no_item.setVisibility(View.GONE);
+                    }
+                    Utils_Class.mProgress.dismiss();
+                }
+                System.out.println("======response :" + response);
+            }
+
+            @Override
+            public void onFailure(Call<ArrayList<GiftList>> call, Throwable t) {
+                System.out.println("======response t:" + t);
+            }
+        });
+    }*/
+
+
     public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
         LayoutInflater inflater;
         Context context;
 
-        public Adapter(Context ctx, ArrayList<Gift_Cat> gift_show) {
+        public Adapter(Context ctx, ArrayList<GiftList> gift_show) {
             this.inflater = LayoutInflater.from(ctx);
             this.context = ctx;
         }
@@ -209,6 +289,7 @@ public class NithraProducts extends Fragment {
 
             Glide.with(context).load(separated[0])
                     .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(gift_show.get(pos).getGiftName());

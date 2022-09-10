@@ -43,7 +43,8 @@ public class Full_Details extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back, company_logo, IVPreviewImage, fav;
+    ImageView  company_logo, IVPreviewImage, fav;
+    LinearLayout back;
     TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name, website, email, head;
     LinearLayout phone;
     CardView card_mail, card_web;
@@ -288,6 +289,7 @@ public class Full_Details extends AppCompatActivity {
 
                         Glide.with(getApplicationContext()).load(separated[0])
                                 .error(R.drawable.ic_gift_default_img)
+                                .placeholder(R.drawable.ic_gift_default_img)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .into(IVPreviewImage);
 
@@ -298,7 +300,7 @@ public class Full_Details extends AppCompatActivity {
                         description.setText(gift_show.get(0).getGiftDescription());
                         detail_shop_name.setText(gift_show.get(0).getShopName());
                         //detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry() + " - " + gift_show.get(0).getPincode());
-                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry());
+                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + "" + gift_show.get(0).getCountry());
                        /* Glide.with(getApplicationContext()).load(gift_show.get(0).getLogo())
                                 //.error(R.drawable.gift_1)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)

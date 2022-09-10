@@ -41,7 +41,8 @@ public class ProductFullView extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String id_gift;
-    ImageView back, profile_edit, profile_delete;
+    ImageView profile_edit, profile_delete;
+    LinearLayout back;
     TextView btShowmore,btShowmore1;
     CardView card_mail, card_web;
     LinearLayout phone;
@@ -308,6 +309,7 @@ public class ProductFullView extends AppCompatActivity {
                     System.out.println("print_comma== " + separated);
                     Glide.with(getApplicationContext()).load(separated[0])
                             .error(R.drawable.ic_gift_default_img)
+                            .placeholder(R.drawable.ic_gift_default_img)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     giftname.setText(gift.get(0).getGiftName());
@@ -319,7 +321,7 @@ public class ProductFullView extends AppCompatActivity {
                     description.setText(gift.get(0).getGiftDescription());
                     head.setText(gift.get(0).getDiscount() + "% offer");
                     detail_shop_name.setText(gift.get(0).getShopName());
-                    detail_add.setText(gift.get(0).getAddress() + ", " + gift.get(0).getCity() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + ", " + gift.get(0).getCountryName());
+                    detail_add.setText(gift.get(0).getAddress() + ", " + gift.get(0).getCity() + " - " + gift.get(0).getPincode() + "\n" + gift.get(0).getState() + "" + gift.get(0).getCountryName());
 
                     if (description.getLineCount() > 3) {
                         btShowmore.setVisibility(View.VISIBLE);

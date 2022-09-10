@@ -165,6 +165,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                     gift.addAll(response.body());
                     Glide.with(getApplicationContext()).load(gift.get(0).getLogo())
                             .error(R.drawable.ic_gift_default_img)
+                            .placeholder(R.drawable.ic_gift_default_img)
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(IVPreviewImage);
                     seller_name.setText(gift.get(0).getName());
@@ -300,6 +301,7 @@ public class SellerProfileProductList extends AppCompatActivity {
 
             Glide.with(context).load(separated[0])
                     .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             System.out.println("print_img " + gift.get(pos).getGiftImage());

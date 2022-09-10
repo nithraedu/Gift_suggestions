@@ -680,6 +680,7 @@ public class ProductEdit extends AppCompatActivity {
                         if (separated[0]!=null) {
                             Glide.with(getApplicationContext()).load(separated[0])
                                     .error(R.drawable.ic_gift_default_img)
+                                    .placeholder(R.drawable.ic_gift_default_img)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .into(IVPreviewImage);
                             remove.setVisibility(View.VISIBLE);
@@ -691,6 +692,7 @@ public class ProductEdit extends AppCompatActivity {
                                 System.out.println("print_sep1");
                                 Glide.with(getApplicationContext()).load(separated[1])
                                         .error(R.drawable.ic_gift_default_img)
+                                        .placeholder(R.drawable.ic_gift_default_img)
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(IVPreviewImage1);
                                 remove1.setVisibility(View.VISIBLE);
@@ -704,6 +706,7 @@ public class ProductEdit extends AppCompatActivity {
                                     System.out.println("print_sep2");
                                 Glide.with(getApplicationContext()).load(separated[2])
                                         .error(R.drawable.ic_gift_default_img)
+                                        .placeholder(R.drawable.ic_gift_default_img)
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(IVPreviewImage2);
                                 remove2.setVisibility(View.VISIBLE);

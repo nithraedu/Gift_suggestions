@@ -3,6 +3,7 @@ package nithra.gift.suggestion.shop.birthday.marriage.Fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -187,13 +188,18 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         if (id == R.id.nav_home) {
             drawer.closeDrawer(GravityCompat.START);
 
-        } else if (id == R.id.nav_share) {
+        } /*else if (id == R.id.nav_share) {
+            String shareBody = " Install this Gift Suggestions app.\n\n Click the below link to download this app:\n https://goo.gl/GPeiaQ";
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setType("text/plain");
+            sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions");
+            sharingIntent.putExtra(Intent.EXTRA_TEXT, shareBody);
+        } */else if (id == R.id.nav_rateus) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("market://details?id=$appPackageName")));
 
-        } else if (id == R.id.nav_rateus) {
 
-        } else if (id == R.id.nav_feedback) {
-            //feedback();
-        } else if (id == R.id.nav_policy) {
+        }  else if (id == R.id.nav_policy) {
             if (Utils_Class.isNetworkAvailable(getContext())) {
                 Intent i = new Intent(getContext(), PrivacyPolicy.class);
                 startActivity(i);
@@ -405,6 +411,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
 
             Glide.with(context).load(giftfor.get(pos).getPeopleLogo())
                     .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.slide_mat);
             holder.gridText.setText(giftfor.get(pos).getPeople());
@@ -465,6 +472,7 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
             int pos = position;
             Glide.with(context).load(giftoccasion.get(pos).getCategoryLogo())
                     .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(holder.img_slide);
             holder.gridText.setText(giftoccasion.get(pos).getCategory());

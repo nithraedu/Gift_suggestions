@@ -166,9 +166,9 @@ public class ShopAdd extends AppCompatActivity {
 
                 String url = "http://" + web;
                 String url1 = "https://" + web;
-                if (uri_1 == null) {
+               /* if (uri_1 == null) {
                     IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
-                }
+                }*/
                 if (sell_name.equals("")) {
                     Utils_Class.toast_center(ShopAdd.this, "Please Enter Seller Name...");
                 } else if (shop_name.equals("")) {

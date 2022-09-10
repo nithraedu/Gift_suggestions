@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
-            android:src="@drawable/fathersday" />
+            android:src="@drawable/ic_gift_default_img" />
         <LinearLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
@@ -29,7 +29,7 @@
                 android:layout_height="wrap_content"
                 android:text="Image click to full view"
                 android:padding="5dp"
-                android:background="#0000ffff"
+                android:background="@drawable/background_trans"
                 android:textColor="@color/white"
                 android:textStyle="bold"/>
         </LinearLayout>
@@ -42,13 +42,13 @@
             android:orientation="horizontal">
 
             <LinearLayout
+                android:id="@+id/back"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:background="@drawable/button_circle"
                 android:gravity="center">
 
                 <ImageView
-                    android:id="@+id/back"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:backgroundTint="#0069ff"
