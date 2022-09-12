@@ -82,7 +82,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:hint="Gift Name"
+                        android:hint="Gift Name*"
                         android:theme="@style/AppThemetextinput"
                         app:boxCornerRadiusBottomEnd="15dp"
                         app:boxCornerRadiusBottomStart="15dp"
@@ -113,7 +113,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Occasion" />
+                            android:text="Occasion*" />
 
                         <TextView
                             android:id="@+id/textView"
@@ -136,7 +136,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gender" />
+                            android:text="Gift For*" />
 
                         <TextView
                             android:id="@+id/textView1"
@@ -146,7 +146,7 @@
                             android:background="@drawable/background1"
                             android:drawableRight="@android:drawable/arrow_down_float"
                             android:drawablePadding="16dp"
-                            android:hint="Select Gender"
+                            android:hint="Select Gift For"
                             android:padding="20dp"
                             android:textColor="@color/black" />
                     </LinearLayout>
@@ -411,7 +411,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:hint="Gift Description"
+                        android:hint="Gift Description*"
                         android:theme="@style/AppThemetextinput"
                         app:boxCornerRadiusBottomEnd="15dp"
                         app:boxCornerRadiusBottomStart="15dp"

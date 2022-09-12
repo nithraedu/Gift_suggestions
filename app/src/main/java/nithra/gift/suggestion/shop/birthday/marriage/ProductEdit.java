@@ -56,6 +56,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
@@ -196,6 +197,7 @@ public class ProductEdit extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Utils_Class.isNetworkAvailable(ProductEdit.this)) {
 
                 for (int i = 0; i < occasion.size(); i++) {
                     cat[i] = occasion.get(i).getCategory();
@@ -258,12 +260,16 @@ public class ProductEdit extends AppCompatActivity {
                     }
                 });
                 builder.show();
+                } else {
+                    Utils_Class.toast_normal(ProductEdit.this, "Please connect to your internet");
+                }
             }
         });
 
         textView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Utils_Class.isNetworkAvailable(ProductEdit.this)) {
 
                 for (int i = 0; i < giftfor.size(); i++) {
                     cat1[i] = giftfor.get(i).getPeople();
@@ -272,7 +278,7 @@ public class ProductEdit extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
 
-                builder.setTitle("Select Gender");
+                builder.setTitle("Select Gift For");
 
                 builder.setCancelable(false);
 
@@ -327,6 +333,9 @@ public class ProductEdit extends AppCompatActivity {
                     }
                 });
                 builder.show();
+                } else {
+                    Utils_Class.toast_normal(ProductEdit.this, "Please connect to your internet");
+                }
             }
         });
 
@@ -368,9 +377,11 @@ public class ProductEdit extends AppCompatActivity {
                 }*/ else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductEdit.this, "Please Enter Gift Description...");
                 } else {
-
-                    submit_res();
-
+                    if (Utils_Class.isNetworkAvailable(ProductEdit.this)) {
+                        submit_res();
+                    } else {
+                        Utils_Class.toast_normal(ProductEdit.this, "Please connect to your internet");
+                    }
                 }
             }
         });

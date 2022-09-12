@@ -86,7 +86,12 @@ public class OtpVerify extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //sharedPreference.putString(OtpVerify.this, "register_otp_1", "register_otp");
-                otp_generate();
+
+                if (Utils_Class.isNetworkAvailable(OtpVerify.this)) {
+                    otp_generate();
+                } else {
+                    Utils_Class.toast_normal(OtpVerify.this, "Please connect to your internet");
+                }
                 new CountDownTimer(120000, 1000) { // adjust the milli seconds here
 
                     public void onTick(long millisUntilFinished) {
@@ -126,7 +131,9 @@ public class OtpVerify extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                otp_2.requestFocus();
+                if (s.length()!=0) {
+                    otp_2.requestFocus();
+                }
             }
         });
 
@@ -143,8 +150,13 @@ public class OtpVerify extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                otp_3.requestFocus();
+                if (s.length()!=0) {
 
+                    otp_3.requestFocus();
+                }else {
+                    otp_1.requestFocus();
+
+                }
             }
         });
 
@@ -161,7 +173,37 @@ public class OtpVerify extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                otp_4.requestFocus();
+                if (s.length()!=0) {
+
+                    otp_4.requestFocus();
+                }else {
+                    otp_2.requestFocus();
+
+                }
+            }
+        });
+
+
+        otp_4.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length()!=0) {
+
+                    otp_4.requestFocus();
+                }else {
+                    otp_3.requestFocus();
+
+                }
             }
         });
 
@@ -171,9 +213,14 @@ public class OtpVerify extends AppCompatActivity {
                 edit_otp = otp_1.getText().toString().trim() + otp_2.getText().toString().trim() + otp_3.getText().toString().trim() + otp_4.getText().toString().trim();
                 if (otp_1.getText().toString().equals("") && otp_2.getText().toString().equals("") && otp_3.getText().toString().equals("") && otp_4.getText().toString().equals("")) {
                     Utils_Class.toast_center(OtpVerify.this, "Enter your otp");
-                } else /*if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(edit_otp)) */{
+                } else /*if (sharedPreference.getString(OtpVerify.this, "register_otp").equals(edit_otp)) */ {
                     System.out.println("printop" + edit_otp);
-                    otp_verify();
+                    if (Utils_Class.isNetworkAvailable(OtpVerify.this)) {
+
+                        otp_verify();
+                    } else {
+                        Utils_Class.toast_normal(OtpVerify.this, "Please connect to your internet");
+                    }
                 } /*else {
                     Utils_Class.toast_center(OtpVerify.this, "Invalid otp");
                 }*/
@@ -223,7 +270,8 @@ public class OtpVerify extends AppCompatActivity {
                             //fragMove.seller();
 
                         }
-                    }if (response.body().get(0).getStatus().equals("failure")) {
+                    }
+                    if (response.body().get(0).getStatus().equals("failure")) {
                         Utils_Class.toast_center(OtpVerify.this, "Invalid otp");
 
                     }

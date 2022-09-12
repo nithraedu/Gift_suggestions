@@ -38,9 +38,12 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dialog_corner_no_bottom.xml" value="0.2005" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dotted.xml" value="0.152" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dotted_red.xml" value="0.1715" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/drw_rectangle_popup_bg.xml" value="0.179" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/edit_profile.xml" value="0.1715" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/feedbackicon.xml" value="0.1675" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/home.xml" value="0.1675" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/ic_add_black_24dp1.xml" value="0.179" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/ic_baseline_arrow_back_24.xml" value="0.2005" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/ic_baseline_arrow_back_ios_24.xml" value="0.2005" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/ic_baseline_arrow_forward.xml" value="0.2005" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/ic_baseline_search_24.xml" value="0.1675" />
@@ -118,6 +121,8 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/notify_item.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/notify_view.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/rate1.xml" value="0.24895833333333334" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/search_dialog_compat.xml" value="0.25" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/searchable_spinner.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/seller_profile_productlist.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/seller_view.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/share_dialog.xml" value="0.24895833333333334" />

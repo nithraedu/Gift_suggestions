@@ -185,6 +185,8 @@ public class ProductAdd extends AppCompatActivity {
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (Utils_Class.isNetworkAvailable(ProductAdd.this)) {
+
 
                 for (int i = 0; i < occasion.size(); i++) {
                     cat[i] = occasion.get(i).getCategory();
@@ -248,13 +250,16 @@ public class ProductAdd extends AppCompatActivity {
                     }
                 });
                 builder.show();
+                } else {
+                    Utils_Class.toast_normal(ProductAdd.this, "Please connect to your internet");
+                }
             }
         });
 
         textView1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (Utils_Class.isNetworkAvailable(ProductAdd.this)) {
                 for (int i = 0; i < giftfor.size(); i++) {
                     cat1[i] = giftfor.get(i).getPeople();
                     cat_id1[i] = giftfor.get(i).getId();
@@ -262,7 +267,7 @@ public class ProductAdd extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ProductAdd.this);
 
-                builder.setTitle("Select Gender");
+                builder.setTitle("Select Gift For");
 
                 builder.setCancelable(false);
 
@@ -316,6 +321,9 @@ public class ProductAdd extends AppCompatActivity {
                     }
                 });
                 builder.show();
+                } else {
+                    Utils_Class.toast_normal(ProductAdd.this, "Please connect to your internet");
+                }
             }
         });
 
@@ -343,12 +351,17 @@ public class ProductAdd extends AppCompatActivity {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Percentage...");
                 } else if (gift_amount.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Offer Amount...");
-                }*/ else if (file_array == null) {
+                }*/ else if (file_array[0]==null) {
                     Utils_Class.toast_center(ProductAdd.this, "Please set Gift image ...");
                 } else if (gift_description.equals("")) {
                     Utils_Class.toast_center(ProductAdd.this, "Please Enter Gift Description...");
                 } else {
-                    submit_res();
+                    if (Utils_Class.isNetworkAvailable(ProductAdd.this)) {
+                        submit_res();
+                    } else {
+                        Utils_Class.toast_normal(ProductAdd.this, "Please connect to your internet");
+                    }
+
                 }
             }
         });

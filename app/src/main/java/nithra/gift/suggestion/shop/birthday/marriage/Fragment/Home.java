@@ -45,6 +45,7 @@ import java.util.List;
 
 import nithra.gift.suggestion.shop.birthday.marriage.ActivitySecond;
 import nithra.gift.suggestion.shop.birthday.marriage.BuildConfig;
+import nithra.gift.suggestion.shop.birthday.marriage.Fav_class;
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Feedback;
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Method;
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.RetrofitClient;
@@ -128,7 +129,9 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         favourite.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fragMove.fav();
+                //fragMove.fav();
+                Intent intent=new Intent(getContext(), Fav_class.class);
+                startActivity(intent);
             }
         });
 

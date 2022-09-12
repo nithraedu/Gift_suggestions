@@ -17,6 +17,7 @@ import com.google.gson.Gson;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import nithra.gift.suggestion.shop.birthday.marriage.ProductEdit;
 import nithra.gift.suggestion.shop.birthday.marriage.R;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
@@ -38,6 +39,7 @@ public class OtpSend extends AppCompatActivity {
     Intent intent;
     Bundle extra;
     String mail_set;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,8 +87,12 @@ public class OtpSend extends AppCompatActivity {
                 } else if (!gmail_otp.matches(emailPattern)) {
                     Toast.makeText(OtpSend.this, "Invalid email address", Toast.LENGTH_SHORT).show();
                 } else {
-                    otp_generate();
+                    if (Utils_Class.isNetworkAvailable(OtpSend.this)) {
 
+                        otp_generate();
+                    } else {
+                        Utils_Class.toast_normal(OtpSend.this, "Please connect to your internet");
+                    }
                 }
 
                 sharedPreference.putString(OtpSend.this, "resend", "" + gmail_otp);

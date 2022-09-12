@@ -71,35 +71,45 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/remove"
+                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="50dp"
-                    android:visibility="gone"
-                    android:src="@drawable/ic_baseline_close_24"/>
+                    android:gravity="center">
 
-                <ImageView
-                    android:id="@+id/IVPreviewImage"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
-                    android:layout_gravity="center"
-                    android:background="@drawable/circle_profile"
-                    android:padding="25dp"
-                    android:src="@drawable/ic_default_user_icon" />
-                <ImageView
-                    android:id="@+id/edit_img"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:padding="10dp"
-                    android:layout_marginTop="-25dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_edit_profile"
-                    android:backgroundTint="#0069ff"
-                    android:background="@drawable/round_design2"
-                    app:tint="@color/white"/>
+                    <ImageView
+                        android:id="@+id/remove"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/button_circle"
+                        android:src="@drawable/ic_baseline_close_24"
+                        android:visibility="gone"
+                        app:tint="@color/red" />
 
+                    <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
+                        android:id="@+id/IVPreviewImage"
+                        android:layout_width="130dp"
+                        android:layout_height="130dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/circle_profile"
+                        android:padding="25dp"
+                        android:src="@drawable/ic_default_user_icon" />
+
+                    <ImageView
+                        android:id="@+id/edit_img"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_below="@+id/IVPreviewImage"
+                        android:layout_centerInParent="true"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="-25dp"
+                        android:background="@drawable/round_design2"
+                        android:backgroundTint="#0069ff"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_edit_profile"
+                        app:tint="@color/white" />
+                </RelativeLayout>
             </LinearLayout>
 
             <LinearLayout
@@ -123,7 +133,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Seller Name"
+                            android:hint="Seller Name*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -149,7 +159,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Shop Name"
+                            android:hint="Shop Name*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -175,7 +185,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Mobile Number"
+                            android:hint="Mobile Number*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -229,7 +239,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Mail"
+                            android:hint="Mail*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -285,13 +295,24 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Country" />
+                                android:text="Country*" />
+                            <TextView
+                                android:id="@+id/testView"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/background1"
+                                android:drawableEnd="@drawable/ic_baseline_keyboard_arrow_down_24"
+                                android:gravity="center_vertical"
+                                android:hint="Select country*"
+                                android:textColor="@color/black"
+                                android:padding="20dp" />
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:background="@drawable/background1"
                                 android:paddingTop="10dp"
+                                android:visibility="gone"
                                 android:paddingBottom="10dp">
 
 
@@ -304,7 +325,10 @@
                                     android:layout_marginRight="10dp"
                                     android:layout_marginBottom="10dp" />
                             </LinearLayout>
+
+
                         </LinearLayout>
+
 
                         <com.google.android.material.textfield.TextInputLayout
                             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -339,7 +363,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="State"
+                            android:hint="State*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -392,7 +416,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="City"
+                            android:hint="City*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -419,7 +443,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Shop Address"
+                            android:hint="Shop Address*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"
@@ -449,7 +473,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_margin="10dp"
-                            android:hint="Pin/Postal code"
+                            android:hint="Pin/Postal code*"
                             android:theme="@style/AppThemetextinput"
                             app:boxCornerRadiusBottomEnd="15dp"
                             app:boxCornerRadiusBottomStart="15dp"

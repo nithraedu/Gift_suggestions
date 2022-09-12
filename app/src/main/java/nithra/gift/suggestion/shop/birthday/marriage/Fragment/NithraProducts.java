@@ -297,7 +297,7 @@ public class NithraProducts extends Fragment {
             holder.category.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String currentString = gift_show.get(0).getGiftImage();
+                    String currentString = gift_show.get(pos).getGiftImage();
 
                     Intent i = new Intent(getContext(), ImageSlide.class);
                     i.putExtra("pos", currentString);

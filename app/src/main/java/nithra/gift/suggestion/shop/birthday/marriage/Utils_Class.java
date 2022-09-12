@@ -1,5 +1,6 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -9,6 +10,8 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.format.DateUtils;
 import android.view.Gravity;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -23,6 +26,11 @@ public class Utils_Class {public static ProgressDialog mProgress;
         mProgress.setMessage(txt);
         //mProgress.setCancelable(aBoolean);
         return mProgress;
+    }
+
+    public static void hideKeyboardFrom(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     public static void date_put(Context context, String str, int val) {

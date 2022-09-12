@@ -1,23 +1,35 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.provider.OpenableColumns;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +38,7 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -60,6 +73,8 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetCountry;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftEdit;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
+import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImage;
+import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -67,7 +82,7 @@ import retrofit2.Response;
 public class ShopEdit extends AppCompatActivity {
 
     TextInputEditText sellername, shopname, shopaddress, mobilenumber, city, state, latitude, longitude, pincode, district, mailid, website, anothermobilenumber;
-    String sell_name, shop_name, shop_add, mob_num,another_mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern;
+    String sell_name, shop_name, shop_add, mob_num, another_mob_num, shop_city, shop_country, shop_state, shop_pincode, shop_district, shop_latitude, shop_longitude, mail, web, emailPattern,country_text;
     TextView save;
     ImageView remove, edit_img;
     ImageView IVPreviewImage;
@@ -82,6 +97,8 @@ public class ShopEdit extends AppCompatActivity {
     ArrayList<GetCountry> country_get;
     ArrayList<String> spin;
     String coun_try, country_id;
+    File[] file_array = new File[1];
+    TextView testView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +131,55 @@ public class ShopEdit extends AppCompatActivity {
         country_get = new ArrayList<GetCountry>();
         spin = new ArrayList<>();
 
+
+        testView = findViewById(R.id.testView);
+
+        testView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Dialog dialog = new Dialog(ShopEdit.this);
+                dialog.setContentView(R.layout.searchable_spinner);
+                dialog.getWindow().setLayout(650, 800);
+                dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.show();
+
+                EditText editText = dialog.findViewById(R.id.edit_text);
+                ListView listView = dialog.findViewById(R.id.list_view);
+
+
+                for (int i = 0; i < country_get.size(); i++) {
+                    spin.add(country_get.get(i).getName());
+                }
+
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(ShopEdit.this, android.R.layout.simple_list_item_1, spin);
+                listView.setAdapter(adapter);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                    }
+
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        adapter.getFilter().filter(s);
+                    }
+
+                    @Override
+                    public void afterTextChanged(Editable s) {
+
+                    }
+                });
+
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        testView.setText(adapter.getItem(position));
+                        dialog.dismiss();
+                    }
+                });
+            }
+        });
+
         emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -127,19 +193,40 @@ public class ShopEdit extends AppCompatActivity {
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openSomeActivityForResult();
+                //openSomeActivityForResult();
+                choose_imge();
             }
         });
         edit_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openSomeActivityForResult();
+                //openSomeActivityForResult();
+                choose_imge();
             }
         });
+
+        spin_country.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                return false;
+            }
+        });
+
+        //remove.setVisibility(View.GONE);
+
        /* remove.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
+                file_array[0] = null;
+                remove.setVisibility(View.GONE);
+
+              *//*  if (!image_change.contains(separated[0])) {
+                    image_change += separated[0] + ",";
+                }*//*
             }
         });*/
 
@@ -157,6 +244,7 @@ public class ShopEdit extends AppCompatActivity {
                 shop_state = state.getText().toString().trim();
                 // shop_district = district.getText().toString().trim();
                 shop_pincode = pincode.getText().toString().trim();
+                country_text=testView.getText().toString().trim();
                /* shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();*/
                 /*if (uri_1 == null) {
@@ -172,7 +260,7 @@ public class ShopEdit extends AppCompatActivity {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your Email...");
                 } else if (!mail.matches(emailPattern)) {
                     Toast.makeText(getApplicationContext(), "Invalid email address", Toast.LENGTH_SHORT).show();
-                } else if (spin_country.getSelectedItemPosition() == 0) {
+                } else if (country_text.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Select Your country...");
                 } else if (shop_state.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your state...");
@@ -183,15 +271,19 @@ public class ShopEdit extends AppCompatActivity {
                 } else if (shop_pincode.equals("")) {
                     Utils_Class.toast_center(getApplicationContext(), "Please Enter Your pin/postal code...");
                 } else {
-                    submit_res();
+                    if (Utils_Class.isNetworkAvailable(ShopEdit.this)) {
+                        submit_res();
+                    } else {
+                        Utils_Class.toast_normal(ShopEdit.this, "Please connect to your internet");
+                    }
                 }
             }
         });
-
     }
 
 
     public void spin_country() {
+
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "get_country");
         RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
@@ -203,7 +295,8 @@ public class ShopEdit extends AppCompatActivity {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
                     country_get.addAll(response.body());
-                    spinner1();
+
+                    //spinner1();
 
 
                     //adapter.notifyDataSetChanged();
@@ -235,7 +328,9 @@ public class ShopEdit extends AppCompatActivity {
                     System.out.println("======response result:" + result);
                     if (response.body().get(0).getStatus().equals("Success")) {
                         list_shop.addAll(response.body());
-
+                      /*  if (list_shop.get(0).getLogo() != null) {
+                            remove.setVisibility(View.VISIBLE);
+                        }*/
                         Glide.with(getApplicationContext()).load(list_shop.get(0).getLogo())
                                 .error(R.drawable.ic_gift_default_img)
                                 .placeholder(R.drawable.ic_gift_default_img)
@@ -255,11 +350,24 @@ public class ShopEdit extends AppCompatActivity {
                         pincode.setText(list_shop.get(0).getPincode());
                         //district.setText(list_shop.get(0).getDistrict());
                         country_id = list_shop.get(0).getCountry();
+                        testView.setText(country_id);
+
+               /*         for (int j = 0; j < country_get.size(); j++) {
+                            System.out.println("id1== " + country_get.get(j).getId());
+                            System.out.println("id2== " + country_id);
+                            if (country_get.get(j).getId().trim().equals(country_id)) {
+                                System.out.println("id3== " + country_get.get(j).getId());
+                                //spin_country.setSelection(j + 1);
+                                testView.setText(country_id);
+                                break;
+                            }
+
+                        }*/
+
                         spin_country();
 
+
                         System.out.println("one");
-
-
                     }
                     Utils_Class.mProgress.dismiss();
 
@@ -283,9 +391,11 @@ public class ShopEdit extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(ShopEdit.this, android.R.layout.simple_spinner_item, spin);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin_country.setAdapter(adapter);
+
         spin_country.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
                 if (i != 0) {
                     coun_try = country_get.get(i - 1).getName();
                 }
@@ -326,13 +436,72 @@ public class ShopEdit extends AppCompatActivity {
                 @Override
                 public void onActivityResult(ActivityResult result) {
                     if (result.getResultCode() == Activity.RESULT_OK) {
+
                         // There are no request codes
                         Intent data = result.getData();
-                        IVPreviewImage.setImageURI(data.getData());
+                        Uri imageUri = data.getData();
+                        try {
+                            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+                            IVPreviewImage.setImageBitmap(bitmap);
+                            System.out.println("print_bitmap== " + bitmap);
+                            System.out.println("printbit_uri== " + imageUri);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            System.out.println("print_error== " + e);
+
+                        }
+
                         uri_1 = data.getData();
                     }
                 }
             });
+
+    public void choose_imge() {
+        try {
+            CropImage.activity(null).setGuidelines(CropImageView.Guidelines.ON).start(ShopEdit.this, 100);
+        } catch (ActivityNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("print_Catch== " + e);
+            Utils_Class.toast_center(ShopEdit.this, "Try again...");
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // handle result of CropImageActivity
+
+        CropImage.ActivityResult result = CropImage.getActivityResult(data);
+        if (resultCode == RESULT_OK) {
+            uri_1 = result.getUri();
+            IVPreviewImage.setImageURI(uri_1);
+               /* if (!image_change.contains(separated[0])) {
+                    image_change += separated[0] + ",";
+                }*/
+
+            try {
+                File file = getFile(ShopEdit.this, uri_1, "img.jpg");
+                path = file.getPath().replace(file.getName(), "");
+                System.out.println("---file name : " + file.getName());
+                System.out.println("---file path : " + path);
+                System.out.println("---file path : " + file.getAbsolutePath());
+
+                file_array[0] = file;
+                //remove.setVisibility(View.VISIBLE);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            System.out.println("print_uri== ");
+
+        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            Utils_Class.toast_center(this, "Cropping failed: " + result.getError());
+        }
+
+    }
+
 
     public void submit_res() {
         map1.clear();
@@ -346,7 +515,8 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("shop_website", web);
         map1.put("name", sell_name);
         //map1.put("country", shop_country);
-        map1.put("country", country_get.get(spin_country.getSelectedItemPosition() - 1).getId());
+        //map1.put("country", country_get.get(spin_country.getSelectedItemPosition() - 1).getId());
+        map1.put("country",  country_text);
         map1.put("state", shop_state);
         map1.put("address", shop_add);
         map1.put("pincode", shop_pincode);
@@ -355,14 +525,28 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("district", shop_district);
         map1.put("city", shop_city);
 
+
         File file = null;
         try {
-            file = getFile(getApplicationContext(), uri_1);
+           /* file = getFile(getApplicationContext(), uri_1);
             path = file.getPath().replace(file.getName(), "");
             System.out.println("---file name : " + file.getName());
             System.out.println("---file path : " + path);
             System.out.println("---file path : " + file.getAbsolutePath());
-            map2.put("logo[]", "" + Uri.fromFile(file));
+            map2.put("logo[]", "" + Uri.fromFile(file));*/
+
+
+            int set_img = 0;
+            for (int i = 0; i < file_array.length; i++) {
+                System.out.println("check_loop");
+                if (file_array[i] != null) {
+                    map2.put("logo[" + set_img + "]", "" + Uri.fromFile(file_array[i]));
+                    set_img++;
+                    System.out.println("print_image==" + Uri.fromFile(file_array[i]));
+                }
+            }
+            System.out.println("check_size== " + file_array.length);
+
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("printerror" + e);
@@ -376,14 +560,14 @@ public class ShopEdit extends AppCompatActivity {
     }
 
 
-    public static File getFile(Context context, Uri uri) throws IOException {
+    public static File getFile(Context context, Uri uri, String image) throws IOException {
         String root = context.getFilesDir().getPath() + File.separatorChar + "Images";
         File folder = new File(root);
         // have the object build the directory structure, if needed.
         if (!folder.exists()) {
             folder.mkdirs();
         }
-        File destinationFilename = new File(root + File.separatorChar + queryName(context, uri));
+        File destinationFilename = new File(root + File.separatorChar + image);
         try (InputStream ins = context.getContentResolver().openInputStream(uri)) {
             createFileFromStream(ins, destinationFilename);
         } catch (Exception ex) {
@@ -392,6 +576,7 @@ public class ShopEdit extends AppCompatActivity {
         }
         return destinationFilename;
     }
+
 
     public static void createFileFromStream(InputStream ins, File destination) {
         try (OutputStream os = new FileOutputStream(destination)) {

@@ -6,14 +6,16 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/home"
             android:title="Home" />
+        <item
+            android:id="@+id/add_shop_nav"
+            android:icon="@drawable/ic_add_shop"
+            android:iconTint="@color/black"
+            android:title="Add Your Shop/Products" />
       <!--  <item
             android:id="@+id/nav_share"
             android:icon="@drawable/ic_menu_share"
             android:title="Share" />-->
-        <item
-            android:id="@+id/nav_rateus"
-            android:icon="@drawable/rateus"
-            android:title="Rate Us" />
+
        <!-- <item
             android:id="@+id/nav_feedback"
             android:icon="@drawable/feedbackicon"
@@ -23,10 +25,9 @@
             android:icon="@drawable/policy_icon"
             android:title="Privacy Policy" />
         <item
-            android:id="@+id/add_shop_nav"
-            android:icon="@drawable/ic_add_shop"
-            android:iconTint="@color/black"
-            android:title="Add Your Shop/Products" />
+            android:id="@+id/nav_rateus"
+            android:icon="@drawable/rateus"
+            android:title="Rate Us" />
     </group>
 
 </menu>

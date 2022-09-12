@@ -10,8 +10,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_marginTop="5dp"
         android:paddingLeft="5dp"
+        android:background="#0069FF"
         android:orientation="horizontal">
 
         <ImageView
@@ -19,7 +19,7 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_gravity="center"
-            android:backgroundTint="#0069ff"
+            app:tint="@color/white"
             android:src="@drawable/ic_baseline_arrow_back_24" />
 
         <TextView
@@ -30,7 +30,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:text="Cat_Title"
-            android:textColor="@color/black"
+            android:textColor="@color/white"
             android:textSize="20dp"
             android:layout_marginLeft="5dp"
             android:textStyle="bold" />

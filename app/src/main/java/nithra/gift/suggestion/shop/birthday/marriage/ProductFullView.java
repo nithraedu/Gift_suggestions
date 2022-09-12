@@ -122,7 +122,7 @@ public class ProductFullView extends AppCompatActivity {
         profile_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                builder.setMessage("Are you sure you want delete your gift?").setCancelable(false)
+                builder.setMessage("Do you want to delete this Product?").setCancelable(false)
                         .setPositiveButton("No", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
