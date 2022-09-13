@@ -70,6 +70,11 @@ public class SellerProfileProductList extends AppCompatActivity {
         pullToRefresh = findViewById(R.id.pullToRefresh);
         no_item = findViewById(R.id.no_item);
 
+
+       /* if(IVPreviewImage.getDrawable()==null){
+            IVPreviewImage.setImageResource(R.drawable.ic_default_user_icon);
+        }*/
+
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,8 +149,6 @@ public class SellerProfileProductList extends AppCompatActivity {
         super.onResume();
         category1();
         category();
-
-
     }
 
     public void category() {
@@ -313,6 +316,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                     //sharedPreference.getString(this, "gift_id");
                     Intent i = new Intent(getApplicationContext(), ProductEdit.class);
                     i.putExtra("id", gift.get(pos).getId());
+                    System.out.println("print_id=="+gift.get(pos).getId());
                     startActivity(i);
                 }
             });

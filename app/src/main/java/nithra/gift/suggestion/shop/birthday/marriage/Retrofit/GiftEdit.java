@@ -55,6 +55,18 @@ public class GiftEdit {
     @SerializedName("country")
     @Expose
     public String country;
+
+    public String getCountry_name() {
+        return country_name;
+    }
+
+    public void setCountry_name(String country_name) {
+        this.country_name = country_name;
+    }
+
+    @SerializedName("country_name")
+    @Expose
+    public String country_name;
     @SerializedName("status")
     @Expose
     public String status;

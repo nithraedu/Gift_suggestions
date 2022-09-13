@@ -69,12 +69,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetCountry;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftEdit;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImage;
 import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImageView;
+import nithra.gift.suggestion.shop.birthday.marriage.imagepicker.ImagePicker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -174,6 +176,7 @@ public class ShopEdit extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                         testView.setText(adapter.getItem(position));
+                        testView.setTag(country_get.get(position).getId());
                         dialog.dismiss();
                     }
                 });
@@ -194,14 +197,62 @@ public class ShopEdit extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //openSomeActivityForResult();
-                choose_imge();
+                //choose_imge();
+                Dialog dialog;
+                dialog = new Dialog(ShopEdit.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.cam_gallery);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                ImageView camera, gallery;
+                camera = dialog.findViewById(R.id.camera);
+                gallery = dialog.findViewById(R.id.gallery);
+                dialog.show();
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick();
+                        dialog.dismiss();
+                    }
+                });
+                gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick_gal();
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
         edit_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //openSomeActivityForResult();
-                choose_imge();
+                //choose_imge();
+                Dialog dialog;
+                dialog = new Dialog(ShopEdit.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.cam_gallery);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                ImageView camera, gallery;
+                camera = dialog.findViewById(R.id.camera);
+                gallery = dialog.findViewById(R.id.gallery);
+                dialog.show();
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick();
+                        dialog.dismiss();
+                    }
+                });
+                gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick_gal();
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
 
@@ -244,7 +295,7 @@ public class ShopEdit extends AppCompatActivity {
                 shop_state = state.getText().toString().trim();
                 // shop_district = district.getText().toString().trim();
                 shop_pincode = pincode.getText().toString().trim();
-                country_text=testView.getText().toString().trim();
+                country_text=testView.getTag().toString().trim();
                /* shop_latitude = latitude.getText().toString().trim();
                 shop_longitude = longitude.getText().toString().trim();*/
                 /*if (uri_1 == null) {
@@ -281,6 +332,55 @@ public class ShopEdit extends AppCompatActivity {
         });
     }
 
+
+    public void image_pick() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ShopEdit.this)
+                .crop()
+                .cameraOnly()
+                .createIntent());
+    }
+
+    public void image_pick_gal() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ShopEdit.this)
+                .crop()
+                .galleryOnly()
+                .createIntent());
+    }
+
+    ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    System.out.println("----------- new activity result" + result);
+                    uri_1 = result.getData().getData();
+                    if (uri_1 != null) {
+                       // uri_1 = result.getUri();
+                        IVPreviewImage.setImageURI(uri_1);
+               /* if (!image_change.contains(separated[0])) {
+                    image_change += separated[0] + ",";
+                }*/
+
+                        try {
+                            File file = getFile(ShopEdit.this, uri_1, "img.jpg");
+                            path = file.getPath().replace(file.getName(), "");
+                            System.out.println("---file name : " + file.getName());
+                            System.out.println("---file path : " + path);
+                            System.out.println("---file path : " + file.getAbsolutePath());
+
+                            file_array[0] = file;
+                            //remove.setVisibility(View.VISIBLE);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("print_uri== ");
+
+                    }
+                }
+            });
 
     public void spin_country() {
 
@@ -349,8 +449,9 @@ public class ShopEdit extends AppCompatActivity {
                         longitude.setText(list_shop.get(0).getLongitude());
                         pincode.setText(list_shop.get(0).getPincode());
                         //district.setText(list_shop.get(0).getDistrict());
-                        country_id = list_shop.get(0).getCountry();
+                        country_id = list_shop.get(0).getCountry_name();
                         testView.setText(country_id);
+                        testView.setTag(list_shop.get(0).getCountry());
 
                /*         for (int j = 0; j < country_get.size(); j++) {
                             System.out.println("id1== " + country_get.get(j).getId());
@@ -468,7 +569,7 @@ public class ShopEdit extends AppCompatActivity {
     }
 
 
-    @Override
+   /* @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         // handle result of CropImageActivity
@@ -477,9 +578,9 @@ public class ShopEdit extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             uri_1 = result.getUri();
             IVPreviewImage.setImageURI(uri_1);
-               /* if (!image_change.contains(separated[0])) {
+               *//* if (!image_change.contains(separated[0])) {
                     image_change += separated[0] + ",";
-                }*/
+                }*//*
 
             try {
                 File file = getFile(ShopEdit.this, uri_1, "img.jpg");
@@ -502,7 +603,7 @@ public class ShopEdit extends AppCompatActivity {
 
     }
 
-
+*/
     public void submit_res() {
         map1.clear();
         map2.clear();

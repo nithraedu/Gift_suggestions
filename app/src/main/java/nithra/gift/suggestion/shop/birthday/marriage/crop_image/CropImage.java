@@ -247,8 +247,10 @@ public final class CropImage {
 
     // Determine Uri of camera image to  save.
     Uri outputFileUri = getCaptureImageOutputUri(context);
-
+    System.out.println("print_outputUri=="+outputFileUri);
     Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+    System.out.println("print_output_intent=="+captureIntent);
+
     List<ResolveInfo> listCam = packageManager.queryIntentActivities(captureIntent, 0);
     for (ResolveInfo res : listCam) {
       Intent intent = new Intent(captureIntent);

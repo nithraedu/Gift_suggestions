@@ -1,6 +1,8 @@
 package nithra.gift.suggestion.shop.birthday.marriage;
 
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -24,6 +26,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -56,7 +60,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GetGift;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion;
@@ -64,6 +67,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
 import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImage;
 import nithra.gift.suggestion.shop.birthday.marriage.crop_image.CropImageView;
+import nithra.gift.suggestion.shop.birthday.marriage.imagepicker.ImagePicker;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -199,67 +203,67 @@ public class ProductEdit extends AppCompatActivity {
             public void onClick(View view) {
                 if (Utils_Class.isNetworkAvailable(ProductEdit.this)) {
 
-                for (int i = 0; i < occasion.size(); i++) {
-                    cat[i] = occasion.get(i).getCategory();
-                    cat_id[i] = occasion.get(i).getId();
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
-
-                builder.setTitle("Select Occasion");
-
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(cat, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        if (b) {
-                            selectedLanguage[i] = true;
-                            langList.add(i);
-                            Collections.sort(langList);
-                        } else {
-                            langList.remove(Integer.valueOf(i));
-                        }
+                    for (int i = 0; i < occasion.size(); i++) {
+                        cat[i] = occasion.get(i).getCategory();
+                        cat_id[i] = occasion.get(i).getId();
                     }
-                });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        StringBuilder id = new StringBuilder();
-                        for (int j = 0; j < langList.size(); j++) {
-                            stringBuilder.append(cat[langList.get(j)]);
-                            id.append(cat_id[langList.get(j)]);
-                            if (j != langList.size() - 1) {
-                                stringBuilder.append(",");
-                                id.append(",");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
+
+                    builder.setTitle("Select Occasion");
+
+                    builder.setCancelable(false);
+
+                    builder.setMultiChoiceItems(cat, selectedLanguage, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                            if (b) {
+                                selectedLanguage[i] = true;
+                                langList.add(i);
+                                Collections.sort(langList);
+                            } else {
+                                langList.remove(Integer.valueOf(i));
                             }
                         }
-                        // langList.clear();
-                        textView.setText(stringBuilder.toString());
-                        textView.setTag(id.toString());
-                    }
-                });
+                    });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        for (int j = 0; j < selectedLanguage.length; j++) {
-                            selectedLanguage[j] = false;
-                            langList.clear();
-                            textView.setText("");
-                            textView.setTag("");
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            StringBuilder id = new StringBuilder();
+                            for (int j = 0; j < langList.size(); j++) {
+                                stringBuilder.append(cat[langList.get(j)]);
+                                id.append(cat_id[langList.get(j)]);
+                                if (j != langList.size() - 1) {
+                                    stringBuilder.append(",");
+                                    id.append(",");
+                                }
+                            }
+                            // langList.clear();
+                            textView.setText(stringBuilder.toString());
+                            textView.setTag(id.toString());
                         }
-                    }
-                });
-                builder.show();
+                    });
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            for (int j = 0; j < selectedLanguage.length; j++) {
+                                selectedLanguage[j] = false;
+                                langList.clear();
+                                textView.setText("");
+                                textView.setTag("");
+                            }
+                        }
+                    });
+                    builder.show();
                 } else {
                     Utils_Class.toast_normal(ProductEdit.this, "Please connect to your internet");
                 }
@@ -271,68 +275,68 @@ public class ProductEdit extends AppCompatActivity {
             public void onClick(View view) {
                 if (Utils_Class.isNetworkAvailable(ProductEdit.this)) {
 
-                for (int i = 0; i < giftfor.size(); i++) {
-                    cat1[i] = giftfor.get(i).getPeople();
-                    cat_id1[i] = giftfor.get(i).getId();
-                }
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
-
-                builder.setTitle("Select Gift For");
-
-                builder.setCancelable(false);
-
-                builder.setMultiChoiceItems(cat1, selectedLanguage1, new DialogInterface.OnMultiChoiceClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i, boolean b) {
-                        if (b) {
-                            selectedLanguage1[i] = true;
-                            langList1.add(i);
-                            Collections.sort(langList1);
-                        } else {
-                            langList1.remove(Integer.valueOf(i));
-                        }
+                    for (int i = 0; i < giftfor.size(); i++) {
+                        cat1[i] = giftfor.get(i).getPeople();
+                        cat_id1[i] = giftfor.get(i).getId();
                     }
-                });
 
-                builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        StringBuilder stringBuilder = new StringBuilder();
-                        StringBuilder id = new StringBuilder();
-                        for (int j = 0; j < langList1.size(); j++) {
-                            stringBuilder.append(cat1[langList1.get(j)]);
-                            id.append(cat_id1[langList1.get(j)]);
-                            if (j != langList1.size() - 1) {
-                                stringBuilder.append(",");
-                                id.append(",");
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ProductEdit.this);
+
+                    builder.setTitle("Select Gift For");
+
+                    builder.setCancelable(false);
+
+                    builder.setMultiChoiceItems(cat1, selectedLanguage1, new DialogInterface.OnMultiChoiceClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i, boolean b) {
+                            if (b) {
+                                selectedLanguage1[i] = true;
+                                langList1.add(i);
+                                Collections.sort(langList1);
+                            } else {
+                                langList1.remove(Integer.valueOf(i));
                             }
                         }
-                        // langList1.clear();
-                        textView1.setText(stringBuilder.toString());
-                        textView1.setTag(id.toString());
-                    }
-                });
+                    });
 
-                builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        dialogInterface.dismiss();
-                    }
-                });
-                builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        for (int j = 0; j < selectedLanguage1.length; j++) {
-                            selectedLanguage1[j] = false;
-                            langList1.clear();
-                            textView1.setText("");
-                            textView1.setTag("");
-
+                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            StringBuilder stringBuilder = new StringBuilder();
+                            StringBuilder id = new StringBuilder();
+                            for (int j = 0; j < langList1.size(); j++) {
+                                stringBuilder.append(cat1[langList1.get(j)]);
+                                id.append(cat_id1[langList1.get(j)]);
+                                if (j != langList1.size() - 1) {
+                                    stringBuilder.append(",");
+                                    id.append(",");
+                                }
+                            }
+                            // langList1.clear();
+                            textView1.setText(stringBuilder.toString());
+                            textView1.setTag(id.toString());
                         }
-                    }
-                });
-                builder.show();
+                    });
+
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    builder.setNeutralButton("Clear All", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            for (int j = 0; j < selectedLanguage1.length; j++) {
+                                selectedLanguage1[j] = false;
+                                langList1.clear();
+                                textView1.setText("");
+                                textView1.setTag("");
+
+                            }
+                        }
+                    });
+                    builder.show();
                 } else {
                     Utils_Class.toast_normal(ProductEdit.this, "Please connect to your internet");
                 }
@@ -388,7 +392,33 @@ public class ProductEdit extends AppCompatActivity {
         IVPreviewImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choose_imge();
+                //choose_imge();
+
+
+                Dialog dialog;
+                dialog = new Dialog(ProductEdit.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.cam_gallery);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                ImageView camera, gallery;
+                camera = dialog.findViewById(R.id.camera);
+                gallery = dialog.findViewById(R.id.gallery);
+                dialog.show();
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick();
+                        dialog.dismiss();
+                    }
+                });
+                gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick_gal();
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
 
@@ -396,13 +426,62 @@ public class ProductEdit extends AppCompatActivity {
         IVPreviewImage1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choose_imge1();
+                //choose_imge1();
+                Dialog dialog;
+                dialog = new Dialog(ProductEdit.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.cam_gallery);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                ImageView camera, gallery;
+                camera = dialog.findViewById(R.id.camera);
+                gallery = dialog.findViewById(R.id.gallery);
+                dialog.show();
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick1();
+                        dialog.dismiss();
+                    }
+                });
+                gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick1_gal();
+                        dialog.dismiss();
+
+                    }
+                });
+
             }
         });
         IVPreviewImage2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                choose_imge2();
+                //choose_imge2();
+                Dialog dialog;
+                dialog = new Dialog(ProductEdit.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
+                dialog.setContentView(R.layout.cam_gallery);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                ImageView camera, gallery;
+                camera = dialog.findViewById(R.id.camera);
+                gallery = dialog.findViewById(R.id.gallery);
+                dialog.show();
+                camera.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick2();
+                        dialog.dismiss();
+                    }
+                });
+                gallery.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        image_pick2_gal();
+                        dialog.dismiss();
+
+                    }
+                });
             }
         });
 
@@ -440,6 +519,158 @@ public class ProductEdit extends AppCompatActivity {
     }
 
 
+    public void image_pick() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .cameraOnly()
+                .createIntent());
+    }
+
+    public void image_pick_gal() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .galleryOnly()
+                .createIntent());
+    }
+
+    public void image_pick1() {
+        // req_code = req_code1;
+        mLauncher1.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .cameraOnly()
+                .createIntent());
+    }
+
+    public void image_pick1_gal() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .galleryOnly()
+                .createIntent());
+    }
+
+    public void image_pick2() {
+        // req_code = req_code1;
+        mLauncher2.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .cameraOnly()
+                .createIntent());
+    }
+
+    public void image_pick2_gal() {
+        // req_code = req_code1;
+        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+                .crop()
+                .galleryOnly()
+                .createIntent());
+    }
+
+
+    ActivityResultLauncher<Intent> mLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    System.out.println("----------- new activity result" + result);
+                    uri = result.getData().getData();
+                    if (uri != null) {
+                        //uri = result.getUri();
+                        IVPreviewImage.setImageURI(uri);
+                        System.out.println("print_uri2== " + uri);
+
+                        if (!image_change.contains(separated[0])) {
+                            image_change += separated[0] + ",";
+                        }
+
+                        try {
+                            File file = getFile(ProductEdit.this, uri, "img1.jpg");
+                            path = file.getPath().replace(file.getName(), "");
+                            System.out.println("---file name : " + file.getName());
+                            System.out.println("---file path : " + path);
+                            System.out.println("---file path : " + file.getAbsolutePath());
+
+                            file_array[0] = file;
+                            remove.setVisibility(View.VISIBLE);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        System.out.println("print_uri== ");
+
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent> mLauncher1 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    System.out.println("----------- new activity result" + result);
+                    uri1 = result.getData().getData();
+                    if (uri1 != null) {
+                        //uri1 = result.getUri();
+                        IVPreviewImage1.setImageURI(uri1);
+                        System.out.println("print_uri1== " + uri1);
+
+                        if (separated.length > 1) {
+                            if (!image_change.contains(separated[1])) {
+                                image_change += separated[1] + ",";
+                            }
+                        }
+                        try {
+                            File file = getFile(ProductEdit.this, uri1, "img2.jpg");
+                            path = file.getPath().replace(file.getName(), "");
+                            System.out.println("---file name : " + file.getName());
+                            System.out.println("---file path : " + path);
+                            System.out.println("---file path : " + file.getAbsolutePath());
+
+                            file_array[1] = file;
+                            remove1.setVisibility(View.VISIBLE);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            });
+
+    ActivityResultLauncher<Intent> mLauncher2 = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    System.out.println("----------- new activity result" + result);
+                    uri2 = result.getData().getData();
+                    if (uri2 != null) {
+                        //uri2 = result.getUri();
+                        IVPreviewImage2.setImageURI(uri2);
+                        System.out.println("print_uri2== " + uri2);
+                        if (separated.length > 2) {
+                            if (!image_change.contains(separated[2])) {
+                                image_change += separated[2] + ",";
+                            }
+                        }
+                        try {
+                            File file = getFile(ProductEdit.this, uri2, "img3.jpg");
+                            path = file.getPath().replace(file.getName(), "");
+                            System.out.println("---file name : " + file.getName());
+                            System.out.println("---file path : " + path);
+                            System.out.println("---file path : " + file.getAbsolutePath());
+
+                            file_array[2] = file;
+                            remove2.setVisibility(View.VISIBLE);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            });
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -449,6 +680,8 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri = result.getUri();
                 IVPreviewImage.setImageURI(uri);
+                System.out.println("print_uri2== " + uri);
+
                 if (!image_change.contains(separated[0])) {
                     image_change += separated[0] + ",";
                 }
@@ -476,6 +709,8 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri1 = result.getUri();
                 IVPreviewImage1.setImageURI(uri1);
+                System.out.println("print_uri1== " + uri1);
+
                 if (separated.length > 1) {
                     if (!image_change.contains(separated[1])) {
                         image_change += separated[1] + ",";
@@ -503,6 +738,7 @@ public class ProductEdit extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 uri2 = result.getUri();
                 IVPreviewImage2.setImageURI(uri2);
+                System.out.println("print_uri2== " + uri2);
                 if (separated.length > 2) {
                     if (!image_change.contains(separated[2])) {
                         image_change += separated[2] + ",";
@@ -688,7 +924,7 @@ public class ProductEdit extends AppCompatActivity {
                         String currentString = list_gift.get(0).getGiftImage();
                         System.out.println("print_image== " + list_gift.get(0).getGiftImage());
                         separated = currentString.split(",");
-                        if (separated[0]!=null) {
+                        if (separated[0] != null) {
                             Glide.with(getApplicationContext()).load(separated[0])
                                     .error(R.drawable.ic_gift_default_img)
                                     .placeholder(R.drawable.ic_gift_default_img)
@@ -698,8 +934,8 @@ public class ProductEdit extends AppCompatActivity {
                         }
 
 
-                            if (separated.length > 1) {
-                                if (separated[1]!=null) {
+                        if (separated.length > 1) {
+                            if (separated[1] != null) {
                                 System.out.println("print_sep1");
                                 Glide.with(getApplicationContext()).load(separated[1])
                                         .error(R.drawable.ic_gift_default_img)
@@ -711,10 +947,10 @@ public class ProductEdit extends AppCompatActivity {
                             }
                         }
 
-                            if (separated.length > 2) {
-                                if (separated[2]!=null) {
+                        if (separated.length > 2) {
+                            if (separated[2] != null) {
 
-                                    System.out.println("print_sep2");
+                                System.out.println("print_sep2");
                                 Glide.with(getApplicationContext()).load(separated[2])
                                         .error(R.drawable.ic_gift_default_img)
                                         .placeholder(R.drawable.ic_gift_default_img)

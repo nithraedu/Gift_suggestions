@@ -35,6 +35,8 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/circle.xml" value="0.187" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/circle2.xml" value="0.1675" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/color2.xml" value="0.1675" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/default_thumb.xml" value="0.1815" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/default_thumb_pressed.xml" value="0.1815" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dialog_corner_no_bottom.xml" value="0.2005" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dotted.xml" value="0.152" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/drawable/dotted_red.xml" value="0.1715" />
@@ -95,6 +97,7 @@
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/backpress.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/buyer_view.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/call_dialog.xml" value="0.25" />
+        <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/cam_gallery.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/crop_image_activity.xml" value="0.24895833333333334" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/crop_image_view.xml" value="0.25" />
         <entry key="..\:/nithra/GiftSuggestions/app/src/main/res/layout/dialog_privacy_policy.xml" value="0.25" />
