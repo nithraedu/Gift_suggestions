@@ -545,7 +545,7 @@ public class ProductEdit extends AppCompatActivity {
 
     public void image_pick1_gal() {
         // req_code = req_code1;
-        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+        mLauncher1.launch(ImagePicker.Companion.with(ProductEdit.this)
                 .crop()
                 .galleryOnly()
                 .createIntent());
@@ -561,7 +561,7 @@ public class ProductEdit extends AppCompatActivity {
 
     public void image_pick2_gal() {
         // req_code = req_code1;
-        mLauncher.launch(ImagePicker.Companion.with(ProductEdit.this)
+        mLauncher2.launch(ImagePicker.Companion.with(ProductEdit.this)
                 .crop()
                 .galleryOnly()
                 .createIntent());
@@ -1306,7 +1306,7 @@ public class ProductEdit extends AppCompatActivity {
                 //do in back ground
                 String response = null;
                 try {
-                    String requestURL = "http://15.206.173.184/upload/gift_suggestion/api/data.php";
+                    String requestURL = "https://nithra.mobi/gift_app/api/data.php";
                     String path = "Images/";
 
                     final String boundary;

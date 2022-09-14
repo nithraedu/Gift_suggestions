@@ -138,6 +138,7 @@ public class OtpSend extends AppCompatActivity {
 
 
                         Intent i = new Intent(OtpSend.this, OtpVerify.class);
+                        //i.putExtra("mail_set",send_otp.get(0).getGmail());
                         startActivity(i);
                         //finish();
                         //fragMove.enterotp();

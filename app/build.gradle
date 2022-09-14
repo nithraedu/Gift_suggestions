@@ -1,6 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'kotlin-android'
+    id 'com.huawei.agconnect'
 }
 
 
@@ -52,6 +53,12 @@ dependencies {
     implementation 'com.github.yalantis:ucrop:2.2.7'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'
+
+    //Huawei
+    implementation 'com.huawei.agconnect:agconnect-core:1.6.0.300'
+    implementation 'com.huawei.hms:hianalytics:6.2.0.301'
+    implementation 'com.huawei.hms:ads-lite:13.4.46.300'
+    implementation "com.huawei.agconnect:agconnect-crash:1.6.0.300"
 
 
 }

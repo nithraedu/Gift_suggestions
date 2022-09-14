@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -244,10 +245,15 @@ public class Full_Details extends AppCompatActivity {
                 if (gift_show.get(0).getShopWebsite() != null && !gift_show.get(0).getShopWebsite().trim().isEmpty()) {
                     if (Utils_Class.isNetworkAvailable(Full_Details.this)) {
                         String url = gift_show.get(0).getShopWebsite().trim();
-                        System.out.println("urlprint" + url);
-                        CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                        CustomTabsIntent customTabsIntent = builder.build();
-                        customTabsIntent.launchUrl(Full_Details.this, Uri.parse(url));
+                        if (URLUtil.isValidUrl(url)) {
+                            System.out.println("urlprint" + url);
+                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
+                            CustomTabsIntent customTabsIntent = builder.build();
+                            customTabsIntent.launchUrl(Full_Details.this, Uri.parse(url));
+                        }else {
+                            Utils_Class.toast_center(Full_Details.this, "URL not valid...");
+
+                        }
                     } else {
                         Utils_Class.toast_center(Full_Details.this, "Check Your Internet Connection...");
                     }
@@ -312,9 +318,9 @@ public class Full_Details extends AppCompatActivity {
 
                         System.out.println("gift_show== " + gift_show.size());
 
-                        if (gift_show.get(0).getShopWebsite().equals("")) {
+                        /*if (gift_show.get(0).getShopWebsite().equals("")) {
                             card_web.setVisibility(View.GONE);
-                        }
+                        }*/
 
                         if (gift_show.get(0).getFav() == 1) {
                             fav.setBackgroundResource(R.drawable.favorite_red);

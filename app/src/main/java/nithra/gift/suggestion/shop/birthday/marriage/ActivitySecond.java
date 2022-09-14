@@ -43,8 +43,9 @@ public class ActivitySecond extends AppCompatActivity {
         cat_title = findViewById(R.id.cat_title);
         viewPager = findViewById(R.id.viewpager);
         adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.add(new Sellerproducts(), "Seller Suggestions");
         adapter.add(new NithraProducts(), "Our Suggestions");
+        adapter.add(new Sellerproducts(), "Seller Suggestions");
+
         viewPager.setAdapter(adapter);
         tabLayout = findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);

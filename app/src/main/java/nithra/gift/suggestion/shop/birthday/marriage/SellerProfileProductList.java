@@ -104,7 +104,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                 finishAffinity();
                 Intent i = new Intent(SellerProfileProductList.this, MainActivity.class);
                 startActivity(i);
-               // finish();
+                // finish();
             }
         });
 
@@ -240,7 +240,7 @@ public class SellerProfileProductList extends AppCompatActivity {
         });
     }
 
-    public void delete_gift(String id_gift) {
+    public void delete_gift(String id_gift,int pos) {
         HashMap<String, String> map = new HashMap<>();
         map.put("action", "gift_delete");
         map.put("id", id_gift);
@@ -256,8 +256,12 @@ public class SellerProfileProductList extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     String result = new Gson().toJson(response.body());
                     System.out.println("======response result:" + result);
-                    Utils_Class.toast_center(getApplicationContext(), "Your product deleted...");
-                    SellerProfileProductList.adapter.notifyDataSetChanged();
+                    if (response.body().get(0).getStatus().equals("Success")) {
+
+                        Utils_Class.toast_center(getApplicationContext(), "Your product deleted...");
+                        gift_ada.remove(pos);
+                        SellerProfileProductList.adapter.notifyDataSetChanged();
+                    }
                 }
                 System.out.println("======response :" + response);
             }
@@ -316,7 +320,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                     //sharedPreference.getString(this, "gift_id");
                     Intent i = new Intent(getApplicationContext(), ProductEdit.class);
                     i.putExtra("id", gift.get(pos).getId());
-                    System.out.println("print_id=="+gift.get(pos).getId());
+                    System.out.println("print_id==" + gift.get(pos).getId());
                     startActivity(i);
                 }
             });
@@ -339,8 +343,7 @@ public class SellerProfileProductList extends AppCompatActivity {
                             })
                             .setNegativeButton("Yes", new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
-                                    delete_gift(gift.get(pos).getId());
-
+                                    delete_gift(gift.get(pos).getId(),pos);
                                 }
                             });
                     AlertDialog alert = builder.create();

@@ -623,7 +623,7 @@ public class ShopEdit extends AppCompatActivity {
         map1.put("pincode", shop_pincode);
        /* map1.put("latitude", shop_latitude);
         map1.put("longitude", shop_longitude);*/
-        map1.put("district", shop_district);
+       // map1.put("district", shop_district);
         map1.put("city", shop_city);
 
 
@@ -797,7 +797,7 @@ public class ShopEdit extends AppCompatActivity {
                 //do in back ground
                 String response = null;
                 try {
-                    String requestURL = "http://15.206.173.184/upload/gift_suggestion/api/data.php";
+                    String requestURL = "https://nithra.mobi/gift_app/api/data.php";
                     String path = "Images/";
 
                     final String boundary;

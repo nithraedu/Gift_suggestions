@@ -300,14 +300,6 @@ public final class CropImage {
     return intents;
   }
 
-  /**
-   * Check if explicetly requesting camera permission is required.<br>
-   * It is required in Android Marshmellow and above if "CAMERA" permission is requested in the
-   * manifest.<br>
-   * See <a
-   * href="http://stackoverflow.com/questions/32789027/android-m-camera-intent-permission-bug">StackOverflow
-   * question</a>.
-   */
   public static boolean isExplicitCameraPermissionRequired(@NonNull Context context) {
     return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
         && hasPermissionInManifest(context, "android.permission.CAMERA")

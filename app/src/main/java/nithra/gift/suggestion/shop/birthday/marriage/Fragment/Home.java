@@ -158,7 +158,13 @@ public class Home extends Fragment implements NavigationView.OnNavigationItemSel
         list.setLayoutManager(gridLayoutManager2);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3, GridLayoutManager.VERTICAL, false);
         list2.setLayoutManager(gridLayoutManager);
-        Utils_Class.mProgress(getContext(), "Loading please wait...", false).show();
+        if (Utils_Class.isNetworkAvailable(getContext())) {
+            Utils_Class.mProgress(getContext(), "Loading please wait...", false).show();
+
+        }else {
+            Utils_Class.mProgress(getContext(), "Please connect your internet...", false).show();
+        }
+
 
         adapter2 = new Adapter2(getContext(), giftfor);
         list.setAdapter(adapter2);

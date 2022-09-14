@@ -39,6 +39,9 @@ public class OtpVerify extends AppCompatActivity {
     ArrayList<SendOtppojo> send_otp;
     ImageView edit;
     ImageView back;
+    Intent intent;
+    Bundle extra;
+    String mail_set;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +63,9 @@ public class OtpVerify extends AppCompatActivity {
         edit = findViewById(R.id.edit);
 
         enter_otp = findViewById(R.id.enter_otp);
+/*        intent = getIntent();
+        extra = intent.getExtras();
+        mail_set=extra.getString("mail_set");*/
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +75,8 @@ public class OtpVerify extends AppCompatActivity {
             }
         });
 
-        edit_email.setText(sharedPreference.getString(OtpVerify.this, "user_mail"));
+        edit_email.setText(""+sharedPreference.getString(OtpVerify.this, "resend"));
+        //edit_email.setText(mail_set);
         new CountDownTimer(120000, 1000) { // adjust the milli seconds here
             public void onTick(long millisUntilFinished) {
                 _tv.setText("If you didn't receive a otp? " + millisUntilFinished / 1000);

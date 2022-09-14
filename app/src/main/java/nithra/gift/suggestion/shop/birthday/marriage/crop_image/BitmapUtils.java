@@ -774,10 +774,6 @@ final class BitmapUtils {
     }
   }
 
-  /**
-   * Get the max size of bitmap allowed to be rendered on the device.<br>
-   * http://stackoverflow.com/questions/7428996/hw-accelerated-activity-how-to-get-opengl-texture-size-limit.
-   */
   private static int getMaxTextureSize() {
     // Safe minimum default size
     final int IMAGE_MAX_BITMAP_DIMENSION = 2048;

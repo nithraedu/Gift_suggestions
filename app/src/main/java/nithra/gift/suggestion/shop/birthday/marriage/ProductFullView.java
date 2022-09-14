@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.URLUtil;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -234,10 +235,16 @@ public class ProductFullView extends AppCompatActivity {
                 if (gift.get(0).getShopWebsite() != null && !gift.get(0).getShopWebsite().trim().isEmpty()) {
                     if (Utils_Class.isNetworkAvailable(ProductFullView.this)) {
                         String url = gift.get(0).getShopWebsite().trim();
-                        System.out.println("urlprint" + url);
+                        if (URLUtil.isValidUrl(url)) {
+
+                            System.out.println("urlprint" + url);
                         CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
                         CustomTabsIntent customTabsIntent = builder.build();
                         customTabsIntent.launchUrl(ProductFullView.this, Uri.parse(url));
+                        }else {
+                            Utils_Class.toast_center(ProductFullView.this, "URL not valid...");
+
+                        }
                     } else {
                         Utils_Class.toast_center(ProductFullView.this, "Check Your Internet Connection...");
                     }

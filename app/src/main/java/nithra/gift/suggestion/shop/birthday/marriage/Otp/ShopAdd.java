@@ -134,6 +134,9 @@ public class ShopAdd extends AppCompatActivity {
 
         testView = findViewById(R.id.testView);
 
+        testView.setText("");
+        testView.setTag("");
+
         testView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -510,9 +513,9 @@ public class ShopAdd extends AppCompatActivity {
         map1.put("state", shop_state);
         map1.put("address", shop_add);
         map1.put("pincode", shop_pincode);
-        map1.put("latitude", shop_latitude);
+        /*map1.put("latitude", shop_latitude);
         map1.put("longitude", shop_longitude);
-        map1.put("district", shop_district);
+        map1.put("district", shop_district);*/
         map1.put("city", shop_city);
 
         File file = null;
@@ -699,7 +702,7 @@ public class ShopAdd extends AppCompatActivity {
                 //do in back ground
                 String response = null;
                 try {
-                    String requestURL = "http://15.206.173.184/upload/gift_suggestion/api/data.php";
+                    String requestURL = "https://nithra.mobi/gift_app/api/data.php";
                     String path = "Images/";
 
                     final String boundary;

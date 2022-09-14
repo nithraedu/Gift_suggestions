@@ -485,7 +485,7 @@ public class Product extends Fragment {
                 //do in back ground
                 String response = null;
                 try {
-                    String requestURL = "http://15.206.173.184/upload/gift_suggestion/api/data.php";
+                    String requestURL = "https://nithra.mobi/gift_app/api/data.php";
                     String path = "Images/";
 
                     final String boundary;
