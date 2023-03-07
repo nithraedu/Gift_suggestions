@@ -1,116 +1,112 @@
-package nithra.gift.suggestion.shop.birthday.marriage;
+package nithra.gift.suggestion.shop.birthday.marriage
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.Build;
-import android.text.format.DateUtils;
-import android.view.Gravity;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Toast;
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import android.net.ConnectivityManager
+import android.os.Build
+import android.provider.Settings
+import android.text.format.DateUtils
+import android.view.Gravity
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
+import java.text.SimpleDateFormat
+import java.util.*
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.StringTokenizer;
-
-public class Utils_Class {public static ProgressDialog mProgress;
-
-    public static ProgressDialog mProgress(Context context, String txt, Boolean aBoolean) {
-        mProgress = new ProgressDialog(context);
-        mProgress.setMessage(txt);
+object Utils_Class {
+    public var mProgress: ProgressDialog? = null
+    @JvmStatic
+    fun mProgress(context: Context?, txt: String?, aBoolean: Boolean?): ProgressDialog? {
+        mProgress = ProgressDialog(context)
+        mProgress!!.setMessage(txt)
         //mProgress.setCancelable(aBoolean);
-        return mProgress;
+        return mProgress
     }
 
-    public static void hideKeyboardFrom(Context context, View view) {
-        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    fun hideKeyboardFrom(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    public static void date_put(Context context, String str, int val) {
-        Calendar calendar = Calendar.getInstance();
-        long next_hour = calendar.getTimeInMillis() + val * DateUtils.DAY_IN_MILLIS;
-
-        SimpleDateFormat sdf1 = new SimpleDateFormat("dd/M/yyyy");
-        Date results = new Date(next_hour);
-        String formatted = sdf1.format(results);
-
-        StringTokenizer st2 = new StringTokenizer(formatted, "/");
-        int rep_day = Integer.parseInt(st2.nextToken());
-        int rep_month = Integer.parseInt(st2.nextToken());
-        int rep_year = Integer.parseInt(st2.nextToken());
-
-        rep_month = rep_month - 1;
-
-        String strdate = rep_day + "/" + rep_month + "/" + rep_year;
-
-        SharedPreference sharedPreference = new SharedPreference();
-        sharedPreference.putString(context, str, strdate);
+    fun date_put(context: Context?, str: String?, `val`: Int) {
+        val calendar = Calendar.getInstance()
+        val next_hour = calendar.timeInMillis + `val` * DateUtils.DAY_IN_MILLIS
+        val sdf1 = SimpleDateFormat("dd/M/yyyy")
+        val results = Date(next_hour)
+        val formatted = sdf1.format(results)
+        val st2 = StringTokenizer(formatted, "/")
+        val rep_day = st2.nextToken().toInt()
+        var rep_month = st2.nextToken().toInt()
+        val rep_year = st2.nextToken().toInt()
+        rep_month = rep_month - 1
+        val strdate = "$rep_day/$rep_month/$rep_year"
+        val sharedPreference = SharedPreference()
+        sharedPreference.putString(context!!, str!!, strdate)
     }
 
-    public static int versioncode_get(Context context) {
-        PackageInfo pInfo = null;
+    fun versioncode_get(context: Context): Int {
+        var pInfo: PackageInfo? = null
         try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
+            pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.printStackTrace()
         }
-        return pInfo.versionCode;
+        return pInfo!!.versionCode
     }
 
-    public static String versionname_get(Context context) {
-        PackageInfo pInfo = null;
+    fun versionname_get(context: Context): String {
+        var pInfo: PackageInfo? = null
         try {
-            pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
+            pInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            e.printStackTrace()
         }
-        return pInfo.versionName;
+        return pInfo!!.versionName
     }
 
-    public static void toast_normal(Context context, String str) {
-        Toast.makeText(context, "" + str, Toast.LENGTH_SHORT).show();
+    @JvmStatic
+    fun toast_normal(context: Context?, str: String) {
+        Toast.makeText(context, "" + str, Toast.LENGTH_SHORT).show()
     }
 
-    public static void toast_center(Context context, String str) {
-        Toast toast = Toast.makeText(context, "" + str, Toast.LENGTH_SHORT);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+    @JvmStatic
+    fun toast_center(context: Context?, str: String) {
+        val toast = Toast.makeText(context, "" + str, Toast.LENGTH_SHORT)
+        toast.setGravity(Gravity.CENTER, 0, 0)
+        toast.show()
     }
 
-    public static String pad(String str) {
-        if (str.length() == 1) {
-            str = "0" + str;
+    fun pad(str: String): String {
+        var str = str
+        if (str.length == 1) {
+            str = "0$str"
         }
-        return str;
+        return str
     }
 
-    public static String getDeviceName() {
-        String manufacturer = Build.MANUFACTURER;
-        String model = Build.MODEL;
-        String Brand = Build.BRAND;
-        String Product = Build.PRODUCT;
-        return manufacturer + "-" + model + "-" + Brand + "-" + Product;
+    val deviceName: String
+        get() {
+            val manufacturer = Build.MANUFACTURER
+            val model = Build.MODEL
+            val Brand = Build.BRAND
+            val Product = Build.PRODUCT
+            return "$manufacturer-$model-$Brand-$Product"
+        }
+
+    @JvmStatic
+    fun isNetworkAvailable(context: Context): Boolean {
+        val connec = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connec.activeNetworkInfo
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected
     }
 
-    public static boolean isNetworkAvailable(Context context) {
-        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connec.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-
-    public static String android_id(Context context) {
-        return android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
+    @JvmStatic
+    fun android_id(context: Context): String {
+        return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }
-
-
-

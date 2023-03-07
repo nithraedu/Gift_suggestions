@@ -1,74 +1,30 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class SendOtppojo {
+class SendOtppojo {
     @SerializedName("id")
     @Expose
-    public String id;
+    var id: String? = null
+
     @SerializedName("name")
     @Expose
-    public String name;
+    var name: String? = null
+
     @SerializedName("gmail")
     @Expose
-    public String gmail;
+    var gmail: String? = null
+
     @SerializedName("otp")
     @Expose
-    public String otp;
+    var otp: String? = null
+
     @SerializedName("status")
     @Expose
-    public String status;
-
-    public String getUserStatus() {
-        return userStatus;
-    }
-
-    public void setUserStatus(String userStatus) {
-        this.userStatus = userStatus;
-    }
+    var status: String? = null
 
     @SerializedName("user_status")
     @Expose
-    public String userStatus;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getGmail() {
-        return gmail;
-    }
-
-    public void setGmail(String gmail) {
-        this.gmail = gmail;
-    }
-
-    public String getOtp() {
-        return otp;
-    }
-
-    public void setOtp(String otp) {
-        this.otp = otp;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    var userStatus: String? = null
 }

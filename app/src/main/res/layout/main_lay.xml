@@ -145,11 +145,28 @@
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tv_hinds"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:gravity="center"
+            android:textColor="@color/app_color"
+            android:textStyle="italic"
+            android:text="Please connect to your internet \n after swipe down for Refresh"
+            android:textSize="20dp" />
 
         <LinearLayout
+            android:id="@+id/full_lay"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -198,6 +215,9 @@
             android:padding="5dp" />
 
     </LinearLayout>
+
         </LinearLayout>
+
+        </RelativeLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 </LinearLayout>

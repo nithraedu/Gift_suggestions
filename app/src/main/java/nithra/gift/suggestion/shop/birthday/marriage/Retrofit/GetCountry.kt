@@ -1,95 +1,38 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class GetCountry {
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getIso() {
-        return iso;
-    }
-
-    public void setIso(String iso) {
-        this.iso = iso;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getNicename() {
-        return nicename;
-    }
-
-    public void setNicename(String nicename) {
-        this.nicename = nicename;
-    }
-
-    public String getIso3() {
-        return iso3;
-    }
-
-    public void setIso3(String iso3) {
-        this.iso3 = iso3;
-    }
-
-    public String getNumcode() {
-        return numcode;
-    }
-
-    public void setNumcode(String numcode) {
-        this.numcode = numcode;
-    }
-
-    public String getPhonecode() {
-        return phonecode;
-    }
-
-    public void setPhonecode(String phonecode) {
-        this.phonecode = phonecode;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
+class GetCountry {
     @SerializedName("id")
     @Expose
-    public String id;
+    var id: String? = null
+
     @SerializedName("iso")
     @Expose
-    public String iso;
+    var iso: String? = null
+
     @SerializedName("name")
     @Expose
-    public String name;
+    var name: String? = null
+
     @SerializedName("nicename")
     @Expose
-    public String nicename;
+    var nicename: String? = null
+
     @SerializedName("iso3")
     @Expose
-    public String iso3;
+    var iso3: String? = null
+
     @SerializedName("numcode")
     @Expose
-    public String numcode;
+    var numcode: String? = null
+
     @SerializedName("phonecode")
     @Expose
-    public String phonecode;
+    var phonecode: String? = null
+
     @SerializedName("status")
     @Expose
-    public String status;
+    var status: String? = null
 }

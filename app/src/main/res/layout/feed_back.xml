@@ -2,15 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="#91000000"
+    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#ffffff"
         android:layout_gravity="center"
+        android:background="@color/white"
         android:orientation="vertical">
 
         <TextView
@@ -18,61 +18,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="10dp"
-            android:background="#016273"
+            android:background="@color/app_color"
             android:gravity="center"
-            android:paddingBottom="5dp"
-            android:paddingTop="5dp"
+            android:padding="15dp"
             android:text="@string/feedback"
-            android:textColor="#ffff"
+            android:textColor="@color/white"
             android:textSize="16dp"
             android:textStyle="bold"
             android:typeface="serif" />
 
-        <EditText
-            android:id="@+id/edit_email"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/dfg"
             android:layout_below="@+id/rep_heading"
-            android:layout_margin="10dp"
-            android:background="@drawable/modern_list_button"
-            android:gravity="left|top"
-            android:hint="Please write your feedback"
-            android:textColorHint="#027c25"
-            android:inputType="textEmailAddress"
-            android:minLines="6"
-            android:padding="5dp"
-            android:textColor="#000"
-            android:textSize="18dp">
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
-        </EditText>
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_below="@+id/rep_heading"
-            android:layout_margin="10dp"
-            android:background="@drawable/modern_list_button"
-            android:gravity="left|top"
-            android:hint="Please write your feedback"
-            android:textColorHint="#027c25"
-            android:inputType="textCapSentences"
-            android:minLines="6"
-            android:padding="5dp"
-            android:textColor="#000"
-            android:textSize="18dp">
+            <EditText
+                android:id="@+id/edit_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="@color/black"
+                android:hint="Email"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textCursorDrawable="@null">
 
-        </EditText>
+            </EditText>
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="15dp"
+                android:backgroundTint="@color/black"
+                android:hint="Type Your Message"
+                android:inputType="textMultiLine"
+                android:textColor="@color/black"
+                android:textColorHint="@color/black"
+                android:textCursorDrawable="@null">
+
+            </EditText>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/policy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             android:padding="10dp"
             android:text="@string/privacy"
-            android:textColor="#000000"
-            android:gravity="center"
-            android:textStyle="bold"
-            android:textSize="17dp"/>
+            android:textColor="@color/p_p"
+            android:textSize="17dp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/btnSend"
@@ -80,12 +82,12 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/editText1"
             android:layout_centerInParent="true"
-            android:layout_marginBottom="10dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/quiz_button2"
             android:clickable="true"
-            android:padding="10dp"
+            android:padding="15dp"
             android:text="  Submit  "
             android:textColor="#fff"
             android:textSize="16dp" />

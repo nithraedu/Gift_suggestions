@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="nithra.gift.suggestion.shop.birthday.marriage">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -30,7 +29,7 @@
         tools:targetApi="31">
         <activity
             android:name=".SplashScreen"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -42,6 +41,9 @@
             android:exported="false" />
         <activity
             android:name=".PrivacyPolicy"
+            android:exported="false" />
+        <activity
+            android:name=".Fav_class"
             android:exported="false" />
         <activity
             android:name=".ImageSlide"
@@ -63,9 +65,6 @@
             android:exported="false" />
         <activity
             android:name=".ProductEdit"
-            android:exported="false" />
-        <activity
-            android:name=".MyProduct"
             android:exported="false" />
         <activity
             android:name=".ActivitySecond"
@@ -93,14 +92,6 @@
             android:windowSoftInputMode="adjustPan">
 
         </activity>
-        <activity
-            android:name=".crop_image.CropImageActivity"
-            android:theme="@style/corppp" />
-        <activity
-            android:name=".crop_image.CropImageActivity1"
-            android:theme="@style/corppp" />
-        <activity android:name=".Fav_class"/>
-
 
         <activity
             android:name=".imagepicker.ImagePickerActivity"
@@ -111,6 +102,9 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity android:name=".Notification.NotificationView" />
+        <activity android:name=".Notification.ST_Activity" />
 
         <provider
             android:name="nithra.gift.suggestion.shop.birthday.marriage.imagepicker.ImagePickerFileProvider"
@@ -125,15 +119,15 @@
         </provider>
 
 
-      <!--  <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths_new" />
-        </provider>-->
+        <!--  <provider
+              android:name="androidx.core.content.FileProvider"
+              android:authorities="${applicationId}"
+              android:exported="false"
+              android:grantUriPermissions="true">
+              <meta-data
+                  android:name="android.support.FILE_PROVIDER_PATHS"
+                  android:resource="@xml/provider_paths_new" />
+          </provider>-->
     </application>
 
 </manifest>

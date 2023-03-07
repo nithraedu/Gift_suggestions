@@ -1,19 +1,14 @@
-package nithra.gift.suggestion.shop.birthday.marriage;
+package nithra.gift.suggestion.shop.birthday.marriage
 
-import androidx.appcompat.app.AppCompatActivity;
+import android.os.Bundle
+import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 
-import android.os.Bundle;
-import android.os.Handler;
-
-public class ExitScreen extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_exit_screen);
-        Handler handel = new Handler();
-        handel.postDelayed(() -> {
-            finish();
-        }, 1500);
+class ExitScreen : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_exit_screen)
+        val handel = Handler()
+        handel.postDelayed({ finish() }, 1500)
     }
 }

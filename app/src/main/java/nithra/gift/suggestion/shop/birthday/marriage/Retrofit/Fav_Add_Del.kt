@@ -1,40 +1,18 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class Fav_Add_Del {
+class Fav_Add_Del {
     @SerializedName("status")
     @Expose
-    public String status;
+    var status: String? = null
+
     @SerializedName("fv_action")
     @Expose
-    public Integer fvAction;
+    var fvAction: Int? = null
+
     @SerializedName("msg")
     @Expose
-    public String msg;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getFvAction() {
-        return fvAction;
-    }
-
-    public void setFvAction(Integer fvAction) {
-        this.fvAction = fvAction;
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
+    var msg: String? = null
 }

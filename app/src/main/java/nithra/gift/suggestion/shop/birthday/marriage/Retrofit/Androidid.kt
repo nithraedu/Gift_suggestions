@@ -1,31 +1,14 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class Androidid {
-
+class Androidid {
     @SerializedName("status")
     @Expose
-    public String status;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
+    var status: String? = null
 
     @SerializedName("user_id")
     @Expose
-    public String userId;
+    var userId: String? = null
 }

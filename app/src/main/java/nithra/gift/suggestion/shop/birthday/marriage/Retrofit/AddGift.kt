@@ -1,139 +1,54 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class AddGift {
+class AddGift {
     @SerializedName("id")
     @Expose
-    public String id;
+    var id: String? = null
+
     @SerializedName("user_id")
     @Expose
-    public String userId;
+    var userId: String? = null
+
     @SerializedName("gift_category")
     @Expose
-    public String giftCategory;
+    var giftCategory: String? = null
+
     @SerializedName("gift_for")
     @Expose
-    public String giftFor;
+    var giftFor: String? = null
+
     @SerializedName("gift_name")
     @Expose
-    public String giftName;
+    var giftName: String? = null
+
     @SerializedName("gift_image")
     @Expose
-    public String giftImage;
+    var giftImage: String? = null
+
     @SerializedName("gift_amount")
     @Expose
-    public String giftAmount;
+    var giftAmount: String? = null
+
     @SerializedName("discount")
     @Expose
-    public String discount;
+    var discount: String? = null
+
     @SerializedName("total_amount")
     @Expose
-    public String totalAmount;
+    var totalAmount: String? = null
+
     @SerializedName("gift_description")
     @Expose
-    public String giftDescription;
+    var giftDescription: String? = null
+
     @SerializedName("gift_status")
     @Expose
-    public String giftStatus;
+    var giftStatus: String? = null
+
     @SerializedName("status")
     @Expose
-    public String status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getGiftCategory() {
-        return giftCategory;
-    }
-
-    public void setGiftCategory(String giftCategory) {
-        this.giftCategory = giftCategory;
-    }
-
-    public String getGiftFor() {
-        return giftFor;
-    }
-
-    public void setGiftFor(String giftFor) {
-        this.giftFor = giftFor;
-    }
-
-    public String getGiftName() {
-        return giftName;
-    }
-
-    public void setGiftName(String giftName) {
-        this.giftName = giftName;
-    }
-
-    public String getGiftImage() {
-        return giftImage;
-    }
-
-    public void setGiftImage(String giftImage) {
-        this.giftImage = giftImage;
-    }
-
-    public String getGiftAmount() {
-        return giftAmount;
-    }
-
-    public void setGiftAmount(String giftAmount) {
-        this.giftAmount = giftAmount;
-    }
-
-    public String getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
-
-    public String getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public String getGiftDescription() {
-        return giftDescription;
-    }
-
-    public void setGiftDescription(String giftDescription) {
-        this.giftDescription = giftDescription;
-    }
-
-    public String getGiftStatus() {
-        return giftStatus;
-    }
-
-    public void setGiftStatus(String giftStatus) {
-        this.giftStatus = giftStatus;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    var status: String? = null
 }

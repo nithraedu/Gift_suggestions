@@ -1,427 +1,320 @@
-package nithra.gift.suggestion.shop.birthday.marriage;
+package nithra.gift.suggestion.shop.birthday.marriage
 
-import android.app.Dialog;
-import android.content.Intent;
-import android.graphics.Paint;
-import android.net.Uri;
-import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.URLUtil;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.app.Dialog
+import android.content.Intent
+import android.graphics.Paint
+import android.net.Uri
+import android.os.Bundle
+import android.view.View
+import android.view.Window
+import android.view.WindowManager
+import android.webkit.URLUtil
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.cardview.widget.CardView
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.gson.Gson
+import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Sellerproducts
+import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Sellerproducts;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_Add_Del;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_view;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Gift_Cat;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI;
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class Full_Details extends AppCompatActivity {
-    ArrayList<Gift_Cat> gift_show;
-    Intent intent;
-    Bundle extra;
-    String id_gift;
-    ImageView  company_logo, IVPreviewImage, fav;
-    LinearLayout back;
-    TextView giftname, giftprize, offerprize, description, detail_shop_name, detail_add, owner_name, website, email, head;
-    LinearLayout phone;
-    CardView card_mail, card_web;
-    SharedPreference sharedPreference = new SharedPreference();
-    ArrayList<Fav_view> fav_show;
-    SwipeRefreshLayout pullToRefresh;
-    int pos_id;
-    TextView btShowmore,btShowmore1;
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.buyer_view);
-        gift_show = new ArrayList<Gift_Cat>();
-        back = findViewById(R.id.back);
-        giftname = findViewById(R.id.giftname);
-        giftname = findViewById(R.id.giftname);
-        giftprize = findViewById(R.id.giftprize);
-        offerprize = findViewById(R.id.offerprize);
-        description = findViewById(R.id.description);
-        detail_shop_name = findViewById(R.id.detail_shop_name);
-        detail_add = findViewById(R.id.detail_add);
-        owner_name = findViewById(R.id.owner_name);
-        company_logo = findViewById(R.id.company_logo);
-        IVPreviewImage = findViewById(R.id.IVPreviewImage);
-        phone = findViewById(R.id.phone);
-        website = findViewById(R.id.website);
-        email = findViewById(R.id.email);
-        card_mail = findViewById(R.id.card_mail);
-        card_web = findViewById(R.id.card_web);
-        head = findViewById(R.id.head);
-        fav = findViewById(R.id.fav);
-        btShowmore = findViewById(R.id.btShowmore);
-        btShowmore1 = findViewById(R.id.btShowmore1);
-        fav_show = new ArrayList<Fav_view>();
-        // pullToRefresh = findViewById(R.id.pullToRefresh);
-
-        intent = getIntent();
-        extra = intent.getExtras();
-        id_gift = extra.getString("full_view");
-        pos_id = extra.getInt("position");
-
-        giftprize.setPaintFlags(giftprize.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-
-        Utils_Class.mProgress(Full_Details.this, "Loading please wait...", false).show();
-
-        btShowmore.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (btShowmore.getText().toString().equalsIgnoreCase("Show more...")) {
-                    description.setMaxLines(Integer.MAX_VALUE);//your TextView
-                    btShowmore.setText("Show less");
-                } else {
-                    description.setMaxLines(3);//your TextView
-                    btShowmore.setText("Show more...");
-                }
+class Full_Details : AppCompatActivity() {
+    var gift_show: ArrayList<Gift_Cat>? = null
+    var intent1: Intent? = null
+    var extra: Bundle? = null
+    var id_gift: String? = null
+    var IVPreviewImage: ImageView? = null
+    var fav: ImageView? = null
+    var back: LinearLayout? = null
+    var giftname: TextView? = null
+    var giftprize: TextView? = null
+    var offerprize: TextView? = null
+    var description: TextView? = null
+    var detail_shop_name: TextView? = null
+    var detail_add: TextView? = null
+    var head: TextView? = null
+    var phone: LinearLayout? = null
+    var card_mail: CardView? = null
+    var card_web: CardView? = null
+    var sharedPreference = SharedPreference()
+    var fav_show: ArrayList<Fav_view>? = null
+    var pullToRefresh: SwipeRefreshLayout? = null
+    var pos_id = 0
+    var btShowmore: TextView? = null
+    var btShowmore1: TextView? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        setContentView(R.layout.buyer_view)
+        gift_show = ArrayList()
+        back = findViewById(R.id.back)
+        giftname = findViewById(R.id.giftname)
+        giftname = findViewById(R.id.giftname)
+        giftprize = findViewById(R.id.giftprize)
+        offerprize = findViewById(R.id.offerprize)
+        description = findViewById(R.id.description)
+        detail_shop_name = findViewById(R.id.detail_shop_name)
+        detail_add = findViewById(R.id.detail_add)
+        IVPreviewImage = findViewById(R.id.IVPreviewImage)
+        phone = findViewById(R.id.phone)
+        card_mail = findViewById(R.id.card_mail)
+        card_web = findViewById(R.id.card_web)
+        head = findViewById(R.id.head)
+        fav = findViewById(R.id.fav)
+        btShowmore = findViewById(R.id.btShowmore)
+        btShowmore1 = findViewById(R.id.btShowmore1)
+        fav_show = ArrayList()
+        intent1 = getIntent()
+        extra = intent1!!.getExtras()
+        id_gift = extra!!.getString("full_view")
+        pos_id = extra!!.getInt("position")
+        giftprize!!.setPaintFlags(giftprize!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+        Utils_Class.mProgress(this@Full_Details, "Loading please wait...", false)!!.show()
+        btShowmore!!.setOnClickListener(View.OnClickListener {
+            if (btShowmore!!.getText().toString().equals("Show more...", ignoreCase = true)) {
+                description!!.setMaxLines(Int.MAX_VALUE)
+                btShowmore!!.setText("Show less")
+            } else {
+                description!!.setMaxLines(3)
+                btShowmore!!.setText("Show more...")
             }
-        });
-
-        btShowmore1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (btShowmore1.getText().toString().equalsIgnoreCase("Show more...")) {
-                    detail_add.setMaxLines(Integer.MAX_VALUE);//your TextView
-                    btShowmore1.setText("Show less");
-                } else {
-                    detail_add.setMaxLines(3);//your TextView
-                    btShowmore1.setText("Show more...");
-                }
+        })
+        btShowmore1!!.setOnClickListener(View.OnClickListener {
+            if (btShowmore1!!.getText().toString().equals("Show more...", ignoreCase = true)) {
+                detail_add!!.setMaxLines(Int.MAX_VALUE)
+                btShowmore1!!.setText("Show less")
+            } else {
+                detail_add!!.setMaxLines(3)
+                btShowmore1!!.setText("Show more...")
             }
-        });
-
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
+        })
+        back!!.setOnClickListener(View.OnClickListener { finish() })
+        get_cat()
+        fav!!.setOnClickListener(View.OnClickListener { fav1() })
+        phone!!.setOnClickListener(View.OnClickListener {
+            val dialog: Dialog
+            dialog = Dialog(
+                this@Full_Details,
+                android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
+            )
+            dialog.setContentView(R.layout.call_dialog)
+            dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+            dialog.setCanceledOnTouchOutside(false)
+            val call1: TextView
+            val call2: TextView
+            val lay1: LinearLayout
+            val lay2: LinearLayout
+            call1 = dialog.findViewById(R.id.call1)
+            call2 = dialog.findViewById(R.id.call2)
+            lay1 = dialog.findViewById(R.id.lay1)
+            lay2 = dialog.findViewById(R.id.lay2)
+            dialog.show()
+            call1.text = gift_show!![0].sellerMobile!!.trim { it <= ' ' }
+            call2.text = gift_show!![0].sellerMobile2!!.trim { it <= ' ' }
+            val phone = gift_show!![0].sellerMobile!!.trim { it <= ' ' }
+            val phone1 = gift_show!![0].sellerMobile2!!.trim { it <= ' ' }
+            if (gift_show!![0].sellerMobile2!!.isEmpty()) {
+                dialog.dismiss()
+                //                    lay2.setVisibility(View.GONE);
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
+                startActivity(intent)
             }
-        });
-
-        get_cat();
-
-
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fav1();
+            lay1.setOnClickListener {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
+                startActivity(intent)
+                dialog.dismiss()
             }
-        });
+            lay2.setOnClickListener {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone1, null))
+                startActivity(intent)
+                dialog.dismiss()
+            }
+        })
+        IVPreviewImage!!.setOnClickListener(View.OnClickListener {
+            val currentString = gift_show!![0].giftImage
+            val separated =
+                currentString!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+            val i = Intent(applicationContext, ImageSlide::class.java)
+            i.putExtra("pos", currentString)
+            startActivity(i)
 
-        phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Dialog dialog;
-                dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth);
-                dialog.setContentView(R.layout.call_dialog);
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(false);
-                TextView call1,call2;
-                LinearLayout lay1,lay2;
-                call1 = dialog.findViewById(R.id.call1);
-                call2 = dialog.findViewById(R.id.call2);
-                lay1=dialog.findViewById(R.id.lay1);
-                lay2=dialog.findViewById(R.id.lay2);
-                dialog.show();
-                call1.setText(gift_show.get(0).getSellerMobile().trim());
-                call2.setText(gift_show.get(0).getSellerMobile2().trim());
-                String phone = gift_show.get(0).getSellerMobile().trim();
-                String phone1 = gift_show.get(0).getSellerMobile2().trim();
-                if (gift_show.get(0).getSellerMobile2().isEmpty()){
-                    dialog.dismiss();
-//                    lay2.setVisibility(View.GONE);
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                    startActivity(intent);
-                }
-
-                lay1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                        startActivity(intent);
-                        dialog.dismiss();
+        })
+        card_mail!!.setOnClickListener(View.OnClickListener {
+            if (gift_show!![0].shopEmail != null && !gift_show!![0].shopEmail
+                !!.trim { it <= ' ' }
+                    .isEmpty()
+            ) {
+                if (Utils_Class.isNetworkAvailable(this@Full_Details)) {
+                    val intent = Intent(Intent.ACTION_SENDTO)
+                    intent.data = Uri.parse("mailto:") // only email apps should handle this
+                    intent.putExtra(
+                        Intent.EXTRA_EMAIL,
+                        arrayOf(gift_show!![0].shopEmail!!.trim { it <= ' ' })
+                    )
+                    intent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions")
+                    intent.putExtra(Intent.EXTRA_TEXT, "Body Here")
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
                     }
-                });
-
-                lay2.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone1, null));
-                        startActivity(intent);
-                        dialog.dismiss();
-                    }
-                });
-              /*  if (phone.equals("")) {
-                    Utils_Class.toast_center(Category_Full_View.this, "Mobile number not available");
                 } else {
-                    Intent intent = new Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null));
-                    startActivity(intent);
-                }*/
+                    Utils_Class.toast_center(this@Full_Details, "Check Your Internet Connection...")
+                }
+            } else {
+                Utils_Class.toast_center(this@Full_Details, "Email not available...")
             }
-        });
-
-
-
-        IVPreviewImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String currentString = gift_show.get(0).getGiftImage();
-                String[] separated = currentString.split(",");
-                Intent i = new Intent(getApplicationContext(), ImageSlide.class);
-                i.putExtra("pos", currentString);
-                startActivity(i);
-
-               /* ImageView img_view;
-                Dialog dialog = new Dialog(Full_Details.this, android.R.style.Theme_DeviceDefault);
-                dialog.setContentView(R.layout.image_view);
-                //dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                dialog.setCanceledOnTouchOutside(true);
-                img_view = dialog.findViewById(R.id.img_view);
-                Glide.with(getApplicationContext()).load(separated[0])
-                        //.error(R.drawable.gift_1)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(img_view);
-                dialog.show();*/
-            }
-        });
-
-        card_mail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (gift_show.get(0).getShopEmail() != null && !gift_show.get(0).getShopEmail().trim().isEmpty()) {
-                    if (Utils_Class.isNetworkAvailable(Full_Details.this)) {
-                        Intent intent = new Intent(Intent.ACTION_SENDTO);
-                        intent.setData(Uri.parse("mailto:")); // only email apps should handle this
-                        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{gift_show.get(0).getShopEmail().trim()});
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions");
-                        intent.putExtra(Intent.EXTRA_TEXT, "Body Here");
-                        if (intent.resolveActivity(getPackageManager()) != null) {
-                            startActivity(intent);
-                        }
+        })
+        card_web!!.setOnClickListener(View.OnClickListener {
+            if (gift_show!![0].shopWebsite != null && !gift_show!![0].shopWebsite
+                !!.trim { it <= ' ' }
+                    .isEmpty()
+            ) {
+                if (Utils_Class.isNetworkAvailable(this@Full_Details)) {
+                    val url = gift_show!![0].shopWebsite!!.trim { it <= ' ' }
+                    if (URLUtil.isValidUrl(url)) {
+                        println("urlprint$url")
+                        val builder = CustomTabsIntent.Builder()
+                        val customTabsIntent = builder.build()
+                        customTabsIntent.launchUrl(this@Full_Details, Uri.parse(url))
                     } else {
-                        Utils_Class.toast_center(Full_Details.this, "Check Your Internet Connection...");
+                        Utils_Class.toast_center(this@Full_Details, "URL not valid...")
                     }
                 } else {
-                    Utils_Class.toast_center(Full_Details.this, "Email not available...");
+                    Utils_Class.toast_center(this@Full_Details, "Check Your Internet Connection...")
                 }
+            } else {
+                Utils_Class.toast_center(this@Full_Details, "Website not available...")
             }
-        });
-
-        card_web.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (gift_show.get(0).getShopWebsite() != null && !gift_show.get(0).getShopWebsite().trim().isEmpty()) {
-                    if (Utils_Class.isNetworkAvailable(Full_Details.this)) {
-                        String url = gift_show.get(0).getShopWebsite().trim();
-                        if (URLUtil.isValidUrl(url)) {
-                            System.out.println("urlprint" + url);
-                            CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
-                            CustomTabsIntent customTabsIntent = builder.build();
-                            customTabsIntent.launchUrl(Full_Details.this, Uri.parse(url));
-                        }else {
-                            Utils_Class.toast_center(Full_Details.this, "URL not valid...");
-
-                        }
-                    } else {
-                        Utils_Class.toast_center(Full_Details.this, "Check Your Internet Connection...");
-                    }
-                } else {
-                    Utils_Class.toast_center(Full_Details.this, "Website not available...");
-                }
-            }
-        });
-       /* pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                get_cat();
-                pullToRefresh.setRefreshing(false);
-            }
-        });*/
-
+        })
     }
 
-
-    public void get_cat() {
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "get_cat");
-        map.put("id", id_gift);
-        map.put("user_id", sharedPreference.getString(getApplicationContext(), "android_userid"));
-        System.out.println("printing==" + map);
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<Gift_Cat>> call = retrofitAPI.gift_cat(map);
-        call.enqueue(new Callback<ArrayList<Gift_Cat>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Gift_Cat>> call, Response<ArrayList<Gift_Cat>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    if (response.body().get(0).getStatus().equals("Success")) {
-                        gift_show.clear();
-                        gift_show.addAll(response.body());
-                        String currentString = gift_show.get(0).getGiftImage();
-                        String[] separated = currentString.split(",");
-
-                        Glide.with(getApplicationContext()).load(separated[0])
-                                .error(R.drawable.ic_gift_default_img)
-                                .placeholder(R.drawable.ic_gift_default_img)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(IVPreviewImage);
-
-
-                        giftname.setText(gift_show.get(0).getGiftName());
-                        giftprize.setText("\u20B9 " + gift_show.get(0).getTotalAmount());
-                        offerprize.setText("\u20B9 " + gift_show.get(0).getGiftAmount());
-                        description.setText(gift_show.get(0).getGiftDescription());
-                        detail_shop_name.setText(gift_show.get(0).getShopName());
-                        //detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + ", " + gift_show.get(0).getDistrict() + "," + gift_show.get(0).getState() + ", " + gift_show.get(0).getCountry() + " - " + gift_show.get(0).getPincode());
-                        detail_add.setText(gift_show.get(0).getAddress() + ", " + gift_show.get(0).getCity() + " - " + gift_show.get(0).getPincode() + "\n" + gift_show.get(0).getState() + "" + gift_show.get(0).getCountry());
-                       /* Glide.with(getApplicationContext()).load(gift_show.get(0).getLogo())
-                                //.error(R.drawable.gift_1)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .into(company_logo);*/
-                        //owner_name.setText(gift_show.get(0).getName());
-                        /*website.setText(gift_show.get(0).getShopWebsite());
-                        email.setText(gift_show.get(0).getShopEmail());*/
-                        head.setText(gift_show.get(0).getDiscount() + "% offer");
-
-                        System.out.println("gift_show== " + gift_show.size());
-
-                        /*if (gift_show.get(0).getShopWebsite().equals("")) {
-                            card_web.setVisibility(View.GONE);
-                        }*/
-
-                        if (gift_show.get(0).getFav() == 1) {
-                            fav.setBackgroundResource(R.drawable.favorite_red);
+    fun get_cat() {
+        val map = HashMap<String, String?>()
+        map["action"] = "get_cat"
+        map["id"] = id_gift
+        map["user_id"] = sharedPreference.getString(applicationContext, "android_userid")
+        println("printing==$map")
+        val retrofitAPI = RetrofitApiClient.retrofit!!.create(
+            RetrofitAPI::class.java
+        )
+        val call = retrofitAPI.gift_cat(map)
+        call.enqueue(object : Callback<ArrayList<Gift_Cat>> {
+            override fun onResponse(
+                call: Call<ArrayList<Gift_Cat>>,
+                response: Response<ArrayList<Gift_Cat>>
+            ) {
+                if (response.isSuccessful) {
+                    val result = Gson().toJson(response.body())
+                    println("======response result:$result")
+                    if (response.body()!![0].status == "Success") {
+                        gift_show!!.clear()
+                        gift_show!!.addAll(response.body()!!)
+                        val currentString = gift_show!![0].giftImage
+                        val separated =
+                            currentString!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }
+                                .toTypedArray()
+                        Glide.with(applicationContext).load(separated[0])
+                            .error(R.drawable.ic_gift_default_img)
+                            .placeholder(R.drawable.ic_gift_default_img)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(IVPreviewImage!!)
+                        giftname!!.text = gift_show!![0].giftName
+                        giftprize!!.text = "\u20B9 " + gift_show!![0].totalAmount
+                        offerprize!!.text = "\u20B9 " + gift_show!![0].giftAmount
+                        description!!.text = gift_show!![0].giftDescription
+                        detail_shop_name!!.text = gift_show!![0].shopName
+                        detail_add!!.text =
+                            """${gift_show!![0].address}, ${gift_show!![0].city} - ${gift_show!![0].pincode}
+${gift_show!![0].state}${gift_show!![0].country}"""
+                        head!!.text =
+                            gift_show!![0].discount + "% offer"
+                        println("gift_show== " + gift_show!!.size)
+                        if (gift_show!![0].fav == 1) {
+                            fav!!.setBackgroundResource(R.drawable.favorite_red)
                         } else {
-                            fav.setBackgroundResource(R.drawable.favorite_grey);
+                            fav!!.setBackgroundResource(R.drawable.favorite_grey)
                         }
-
-                        if (description.getLineCount() > 3) {
-                            btShowmore.setVisibility(View.VISIBLE);
+                        if (description!!.lineCount > 3) {
+                            btShowmore!!.visibility = View.VISIBLE
                         } else {
-                            btShowmore.setVisibility(View.GONE);
+                            btShowmore!!.visibility = View.GONE
                         }
-
-                        if (detail_add.getLineCount() > 3) {
-                            btShowmore1.setVisibility(View.VISIBLE);
+                        if (detail_add!!.lineCount > 3) {
+                            btShowmore1!!.visibility = View.VISIBLE
                         } else {
-                            btShowmore1.setVisibility(View.GONE);
+                            btShowmore1!!.visibility = View.GONE
                         }
                     }
-
-                    Utils_Class.mProgress.dismiss();
-
+                    Utils_Class.mProgress!!.dismiss()
                 }
-                System.out.println("======response :" + response);
+                println("======response :$response")
             }
 
-            @Override
-            public void onFailure(Call<ArrayList<Gift_Cat>> call, Throwable t) {
-                System.out.println("======response t:" + t);
+            override fun onFailure(call: Call<ArrayList<Gift_Cat>>, t: Throwable) {
+                println("======response t:$t")
             }
-        });
+        })
     }
 
-
-    public void fav1() {
-        // fav_show.clear();
-        HashMap<String, String> map = new HashMap<>();
-        map.put("action", "favourite");
-        map.put("gift_id", id_gift);
-        map.put("user_id", sharedPreference.getString(Full_Details.this, "android_userid"));
-
-        System.out.println("favroute==" + map);
-        RetrofitAPI retrofitAPI = RetrofitApiClient.getRetrofit().create(RetrofitAPI.class);
-        Call<ArrayList<Fav_Add_Del>> call = retrofitAPI.fav_add_del(map);
-        call.enqueue(new Callback<ArrayList<Fav_Add_Del>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Fav_Add_Del>> call, Response<ArrayList<Fav_Add_Del>> response) {
-                if (response.isSuccessful()) {
-                    String result = new Gson().toJson(response.body());
-                    System.out.println("======response result:" + result);
-                    if (response.body().get(0).getStatus().equals("Success")) {
-                        if (response.body().get(0).getFvAction() == 1) {
-                            gift_show.get(0).setFav(1);
-                            Sellerproducts.gift_show.get(pos_id).setFav(1);
+    fun fav1() {
+        val map = HashMap<String, String?>()
+        map["action"] = "favourite"
+        map["gift_id"] = id_gift
+        map["user_id"] = sharedPreference.getString(this@Full_Details, "android_userid")
+        println("favroute==$map")
+        val retrofitAPI = RetrofitApiClient.retrofit!!.create(
+            RetrofitAPI::class.java
+        )
+        val call = retrofitAPI.fav_add_del(map)
+        call.enqueue(object : Callback<ArrayList<Fav_Add_Del>> {
+            override fun onResponse(
+                call: Call<ArrayList<Fav_Add_Del>>,
+                response: Response<ArrayList<Fav_Add_Del>>
+            ) {
+                if (response.isSuccessful) {
+                    val result = Gson().toJson(response.body())
+                    println("======response result:$result")
+                    if (response.body()!![0].status == "Success") {
+                        if (response.body()!![0].fvAction == 1) {
+                            gift_show!![0].fav = 1
+                            Sellerproducts.gift_show!![pos_id].fav = 1
                             //Favourite.fav_show.get(0).setFav(1);
-                            fav.setBackgroundResource(R.drawable.favorite_red);
-                            Utils_Class.toast_center(Full_Details.this, "Your gift added to favourite...");
+                            fav!!.setBackgroundResource(R.drawable.favorite_red)
+                            Utils_Class.toast_center(
+                                this@Full_Details,
+                                "Your gift added to favourite..."
+                            )
                         } else {
-                            gift_show.get(0).setFav(0);
-                            Sellerproducts.gift_show.get(pos_id).setFav(0);
-                            //Favourite.fav_show.get(0).setFav(0);
-                            fav.setBackgroundResource(R.drawable.favorite_grey);
-                            Utils_Class.toast_center(Full_Details.this, "Your gift removed from favourite...");
+                            gift_show!![0].fav = 0
+                            Sellerproducts.gift_show!![pos_id].fav = 0
+                            fav!!.setBackgroundResource(R.drawable.favorite_grey)
+                            Utils_Class.toast_center(
+                                this@Full_Details,
+                                "Your gift removed from favourite..."
+                            )
                         }
-                        Sellerproducts.adapter.notifyDataSetChanged();
-                        //Favourite.adapter.notifyDataSetChanged();
+                        Sellerproducts.adapter!!.notifyDataSetChanged()
                     }
                 }
-                System.out.println("======response :" + response);
+                println("======response :$response")
             }
 
-            @Override
-            public void onFailure(Call<ArrayList<Fav_Add_Del>> call, Throwable t) {
-                System.out.println("======response t:" + t);
+            override fun onFailure(call: Call<ArrayList<Fav_Add_Del>>, t: Throwable) {
+                println("======response t:$t")
             }
-        });
+        })
     }
-
-    public class Frag_Adapter extends FragmentStateAdapter {
-
-        private ArrayList<Fragment> fragmentList = new ArrayList<>();
-
-        public Frag_Adapter(@NonNull FragmentActivity fragmentActivity) {
-            super(fragmentActivity);
-        }
-
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            return fragmentList.get(position);
-        }
-
-        public void addFragment(Fragment fragment) {
-            fragmentList.add(fragment);
-        }
-
-        @Override
-        public int getItemCount() {
-            return fragmentList.size();
-        }
-    }
-
 }

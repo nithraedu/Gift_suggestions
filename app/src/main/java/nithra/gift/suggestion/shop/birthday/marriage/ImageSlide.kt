@@ -1,172 +1,122 @@
-package nithra.gift.suggestion.shop.birthday.marriage;
+package nithra.gift.suggestion.shop.birthday.marriage
 
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.view.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager2.widget.ViewPager2
+import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.bumptech.glide.Glide
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.bumptech.glide.Glide;
-
-public class ImageSlide extends AppCompatActivity {
-    ViewPager2 viewpager2;
-    Adapter adapter;
-    Intent intent;
-    Bundle extra;
-    String pos_gift,name;
-    LinearLayout swipe;
-    CardView back_arrow, forward_arrow;
-    LinearLayout back;
-    TextView gift_name;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-        setContentView(R.layout.activity_image_slide);
-        viewpager2 = findViewById(R.id.viewpager2);
-        swipe = findViewById(R.id.swipe);
-        back_arrow = findViewById(R.id.back_arrow);
-        forward_arrow = findViewById(R.id.forward_arrow);
-        back = findViewById(R.id.back);
-        gift_name = findViewById(R.id.gift_name);
-        intent = getIntent();
-        extra = intent.getExtras();
-        pos_gift = extra.getString("pos");
-        name = extra.getString("name");
-        String[] separated = pos_gift.split(",");
-
-
-        gift_name.setText(name);
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        forward_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewpager2.setCurrentItem((viewpager2.getCurrentItem() + 1), true);
-            }
-        });
-
-        back_arrow.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                viewpager2.setCurrentItem((viewpager2.getCurrentItem() - 1), true);
-            }
-        });
-        viewpager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+class ImageSlide : AppCompatActivity() {
+    var viewpager2: ViewPager2? = null
+    var adapter: Adapter? = null
+    var intent1: Intent? = null
+    var extra: Bundle? = null
+    var pos_gift: String? = null
+    var name: String? = null
+    var swipe: LinearLayout? = null
+    var back_arrow: CardView? = null
+    var forward_arrow: CardView? = null
+    var back: LinearLayout? = null
+    var gift_name: TextView? = null
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requestWindowFeature(Window.FEATURE_NO_TITLE)
+        this.window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN
+        )
+        setContentView(R.layout.activity_image_slide)
+        viewpager2 = findViewById(R.id.viewpager2)
+        swipe = findViewById(R.id.swipe)
+        back_arrow = findViewById(R.id.back_arrow)
+        forward_arrow = findViewById(R.id.forward_arrow)
+        back = findViewById(R.id.back)
+        gift_name = findViewById(R.id.gift_name)
+        intent1 = getIntent()
+        extra = intent1!!.getExtras()
+        pos_gift = extra!!.getString("pos")
+        name = extra!!.getString("name")
+        val separated =
+            pos_gift!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
+        gift_name!!.setText(name)
+        back!!.setOnClickListener(View.OnClickListener { finish() })
+        forward_arrow!!.setOnClickListener(View.OnClickListener {
+            viewpager2!!.setCurrentItem(
+                viewpager2!!.getCurrentItem() + 1, true
+            )
+        })
+        back_arrow!!.setOnClickListener(View.OnClickListener {
+            viewpager2!!.setCurrentItem(
+                viewpager2!!.getCurrentItem() - 1, true
+            )
+        })
+        viewpager2!!.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+            override fun onPageScrolled(
+                position: Int, positionOffset: Float, positionOffsetPixels: Int
+            ) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
             }
 
-            @Override
-            public void onPageSelected(int position) {
-                super.onPageSelected(position);
-               /* if (separated.length - 1 == position) {
-                    swipe.setVisibility(View.INVISIBLE);
-                } else {
-                    swipe.setVisibility(View.VISIBLE);
-                }*/
-
-               /* if (position == 0) {
-                    back_arrow.setVisibility(View.INVISIBLE);
-                } else if (separated.length - 1== position) {
-                    forward_arrow.setVisibility(View.INVISIBLE);
-                } else {
-                    back_arrow.setVisibility(View.VISIBLE);
-                    forward_arrow.setVisibility(View.VISIBLE);
-                }
-*/
-
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
                 if (position == 0) {
-                    if (separated.length == 1) {
-                        forward_arrow.setVisibility(View.INVISIBLE);
-                        back_arrow.setVisibility(View.INVISIBLE);
+                    if (separated.size == 1) {
+                        forward_arrow!!.setVisibility(View.INVISIBLE)
+                        back_arrow!!.setVisibility(View.INVISIBLE)
                     } else {
-                        back_arrow.setVisibility(View.INVISIBLE);
-                        forward_arrow.setVisibility(View.VISIBLE);
+                        back_arrow!!.setVisibility(View.INVISIBLE)
+                        forward_arrow!!.setVisibility(View.VISIBLE)
                     }
-                } else if ((separated.length - 1) == position) {
-                    forward_arrow.setVisibility(View.INVISIBLE);
-                    back_arrow.setVisibility(View.VISIBLE);
+                } else if (separated.size - 1 == position) {
+                    forward_arrow!!.setVisibility(View.INVISIBLE)
+                    back_arrow!!.setVisibility(View.VISIBLE)
                 } else {
-                    back_arrow.setVisibility(View.VISIBLE);
-                    forward_arrow.setVisibility(View.VISIBLE);
+                    back_arrow!!.setVisibility(View.VISIBLE)
+                    forward_arrow!!.setVisibility(View.VISIBLE)
                 }
             }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                super.onPageScrollStateChanged(state);
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
             }
-        });
-
-        System.out.println("print_url== " + separated[0]);
-        adapter = new Adapter(this, viewpager2, separated);
-        viewpager2.setAdapter(adapter);
+        })
+        println("print_url== " + separated[0])
+        adapter = Adapter(this, viewpager2!!, separated)
+        viewpager2!!.setAdapter(adapter)
     }
 
-    public class Adapter extends RecyclerView.Adapter<Adapter.ViewHolder> {
-        ViewPager2 viewpager;
-        private Context context;
-        String[] image;
-
-        public Adapter(Context context, ViewPager2 viewpager, String[] img) {
-            this.context = context;
-            this.viewpager = viewpager;
-            this.image = img;
+    inner class Adapter(
+        private val context: Context, var viewpager: ViewPager2, var image: Array<String>
+    ) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view = LayoutInflater.from(context).inflate(R.layout.image_view, parent, false)
+            return ViewHolder(view)
         }
 
-        @NonNull
-        @Override
-        public Adapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.image_view, parent, false);
-            return new ViewHolder(view);
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            Glide.with(applicationContext).load(image[position])
+                .error(R.drawable.ic_gift_default_img)
+                .placeholder(R.drawable.ic_gift_default_img) //.diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.img_view)
         }
 
-        @Override
-        public void onBindViewHolder(@NonNull Adapter.ViewHolder holder, int position) {
-
-            Glide.with(getApplicationContext()).load(image[position])
-                    .error(R.drawable.ic_gift_default_img)
-                    .placeholder(R.drawable.ic_gift_default_img)
-                    //.diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.img_view);
+        override fun getItemCount(): Int {
+            return image.size
         }
 
+        inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            var img_view: ImageView
 
-        @Override
-        public int getItemCount() {
-            return image.length;
-        }
-
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            ImageView img_view;
-
-            public ViewHolder(@NonNull View view) {
-                super(view);
-                img_view = view.findViewById(R.id.img_view);
+            init {
+                img_view = view.findViewById(R.id.img_view)
             }
         }
     }
-
-
 }

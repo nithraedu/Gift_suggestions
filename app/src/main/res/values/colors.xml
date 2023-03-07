@@ -15,6 +15,7 @@
     <color name="bottom_bg">#0069ff</color>
     <color name="bottom_icon">#ff3a52</color>
     <color name="cardbg">#f8f8fa</color>
+    <color name="p_p">#0066CC</color>
 
 
     <color name="searchDialogResultColor">@android:color/secondary_text_light</color>

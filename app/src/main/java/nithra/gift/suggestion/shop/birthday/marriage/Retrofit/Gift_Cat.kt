@@ -1,315 +1,118 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class Gift_Cat {
+class Gift_Cat {
     @SerializedName("seller_id")
     @Expose
-    public String sellerId;
+    var sellerId: String? = null
+
     @SerializedName("id")
     @Expose
-    public String id;
+    var id: String? = null
+
     @SerializedName("user_id")
     @Expose
-    public String userId;
+    var userId: String? = null
+
     @SerializedName("name")
     @Expose
-    public String name;
+    var name: String? = null
+
     @SerializedName("shop_name")
     @Expose
-    public String shopName;
+    var shopName: String? = null
+
     @SerializedName("seller_mobile")
     @Expose
-    public String sellerMobile;
+    var sellerMobile: String? = null
+
     @SerializedName("seller_mobile2")
     @Expose
-    public String sellerMobile2;
+    var sellerMobile2: String? = null
+
     @SerializedName("state")
     @Expose
-    public String state;
+    var state: String? = null
+
     @SerializedName("address")
     @Expose
-    public String address;
+    var address: String? = null
+
     @SerializedName("pincode")
     @Expose
-    public String pincode;
+    var pincode: String? = null
+
     @SerializedName("latitude")
     @Expose
-    public String latitude;
+    var latitude: String? = null
+
     @SerializedName("logo")
     @Expose
-    public String logo;
+    var logo: String? = null
+
     @SerializedName("longitude")
     @Expose
-    public String longitude;
+    var longitude: String? = null
+
     @SerializedName("shop_website")
     @Expose
-    public String shopWebsite;
+    var shopWebsite: String? = null
+
     @SerializedName("shop_email")
     @Expose
-    public String shopEmail;
+    var shopEmail: String? = null
+
     @SerializedName("district")
     @Expose
-    public String district;
+    var district: String? = null
+
     @SerializedName("country")
     @Expose
-    public String country;
+    var country: String? = null
+
     @SerializedName("city")
     @Expose
-    public String city;
+    var city: String? = null
+
     @SerializedName("gift_name")
     @Expose
-    public String giftName;
+    var giftName: String? = null
+
     @SerializedName("gift_image")
     @Expose
-    public String giftImage;
+    var giftImage: String? = null
+
     @SerializedName("gift_amount")
     @Expose
-    public String giftAmount;
+    var giftAmount: String? = null
+
     @SerializedName("discount")
     @Expose
-    public String discount;
+    var discount: String? = null
+
     @SerializedName("total_amount")
     @Expose
-    public String totalAmount;
+    var totalAmount: String? = null
+
     @SerializedName("gift_description")
     @Expose
-    public String giftDescription;
+    var giftDescription: String? = null
+
     @SerializedName("gift_category")
     @Expose
-    public String giftCategory;
+    var giftCategory: String? = null
+
     @SerializedName("gift_for")
     @Expose
-    public String giftFor;
+    var giftFor: String? = null
+
     @SerializedName("status")
     @Expose
-    public String status;
+    var status: String? = null
+
     @SerializedName("fav")
     @Expose
-    public Integer fav;
-
-    public String getSellerId() {
-        return sellerId;
-    }
-
-    public void setSellerId(String sellerId) {
-        this.sellerId = sellerId;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getShopName() {
-        return shopName;
-    }
-
-    public void setShopName(String shopName) {
-        this.shopName = shopName;
-    }
-
-    public String getSellerMobile() {
-        return sellerMobile;
-    }
-
-    public void setSellerMobile(String sellerMobile) {
-        this.sellerMobile = sellerMobile;
-    }
-
-    public String getSellerMobile2() {
-        return sellerMobile2;
-    }
-
-    public void setSellerMobile2(String sellerMobile2) {
-        this.sellerMobile2 = sellerMobile2;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getPincode() {
-        return pincode;
-    }
-
-    public void setPincode(String pincode) {
-        this.pincode = pincode;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public void setLatitude(String latitude) {
-        this.latitude = latitude;
-    }
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public void setLongitude(String longitude) {
-        this.longitude = longitude;
-    }
-
-    public String getShopWebsite() {
-        return shopWebsite;
-    }
-
-    public void setShopWebsite(String shopWebsite) {
-        this.shopWebsite = shopWebsite;
-    }
-
-    public String getShopEmail() {
-        return shopEmail;
-    }
-
-    public void setShopEmail(String shopEmail) {
-        this.shopEmail = shopEmail;
-    }
-
-    public String getDistrict() {
-        return district;
-    }
-
-    public void setDistrict(String district) {
-        this.district = district;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getGiftName() {
-        return giftName;
-    }
-
-    public void setGiftName(String giftName) {
-        this.giftName = giftName;
-    }
-
-    public String getGiftImage() {
-        return giftImage;
-    }
-
-    public void setGiftImage(String giftImage) {
-        this.giftImage = giftImage;
-    }
-
-    public String getGiftAmount() {
-        return giftAmount;
-    }
-
-    public void setGiftAmount(String giftAmount) {
-        this.giftAmount = giftAmount;
-    }
-
-    public String getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(String discount) {
-        this.discount = discount;
-    }
-
-    public String getTotalAmount() {
-        return totalAmount;
-    }
-
-    public void setTotalAmount(String totalAmount) {
-        this.totalAmount = totalAmount;
-    }
-
-    public String getGiftDescription() {
-        return giftDescription;
-    }
-
-    public void setGiftDescription(String giftDescription) {
-        this.giftDescription = giftDescription;
-    }
-
-    public String getGiftCategory() {
-        return giftCategory;
-    }
-
-    public void setGiftCategory(String giftCategory) {
-        this.giftCategory = giftCategory;
-    }
-
-    public String getGiftFor() {
-        return giftFor;
-    }
-
-    public void setGiftFor(String giftFor) {
-        this.giftFor = giftFor;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Integer getFav() {
-        return fav;
-    }
-
-    public void setFav(Integer fav) {
-        this.fav = fav;
-    }
+    var fav: Int? = null
 }

@@ -1,52 +1,23 @@
-package nithra.gift.suggestion.shop.birthday.marriage.Retrofit;
+package nithra.gift.suggestion.shop.birthday.marriage.Retrofit
 
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
+import com.google.gson.annotations.Expose
+import com.google.gson.annotations.SerializedName
 
-public class Occasion {
-
+class Occasion {
     @SerializedName("id")
     @Expose
-    public String id;
+    var id: String? = null
+
+    @JvmField
     @SerializedName("category")
     @Expose
-    public String category;
+    var category: String? = null
+
     @SerializedName("category_logo")
     @Expose
-    public String categoryLogo;
+    var categoryLogo: String? = null
+
     @SerializedName("status")
     @Expose
-    public String status;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getCategoryLogo() {
-        return categoryLogo;
-    }
-
-    public void setCategoryLogo(String categoryLogo) {
-        this.categoryLogo = categoryLogo;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
+    var status: String? = null
 }
