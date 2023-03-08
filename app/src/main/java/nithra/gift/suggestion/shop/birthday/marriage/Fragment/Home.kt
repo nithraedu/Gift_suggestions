@@ -2,7 +2,10 @@ package nithra.gift.suggestion.shop.birthday.marriage.Fragment
 
 import android.app.Dialog
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.database.sqlite.SQLiteDatabase
+import android.database.sqlite.SQLiteDatabase.openOrCreateDatabase
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
@@ -11,6 +14,8 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -32,6 +37,7 @@ import nithra.gift.suggestion.shop.birthday.marriage.*
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Feedback
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Method
 import nithra.gift.suggestion.shop.birthday.marriage.Feedback.RetrofitClient
+import nithra.gift.suggestion.shop.birthday.marriage.Notification.NotificationView
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftFor
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Occasion
@@ -63,8 +69,18 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
     var hint_text_no_internet: TextView? = null
     var full_lay: LinearLayout? = null
     var a = 0
+    var notifi_count: TextView? = null
+    var db1: SQLiteDatabase? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        visible()
+
     }
 
     override fun onCreateView(
@@ -75,6 +91,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         drawer = view.findViewById(R.id.drawer_layout)
         notification = view.findViewById(R.id.notification)
+        notifi_count = view.findViewById(R.id.notifi_count)
         profile_view = view.findViewById(R.id.profile_view)
         favourite = view.findViewById(R.id.favourite)
         hint_text_no_internet = view.findViewById(R.id.tv_hinds)
@@ -84,8 +101,22 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         val list = view.findViewById<RecyclerView>(R.id.list)
         val list2 = view.findViewById<RecyclerView>(R.id.list2)
         pullToRefresh = view.findViewById(R.id.pullToRefresh)
+
+        db1 = requireActivity().openOrCreateDatabase("myDB", MODE_PRIVATE, null)
+        val tablenew = "noti_cal"
+        db1!!.execSQL(
+            "CREATE TABLE IF NOT EXISTS " + tablenew
+                    + " (id integer NOT NULL PRIMARY KEY AUTOINCREMENT,title VARCHAR,message VARCHAR,date VARCHAR,time VARCHAR,isclose INT(4),isshow INT(4) default 0,type VARCHAR,"
+                    + "bm VARCHAR,ntype VARCHAR,url VARCHAR);"
+        )
+
+
         favourite!!.setOnClickListener(View.OnClickListener {
             val intent = Intent(context, Fav_class::class.java)
+            startActivity(intent)
+        })
+        notification!!.setOnClickListener(View.OnClickListener {
+            val intent = Intent(context, NotificationView::class.java)
             startActivity(intent)
         })
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
@@ -155,14 +186,34 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         return view
     }
 
+
+    fun visible() {
+        val c = db1!!.rawQuery("select * from noti_cal where isclose=0", null)
+        val noti_count = c.count
+        if (noti_count != 0) {
+            notifi_count!!.visibility = View.VISIBLE
+            if (noti_count <= 9) {
+                notifi_count!!.text = "" + noti_count
+            } else {
+                notifi_count!!.text = "9+"
+            }
+        } else {
+            notifi_count!!.visibility = View.INVISIBLE
+        }
+        var noti_shake: Animation? = null
+        if (noti_count != 0) {
+            noti_shake = AnimationUtils.loadAnimation(activity, R.anim.noti_shake)
+            notifi_count!!.startAnimation(noti_shake)
+        }
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         item.isChecked = false
         val id = item.itemId
         if (id == R.id.nav_home) {
             drawer!!.closeDrawer(GravityCompat.START)
         } else if (id == R.id.nav_share) {
-            val shareBody =
-                " Install this Gift Suggestions app.\n\n Click the below link to download this app:\n https://goo.gl/GPeiaQ"
+            val shareBody = "Install this Gift Suggestions app.\n\n Click the below link to download this app:\n https://rb.gy/6gbzgq"
             val sharingIntent = Intent(Intent.ACTION_SEND)
             sharingIntent.type = "text/plain"
             sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions")
@@ -172,12 +223,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
             feedback()
 
         } else if (id == R.id.nav_rateus) {
-            startActivity(
-                Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=\$appPackageName")
-                )
-            )
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=nithra.gift.suggestion.shop.birthday.marriage")))
         } else if (id == R.id.nav_policy) {
             if (context?.let { Utils_Class.isNetworkAvailable(it) } == true) {
                 val i = Intent(context, PrivacyPolicy::class.java)
@@ -250,14 +296,12 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                 e.printStackTrace()
             }
             val map = HashMap<String, String?>()
-            map["type"] = "Gift_Suggestions"
+            map["type"] = "Gift Suggestions"
             map["feedback"] = feedback
             map["email"] = email
             map["model"] = Build.MODEL
-            map["vcode"] = "1.0"
-            val method = RetrofitClient.retrofit!!.create(
-                Method::class.java
-            )
+            map["vcode"] = ""+BuildConfig.VERSION_CODE
+            val method = RetrofitClient.retrofit!!.create(Method::class.java)
             val call = method.getAlldata(map)
             call.enqueue(object : Callback<List<Feedback>> {
                 override fun onResponse(

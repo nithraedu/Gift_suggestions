@@ -4,6 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
 
     <queries>
         <intent>
@@ -55,9 +57,6 @@
             android:name=".Full_Details"
             android:exported="false" />
         <activity
-            android:name=".SellerProfile"
-            android:exported="false" />
-        <activity
             android:name=".ProductFullView"
             android:exported="false" />
         <activity
@@ -105,6 +104,14 @@
 
         <activity android:name=".Notification.NotificationView" />
         <activity android:name=".Notification.ST_Activity" />
+
+        <service
+            android:name=".Notification.FirebaseMessageService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="nithra.gift.suggestion.shop.birthday.marriage.imagepicker.ImagePickerFileProvider"

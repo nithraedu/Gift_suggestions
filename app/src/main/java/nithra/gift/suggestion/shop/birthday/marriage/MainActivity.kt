@@ -1,10 +1,12 @@
 package nithra.gift.suggestion.shop.birthday.marriage
 
+import android.Manifest
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -13,7 +15,11 @@ import android.view.MenuItem
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
 import androidx.fragment.app.Fragment
@@ -94,6 +100,18 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         }
         spa = applicationContext.getSharedPreferences("MyPref", MODE_PRIVATE)
 
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(this, "permission") == 0) {
+            sp.putInt(this, "permission", 1)
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 113)
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(this,"permission") == 10) {
+            sp.putInt(this, "permission", 1)
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 113)
+        } else {
+            sp.putInt(this, "permission", sp.getInt(this, "permission") + 1)
+        }
+
+
         //in_app cods start
         appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity)
         val appUpdateInfoTask = appUpdateManager!!.appUpdateInfo
@@ -139,8 +157,6 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
 
         viewpager2!!.setAdapter(frag_adapter)
     }
-
-
 
     fun android() {
         val map = HashMap<String, String?>()
@@ -232,14 +248,12 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 e.printStackTrace()
             }
             val map = HashMap<String, String?>()
-            map["type"] = "Gift_Suggestions"
+            map["type"] = "Gift Suggestions"
             map["feedback"] = feedback
             map["email"] = email
             map["model"] = Build.MODEL
-            map["vcode"] = "1.0"
-            val method = RetrofitClient.retrofit!!.create(
-                Method::class.java
-            )
+            map["vcode"] = ""+BuildConfig.VERSION_CODE
+            val method = RetrofitClient.retrofit!!.create(Method::class.java)
             val call = method.getAlldata(map)
             call.enqueue(object : Callback<List<Feedback>> {
                 override fun onResponse(
@@ -567,7 +581,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         val url = "https://nithra.mobi/apps/referrer.php"
         val postDataParams = JSONObject()
         try {
-            postDataParams.put("app", "GiftSuggestion")
+            postDataParams.put("app", "Gift Suggestions")
             postDataParams.put("ref", utm)
             postDataParams.put("mm", utm1)
             postDataParams.put("cn", utm2)
@@ -581,4 +595,21 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     companion object {
         var sp = SharedPreference()
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 113) {
+            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                println("jaasim==3")
+                sp.putInt(applicationContext, "permission", 1)
+            } else {
+                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    println("jaasim==4")
+                }
+            }
+        }
+    }
+
+
 }

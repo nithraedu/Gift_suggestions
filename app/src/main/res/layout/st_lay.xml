@@ -39,7 +39,7 @@
                     android:id="@+id/sticky_lay"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="#2445b0"
+                    android:background="@color/app_color"
                     android:gravity="center"
                     android:minHeight="?attr/actionBarSize"
                     android:orientation="vertical">
@@ -53,7 +53,7 @@
                         android:padding="5dp"
                         android:text="American Pickers"
                         android:textAppearance="?android:attr/textAppearanceLarge"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@android:color/white" />
 
                     <androidx.appcompat.widget.AppCompatButton
                         android:id="@+id/btn_close"
@@ -62,6 +62,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerHorizontal="true"
                         android:layout_marginRight="5dp"
+                        android:backgroundTint="@color/white"
                         android:background="@drawable/delete"/>
 
                 </RelativeLayout>
@@ -93,6 +94,8 @@
             android:layout_height="wrap_content"
             android:src="@drawable/abc_ic_menu_share_mtrl_alpha"
             app:fabSize="mini"
+            app:tint="@color/white"
+            android:backgroundTint="@color/app_color"
             android:layout_marginRight="15dp"
             android:layout_marginBottom="15dp"
             android:layout_gravity="bottom|end"/>

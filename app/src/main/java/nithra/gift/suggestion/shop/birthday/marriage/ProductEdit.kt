@@ -276,6 +276,8 @@ class ProductEdit : AppCompatActivity() {
                 Utils_Class.toast_center(this@ProductEdit, "Please select Occasion...")
             } else if (gift_gender == "") {
                 Utils_Class.toast_center(this@ProductEdit, "Please select Gender...")
+            } else if (file_array[0] == null && file_array[1] == null && file_array[2] == null) {
+                Utils_Class.toast_center(this@ProductEdit, "Please set Gift image ...")
             } else if (gift_description == "") {
                 Utils_Class.toast_center(this@ProductEdit, "Please Enter Gift Description...")
             } else {

@@ -18,10 +18,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.gson.Gson
-import nithra.gift.suggestion.shop.birthday.marriage.MainActivity
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ProductAdd
 import nithra.gift.suggestion.shop.birthday.marriage.Otp.ShopAdd
-import nithra.gift.suggestion.shop.birthday.marriage.ProductEdit
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.DeleteGift
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.GiftList
 import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI
@@ -127,7 +125,8 @@ class SellerProfileProductList : AppCompatActivity() {
                     Glide.with(applicationContext).load(gift!![0].logo)
                         .error(R.drawable.ic_gift_default_img)
                         .placeholder(R.drawable.ic_gift_default_img)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL).into(IVPreviewImage!!)
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(IVPreviewImage!!)
                     seller_name!!.text = gift!![0].name
                     shop_name!!.text = gift!![0].shopName + ", "
                     city!!.text = gift!![0].city

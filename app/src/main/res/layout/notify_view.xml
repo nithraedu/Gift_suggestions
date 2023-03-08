@@ -9,6 +9,7 @@
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="@color/app_color"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     <RelativeLayout
@@ -23,12 +24,12 @@
 
             <ImageView
                 android:id="@+id/imgg"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="75dp"
-                android:src="@drawable/round_design2" />
+                android:layout_marginTop="150dp"
+                android:src="@drawable/ic_notification" />
 
             <TextView
                 android:layout_width="wrap_content"
