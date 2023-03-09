@@ -72,9 +72,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
     var notifi_count: TextView? = null
     var db1: SQLiteDatabase? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onCreate(savedInstanceState: Bundle?) { super.onCreate(savedInstanceState)
     }
 
     override fun onResume() {
@@ -107,8 +105,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         db1!!.execSQL(
             "CREATE TABLE IF NOT EXISTS " + tablenew
                     + " (id integer NOT NULL PRIMARY KEY AUTOINCREMENT,title VARCHAR,message VARCHAR,date VARCHAR,time VARCHAR,isclose INT(4),isshow INT(4) default 0,type VARCHAR,"
-                    + "bm VARCHAR,ntype VARCHAR,url VARCHAR);"
-        )
+                    + "bm VARCHAR,ntype VARCHAR,url VARCHAR);")
 
 
         favourite!!.setOnClickListener(View.OnClickListener {
@@ -120,13 +117,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
             startActivity(intent)
         })
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
-        val toggle = ActionBarDrawerToggle(
-            activity,
-            drawer,
-            toolbar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
+        val toggle = ActionBarDrawerToggle(activity, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close)
         drawer!!.addDrawerListener(toggle)
         toggle.syncState()
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayHomeAsUpEnabled(true)
@@ -134,10 +125,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         (activity as AppCompatActivity?)!!.supportActionBar!!.setDisplayShowTitleEnabled(true)
         (activity as AppCompatActivity?)!!.supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_menu_navigate)
         val navigationView = view.findViewById<NavigationView>(R.id.nav_mm_view)
-        navigationView.setNavigationItemSelectedListener { item: MenuItem ->
-            onNavigationItemSelected(
-                item
-            )
+        navigationView.setNavigationItemSelectedListener { item: MenuItem -> onNavigationItemSelected(item)
         }
         val v = navigationView.inflateHeaderView(R.layout.header)
         code = v.findViewById(R.id.code)
@@ -340,7 +328,8 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                     startActivity(intent);
                 }
             }
-        });*/dialog.show()
+        });*/
+        dialog.show()
     }
 
     fun gift_occasion() {
