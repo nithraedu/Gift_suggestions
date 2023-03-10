@@ -216,22 +216,14 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 val intent = Intent(this@MainActivity, PrivacyPolicy::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(
-                    this@MainActivity,
-                    "please connect to the internet...",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@MainActivity, "please connect to the internet...", Toast.LENGTH_SHORT).show()
             }
         }
         submit_btn.setOnClickListener(View.OnClickListener {
             var feedback = feedback_edt.text.toString().trim { it <= ' ' }
             val email = email_edt.text.toString().trim { it <= ' ' }
             if (feedback == "") {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Please type your feedback or suggestion, Thank you",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@MainActivity, "Please type your feedback or suggestion, Thank you", Toast.LENGTH_SHORT).show()
                 return@OnClickListener
             }
             if (!Utils_Class.isNetworkAvailable(this@MainActivity)) {
@@ -248,7 +240,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 e.printStackTrace()
             }
             val map = HashMap<String, String?>()
-            map["type"] = "Gift Suggestions"
+            map["type"] = "Gift_Suggestions"
             map["feedback"] = feedback
             map["email"] = email
             map["model"] = Build.MODEL
@@ -268,11 +260,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                             val jsonObject = jsonArray.getJSONObject(0)
                             println("======response feedbacks:" + jsonObject.getString("status"))
                             dialog.dismiss()
-                            Toast.makeText(
-                                this@MainActivity,
-                                "Feedback sent, Thank you",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Toast.makeText(this@MainActivity, "Feedback sent, Thank you", Toast.LENGTH_SHORT).show()
                         } catch (e: JSONException) {
                             println("======response e:$e")
                             e.printStackTrace()
@@ -323,11 +311,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 val intent = Intent(this@MainActivity, PrivacyPolicy::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(
-                    this@MainActivity,
-                    "Please connect the internet...",
-                    Toast.LENGTH_SHORT
-                ).show()
+                Toast.makeText(this@MainActivity, "Please connect the internet...", Toast.LENGTH_SHORT).show()
             }
         }
         b2.setOnClickListener {
@@ -436,12 +420,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
                 try {
-                    appUpdateManager!!.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        AppUpdateType.IMMEDIATE,
-                        this@MainActivity,
-                        200
-                    )
+                    appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this@MainActivity, 200)
                 } catch (e: SendIntentException) {
                     e.printStackTrace()
                 }
@@ -610,6 +589,4 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             }
         }
     }
-
-
 }

@@ -201,7 +201,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         if (id == R.id.nav_home) {
             drawer!!.closeDrawer(GravityCompat.START)
         } else if (id == R.id.nav_share) {
-            val shareBody = "Install this Gift Suggestions app.\n\n Click the below link to download this app:\n https://rb.gy/6gbzgq"
+            val shareBody = "Install this Gift Suggestions app.\n\n Click the below link to download this app:\n https://bit.ly/3LdV0Gj"
             val sharingIntent = Intent(Intent.ACTION_SEND)
             sharingIntent.type = "text/plain"
             sharingIntent.putExtra(Intent.EXTRA_SUBJECT, "Gift Suggestions")
@@ -284,7 +284,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                 e.printStackTrace()
             }
             val map = HashMap<String, String?>()
-            map["type"] = "Gift Suggestions"
+            map["type"] = "Gift_Suggestions"
             map["feedback"] = feedback
             map["email"] = email
             map["model"] = Build.MODEL
