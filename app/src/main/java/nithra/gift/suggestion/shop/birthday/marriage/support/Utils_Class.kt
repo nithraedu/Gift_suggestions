@@ -20,7 +20,7 @@ import java.util.*
 object Utils_Class {
     var mProgress: Dialog?=null
     @JvmStatic
-    fun mProgress(context: Context?, txt: String?, aBoolean: Boolean?): Dialog? {
+    fun mProgress(context: Context?): Dialog? {
         mProgress = context?.let {
             Dialog(
                 it,
@@ -113,7 +113,7 @@ object Utils_Class {
     }
 
     @JvmStatic
-    fun android_id(context: Context): String {
+    fun androidId(context: Context): String {
         return Settings.Secure.getString(context.contentResolver, Settings.Secure.ANDROID_ID)
     }
 }

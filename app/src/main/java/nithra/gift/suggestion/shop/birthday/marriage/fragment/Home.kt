@@ -50,29 +50,25 @@ import java.io.UnsupportedEncodingException
 import java.net.URLEncoder
 
 class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
-    var drawer: DrawerLayout? = null
+    private var drawer: DrawerLayout? = null
     var giftfor: ArrayList<GiftFor>? = null
     var giftoccasion: ArrayList<Occasion>? = null
     var adapter2: Adapter2? = null
     var adapter3: Adapter3? = null
     var notification: LinearLayout? = null
-    var profile_view: LinearLayout? = null
-    var favourite: LinearLayout? = null
+    private var profileView: LinearLayout? = null
+    private var favourite: LinearLayout? = null
     var sharedPreference = SharedPreference()
     var code: TextView? = null
     var name: TextView? = null
-    var versionCode = BuildConfig.VERSION_CODE
-    var versionName = BuildConfig.VERSION_NAME
+    private var versionCode = BuildConfig.VERSION_CODE
+    private var versionName = BuildConfig.VERSION_NAME
     var pullToRefresh: SwipeRefreshLayout? = null
-    var hint_text_no_internet: TextView? = null
-    var full_lay: LinearLayout? = null
+    private var hintTextNoInternet: TextView? = null
+    private var fullLay: LinearLayout? = null
     var a = 0
-    var notifi_count: TextView? = null
-    var db1: SQLiteDatabase? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var notifiCount: TextView? = null
+    private var db1: SQLiteDatabase? = null
 
     override fun onResume() {
         super.onResume()
@@ -89,11 +85,11 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         val toolbar = view.findViewById<Toolbar>(R.id.toolbar)
         drawer = view.findViewById(R.id.drawer_layout)
         notification = view.findViewById(R.id.notification)
-        notifi_count = view.findViewById(R.id.notifi_count)
-        profile_view = view.findViewById(R.id.profile_view)
+        notifiCount = view.findViewById(R.id.notifi_count)
+        profileView = view.findViewById(R.id.profile_view)
         favourite = view.findViewById(R.id.favourite)
-        hint_text_no_internet = view.findViewById(R.id.tv_hinds)
-        full_lay = view.findViewById(R.id.full_lay)
+        hintTextNoInternet = view.findViewById(R.id.tv_hinds)
+        fullLay = view.findViewById(R.id.full_lay)
         giftfor = ArrayList()
         giftoccasion = ArrayList()
         val list = view.findViewById<RecyclerView>(R.id.list)
@@ -109,14 +105,14 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         )
 
 
-        favourite!!.setOnClickListener({
-            val intent = Intent(context, Fav_class::class.java)
+        favourite!!.setOnClickListener {
+            val intent = Intent(context, Favclass::class.java)
             startActivity(intent)
-        })
-        notification!!.setOnClickListener({
+        }
+        notification!!.setOnClickListener {
             val intent = Intent(context, NotificationView::class.java)
             startActivity(intent)
-        })
+        }
         (activity as AppCompatActivity?)!!.setSupportActionBar(toolbar)
         val toggle = ActionBarDrawerToggle(
             activity,
@@ -138,67 +134,67 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         val v = navigationView.inflateHeaderView(R.layout.header)
         code = v.findViewById(R.id.code)
         name = v.findViewById(R.id.name)
-        code!!.setText("" + versionCode)
-        name!!.setText(versionName)
+        code!!.text = "" + versionCode
+        name!!.text = versionName
         val gridLayoutManager2 = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
         list.layoutManager = gridLayoutManager2
         val gridLayoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
         list2.layoutManager = gridLayoutManager
         if (context?.let { Utils_Class.isNetworkAvailable(it) } == true) {
-            Utils_Class.mProgress(context, "Loading please wait...", false)!!.show()
-            hint_text_no_internet!!.visibility = View.GONE
+            Utils_Class.mProgress(context)!!.show()
+            hintTextNoInternet!!.visibility = View.GONE
 
         } else {
-            Utils_Class.mProgress(context, "Please connect your internet...", false)
-            full_lay!!.visibility = View.GONE
-            hint_text_no_internet!!.setVisibility(View.VISIBLE)
+            Utils_Class.mProgress(context)
+            fullLay!!.visibility = View.GONE
+            hintTextNoInternet!!.visibility = View.VISIBLE
         }
         adapter2 = Adapter2(context, giftfor!!)
         list.adapter = adapter2
         adapter3 = Adapter3(context, giftoccasion!!)
         list2.adapter = adapter3
 
-        gift_occasion()
-        gender_gift()
+        giftOccasion()
+        genderGift()
 
 
 
-        pullToRefresh!!.setOnRefreshListener({
+        pullToRefresh!!.setOnRefreshListener {
             if (context?.let { Utils_Class.isNetworkAvailable(it) } == true) {
-                hint_text_no_internet!!.visibility = View.GONE
-                full_lay!!.visibility = View.VISIBLE
+                hintTextNoInternet!!.visibility = View.GONE
+                fullLay!!.visibility = View.VISIBLE
 
                 giftoccasion!!.clear()
                 giftfor!!.clear()
-                gift_occasion()
-                gender_gift()
-                pullToRefresh!!.setRefreshing(false)
+                giftOccasion()
+                genderGift()
+                pullToRefresh!!.isRefreshing = false
             } else {
-                pullToRefresh!!.setRefreshing(false)
-                full_lay!!.visibility = View.GONE
-                hint_text_no_internet!!.setVisibility(View.VISIBLE)
+                pullToRefresh!!.isRefreshing = false
+                fullLay!!.visibility = View.GONE
+                hintTextNoInternet!!.visibility = View.VISIBLE
             }
-        })
+        }
         return view
     }
 
     fun visible() {
         val c = db1!!.rawQuery("select * from noti_cal where isclose=0", null)
-        val noti_count = c.count
-        if (noti_count != 0) {
-            notifi_count!!.visibility = View.VISIBLE
-            if (noti_count <= 9) {
-                notifi_count!!.text = "" + noti_count
+        val notiCount = c.count
+        if (notiCount != 0) {
+            notifiCount!!.visibility = View.VISIBLE
+            if (notiCount <= 9) {
+                notifiCount!!.text = "" + notiCount
             } else {
-                notifi_count!!.text = "9+"
+                notifiCount!!.text = "9+"
             }
         } else {
-            notifi_count!!.visibility = View.INVISIBLE
+            notifiCount!!.visibility = View.INVISIBLE
         }
-        val noti_shake: Animation?
-        if (noti_count != 0) {
-            noti_shake = AnimationUtils.loadAnimation(activity, R.anim.noti_shake)
-            notifi_count!!.startAnimation(noti_shake)
+        val notiShake: Animation?
+        if (notiCount != 0) {
+            notiShake = AnimationUtils.loadAnimation(activity, R.anim.noti_shake)
+            notifiCount!!.startAnimation(notiShake)
         }
         c.close()
     }
@@ -251,10 +247,10 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
 
     fun feedback() {
-        val email_edt: EditText
-        val feedback_edt: EditText
+        val emailEdt: EditText
+        val feedbackEdt: EditText
         val privacy: TextView
-        val submit_btn: TextView
+        val submitBtn: TextView
         val dialog =
             Dialog(
                 requireContext(),
@@ -263,9 +259,9 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         dialog.setContentView(R.layout.feed_back)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCanceledOnTouchOutside(false)
-        email_edt = dialog.findViewById(R.id.edit_email)
-        feedback_edt = dialog.findViewById(R.id.editText1)
-        submit_btn = dialog.findViewById(R.id.btnSend)
+        emailEdt = dialog.findViewById(R.id.edit_email)
+        feedbackEdt = dialog.findViewById(R.id.editText1)
+        submitBtn = dialog.findViewById(R.id.btnSend)
         privacy = dialog.findViewById(R.id.policy)
         privacy.setOnClickListener {
             if (context?.let { it1 -> Utils_Class.isNetworkAvailable(it1) } == true) {
@@ -276,9 +272,9 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                     .show()
             }
         }
-        submit_btn.setOnClickListener(View.OnClickListener {
-            var feedback = feedback_edt.text.toString().trim { it <= ' ' }
-            val email = email_edt.text.toString().trim { it <= ' ' }
+        submitBtn.setOnClickListener(View.OnClickListener {
+            var feedback = feedbackEdt.text.toString().trim { it <= ' ' }
+            val email = emailEdt.text.toString().trim { it <= ' ' }
             if (feedback == "") {
                 Toast.makeText(
                     context,
@@ -329,7 +325,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         dialog.show()
     }
 
-    fun gift_occasion() {
+    private fun giftOccasion() {
         val map = HashMap<String, String?>()
         map["action"] = "category"
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
@@ -353,7 +349,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         })
     }
 
-    fun gender_gift() {
+    private fun genderGift() {
         val map = HashMap<String, String>()
         map["action"] = "gift_for"
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
@@ -378,7 +374,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
 
     inner class Adapter2(ctx: Context?, var giftfor: ArrayList<GiftFor>) :
         RecyclerView.Adapter<Adapter2.ViewHolder>() {
-        var inflater: LayoutInflater
+        private var inflater: LayoutInflater
         var context: Context?
 
         init {
@@ -401,7 +397,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                 .error(R.drawable.ic_gift_default_img)
                 .placeholder(R.drawable.ic_gift_default_img)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.slide_mat)
+                .into(holder.slideMat)
             holder.gridText.text = giftfor[position].people
             holder.gender.setOnClickListener {
                 val i = Intent(getContext(), ActivitySecond::class.java)
@@ -416,21 +412,21 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var slide_mat: ImageView
+            var slideMat: ImageView
             var gridText: TextView
             var gender: LinearLayout
 
             init {
-                slide_mat = itemView.findViewById(R.id.imageGrid)
+                slideMat = itemView.findViewById(R.id.imageGrid)
                 gridText = itemView.findViewById(R.id.gridText)
                 gender = itemView.findViewById(R.id.gender)
             }
         }
     }
 
-    inner class Adapter3(ctx: Context?, var giftoccasion: ArrayList<Occasion>) :
+    inner class Adapter3(ctx: Context?, private var giftoccasion: ArrayList<Occasion>) :
         RecyclerView.Adapter<Adapter3.ViewHolder>() {
-        var inflater: LayoutInflater
+        private var inflater: LayoutInflater
         var context: Context?
 
         init {
@@ -453,7 +449,7 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
                 .error(R.drawable.ic_gift_default_img)
                 .placeholder(R.drawable.ic_gift_default_img)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.img_slide)
+                .into(holder.imgSlide)
             holder.gridText.text = giftoccasion[position].category
             holder.category.setOnClickListener {
                 val i = Intent(getContext(), ActivitySecond::class.java)
@@ -468,12 +464,12 @@ class Home : Fragment(), NavigationView.OnNavigationItemSelectedListener {
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var img_slide: ImageView
+            var imgSlide: ImageView
             var gridText: TextView
             var category: CardView
 
             init {
-                img_slide = itemView.findViewById(R.id.imageGrid)
+                imgSlide = itemView.findViewById(R.id.imageGrid)
                 gridText = itemView.findViewById(R.id.gridText)
                 category = itemView.findViewById(R.id.category)
             }

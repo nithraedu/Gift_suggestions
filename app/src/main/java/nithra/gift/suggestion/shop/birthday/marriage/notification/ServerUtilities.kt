@@ -7,7 +7,7 @@ import org.json.JSONObject
 import android.os.Build
 import nithra.gift.suggestion.shop.birthday.marriage.support.HttpHandler
 import nithra.gift.suggestion.shop.birthday.marriage.support.SharedPreference
-import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class.android_id
+import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class.androidId
 import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class.versioncode_get
 import org.json.JSONException
 
@@ -83,7 +83,7 @@ object ServerUtilities {
         try {
             postDataParams.put("vname", vername)
             postDataParams.put("vcode", Integer.toString(vercode))
-            postDataParams.put("email", "" + android_id(context!!))
+            postDataParams.put("email", "" + androidId(context!!))
             postDataParams.put("regid", regid)
         } catch (e: JSONException) {
             e.printStackTrace()

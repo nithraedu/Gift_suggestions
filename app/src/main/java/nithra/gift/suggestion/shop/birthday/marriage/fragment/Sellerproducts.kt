@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import nithra.gift.suggestion.shop.birthday.marriage.Full_Details
+import nithra.gift.suggestion.shop.birthday.marriage.FullDetails
 import nithra.gift.suggestion.shop.birthday.marriage.R
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Fav_Add_Del
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Gift_Cat
@@ -31,20 +31,17 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class Sellerproducts : Fragment() {
-    var fav_add_dels: ArrayList<Fav_Add_Del>? = null
+    private var favAddDels: ArrayList<Fav_Add_Del>? = null
     var list: RecyclerView? = null
-    var intent1: Intent? = null
+    private var intent1: Intent? = null
     var extra: Bundle? = null
     var title: String? = null
-    var title1: String? = null
-    var title3: String? = null
+    private var title1: String? = null
+    private var title3: String? = null
     var sharedPreference = SharedPreference()
-    var no_item: LinearLayout? = null
+    var noItem: LinearLayout? = null
     var pullToRefresh: SwipeRefreshLayout? = null
     var dialog: Dialog?=null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -53,11 +50,11 @@ class Sellerproducts : Fragment() {
         val view = inflater.inflate(R.layout.fragment_sellerproducts, container, false)
         gift_show = ArrayList()
         list = view.findViewById(R.id.list)
-        no_item = view.findViewById(R.id.no_item)
+        noItem = view.findViewById(R.id.no_item)
         pullToRefresh = view.findViewById(R.id.pullToRefresh)
-        fav_add_dels = ArrayList()
+        favAddDels = ArrayList()
         intent1 = requireActivity().intent
-        extra = intent1!!.getExtras()
+        extra = intent1!!.extras
         if (extra != null) {
             title = extra!!.getString("title")
             title1 = extra!!.getString("cat_idd")
@@ -74,25 +71,25 @@ class Sellerproducts : Fragment() {
         dialog!!.setCancelable(false)
         dialog!!.show()
         val gridLayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-        list!!.setLayoutManager(gridLayoutManager)
+        list!!.layoutManager = gridLayoutManager
         adapter = context?.let {
             Adapter(
-                it, gift_show
+                it
             )
         }
-        list!!.setAdapter(adapter)
-        get_cat()
-        get_cat1()
-        pullToRefresh!!.setOnRefreshListener({
+        list!!.adapter = adapter
+        getCat()
+        getCat1()
+        pullToRefresh!!.setOnRefreshListener {
             gift_show!!.clear()
-            get_cat()
-            get_cat1()
-            pullToRefresh!!.setRefreshing(false)
-        })
+            getCat()
+            getCat1()
+            pullToRefresh!!.isRefreshing = false
+        }
         return view
     }
 
-    fun get_cat() {
+    private fun getCat() {
         val map = HashMap<String, String?>()
         map["action"] = "get_cat"
         map["gift_category"] = title1
@@ -114,10 +111,10 @@ class Sellerproducts : Fragment() {
                     }
                     if (gift_show!!.size == 0) {
                         pullToRefresh!!.visibility = View.GONE
-                        no_item!!.visibility = View.VISIBLE
+                        noItem!!.visibility = View.VISIBLE
                     } else {
                         pullToRefresh!!.visibility = View.VISIBLE
-                        no_item!!.visibility = View.GONE
+                        noItem!!.visibility = View.GONE
                     }
                     dialog!!.dismiss()
                 }
@@ -130,7 +127,7 @@ class Sellerproducts : Fragment() {
         })
     }
 
-    fun get_cat1() {
+    private fun getCat1() {
         val map = HashMap<String, String?>()
         map["action"] = "get_cat"
         map["gift_for"] = title3
@@ -152,10 +149,10 @@ class Sellerproducts : Fragment() {
                     }
                     if (gift_show!!.size == 0) {
                         pullToRefresh!!.visibility = View.GONE
-                        no_item!!.visibility = View.VISIBLE
+                        noItem!!.visibility = View.VISIBLE
                     } else {
                         pullToRefresh!!.visibility = View.VISIBLE
-                        no_item!!.visibility = View.GONE
+                        noItem!!.visibility = View.GONE
                     }
                                         dialog!!.dismiss()
 
@@ -203,9 +200,9 @@ class Sellerproducts : Fragment() {
         })
     }
 
-    inner class Adapter(ctx: Context, gift_show: ArrayList<Gift_Cat>?) :
+    inner class Adapter(ctx: Context) :
         RecyclerView.Adapter<Adapter.ViewHolder>() {
-        var inflater: LayoutInflater
+        private var inflater: LayoutInflater
         var context: Context
 
         init {
@@ -238,14 +235,14 @@ class Sellerproducts : Fragment() {
                     .error(R.drawable.ic_gift_default_img)
                     .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.img_slide)
+                    .into(holder.imgSlide)
             }
             holder.gridText.text = gift_show!![position].giftName
             holder.head.text = gift_show!![position].discount + "% offer"
             holder.giftprize.text = "\u20B9 " + gift_show!![position].totalAmount
             holder.offerprize.text = "\u20B9 " + gift_show!![position].giftAmount
             holder.category.setOnClickListener {
-                val i = Intent(getContext(), Full_Details::class.java)
+                val i = Intent(getContext(), FullDetails::class.java)
                 i.putExtra("full_view", gift_show!![position].id)
                 i.putExtra("position", position)
                 startActivity(i)
@@ -265,7 +262,7 @@ class Sellerproducts : Fragment() {
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var img_slide: ImageView
+            var imgSlide: ImageView
             var favourite: ImageView
             var gridText: TextView
             var head: TextView
@@ -274,7 +271,7 @@ class Sellerproducts : Fragment() {
             var category: CardView
 
             init {
-                img_slide = itemView.findViewById(R.id.imageGrid)
+                imgSlide = itemView.findViewById(R.id.imageGrid)
                 favourite = itemView.findViewById(R.id.favourite)
                 gridText = itemView.findViewById(R.id.gridText)
                 head = itemView.findViewById(R.id.head)

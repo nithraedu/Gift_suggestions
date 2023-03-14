@@ -387,7 +387,7 @@ class FirebaseMessageService : com.google.firebase.messaging.FirebaseMessagingSe
                 if (sharedPreference.getString(this@FirebaseMessageService, "token")!!.length > 0) {
                     ServerUtilities.gcmpost(
                         token,
-                        Utils_Class.android_id(this@FirebaseMessageService),
+                        Utils_Class.androidId(this@FirebaseMessageService),
                         Utils_Class.versionname_get(this@FirebaseMessageService),
                         Utils_Class.versioncode_get(this@FirebaseMessageService),
                         this@FirebaseMessageService

@@ -2,9 +2,6 @@ package nithra.gift.suggestion.shop.birthday.marriage
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,41 +15,36 @@ import nithra.gift.suggestion.shop.birthday.marriage.fragment.Sellerproducts
 
 class ActivitySecond : AppCompatActivity() {
     var adapter: ViewPagerAdapter? = null
-    var viewPager: ViewPager? = null
-    var tabLayout: TabLayout? = null
-    var cat_title: TextView? = null
-    var intent1: Intent? = null
+    private var viewPager: ViewPager? = null
+    private var tabLayout: TabLayout? = null
+    private var catTitle: TextView? = null
+    private var intent1: Intent? = null
     var title: String? = null
-    var title1: String? = null
-    var title3: String? = null
+    private var title1: String? = null
+    private var title3: String? = null
     var extra: Bundle? = null
     var back: ImageView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.activity_second)
-        cat_title = findViewById(R.id.cat_title)
+        catTitle = findViewById(R.id.cat_title)
         viewPager = findViewById(R.id.viewpager)
         adapter = ViewPagerAdapter(supportFragmentManager)
         adapter!!.add(NithraProducts(), "Our Suggestions")
         adapter!!.add(Sellerproducts(), "Seller Suggestions")
-        viewPager!!.setAdapter(adapter)
+        viewPager!!.adapter = adapter
         tabLayout = findViewById(R.id.tab_layout)
         tabLayout!!.setupWithViewPager(viewPager)
-        intent1 = getIntent()
-        extra = intent1!!.getExtras()
+        intent1 = intent
+        extra = intent1!!.extras
         back = findViewById(R.id.back)
         if (extra != null) {
             title = extra!!.getString("title")
             title1 = extra!!.getString("cat_idd")
             title3 = extra!!.getString("gender_id")
         }
-        back!!.setOnClickListener({ finish() })
-        cat_title!!.setText("$title Gifts")
+        back!!.setOnClickListener { finish() }
+        catTitle!!.text = "$title Gifts"
     }
 
     inner class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(
@@ -73,7 +65,7 @@ class ActivitySecond : AppCompatActivity() {
             return fragments.size
         }
 
-        override fun getPageTitle(position: Int): CharSequence? {
+        override fun getPageTitle(position: Int): CharSequence {
             return fragmentTitle[position]
         }
     }

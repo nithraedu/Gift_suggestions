@@ -2,8 +2,6 @@ package nithra.gift.suggestion.shop.birthday.marriage.otp
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.Window
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -21,62 +19,56 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class OtpSend : AppCompatActivity() {
-    var getotp: TextView? = null
+    private var getotp: TextView? = null
     var name: EditText? = null
-    var gmail: EditText? = null
-    var name_otp: String? = null
-    var gmail_otp: String? = null
+    private var gmail: EditText? = null
+    private var nameOtp: String? = null
+    private var gmailOtp: String? = null
     var sharedPreference = SharedPreference()
-    var send_otp: ArrayList<SendOtppojo>? = null
+    var sendOtp: ArrayList<SendOtppojo>? = null
     var back: ImageView? = null
     var extra: Bundle? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.fragment_send_o_t_p)
         back = findViewById(R.id.back)
         getotp = findViewById(R.id.getotp)
         name = findViewById(R.id.name)
         gmail = findViewById(R.id.gmail)
-        send_otp = ArrayList()
-        back!!.setOnClickListener({
+        sendOtp = ArrayList()
+        back!!.setOnClickListener {
             val i = Intent(this@OtpSend, SellerEntry::class.java)
             startActivity(i)
             finish()
-        })
-        getotp!!.setOnClickListener({
-            name_otp = name!!.getText().toString().trim { it <= ' ' }
-            gmail_otp = gmail!!.getText().toString().trim { it <= ' ' }
-            // emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
-            val emailPattern: Regex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})".toRegex()
+        }
+        getotp!!.setOnClickListener {
+            nameOtp = name!!.text.toString().trim { it <= ' ' }
+            gmailOtp = gmail!!.text.toString().trim { it <= ' ' }
+            val emailPattern: Regex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)".toRegex()
 
-            if (name_otp == "") {
+            if (nameOtp == "") {
                 Utils_Class.toast_center(this@OtpSend, "Please Enter Your Name...")
-            } else if (gmail_otp == "") {
+            } else if (gmailOtp == "") {
                 Utils_Class.toast_center(this@OtpSend, "Please Enter Your Email...")
-            } else if (!gmail_otp!!.matches(emailPattern)) {
+            } else if (!gmailOtp!!.matches(emailPattern)) {
                 Toast.makeText(this@OtpSend, "Invalid email address", Toast.LENGTH_SHORT).show()
             } else {
                 if (Utils_Class.isNetworkAvailable(this@OtpSend)) {
-                    otp_generate()
+                    otpGenerate()
                 } else {
                     Utils_Class.toast_normal(this@OtpSend, "Please connect to your internet")
                 }
             }
-            sharedPreference.putString(this@OtpSend, "resend", "" + gmail_otp)
-        })
+            sharedPreference.putString(this@OtpSend, "resend", "" + gmailOtp)
+        }
     }
 
-    fun otp_generate() {
-        Utils_Class.mProgress(this@OtpSend, "Loading please wait...", false)!!.show()
+    private fun otpGenerate() {
+        Utils_Class.mProgress(this@OtpSend)!!.show()
         val map = HashMap<String, String?>()
         map["action"] = "check_seller"
-        map["name"] = name_otp
-        map["gmail"] = gmail_otp
+        map["name"] = nameOtp
+        map["gmail"] = gmailOtp
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -88,26 +80,26 @@ class OtpSend : AppCompatActivity() {
             ) {
                 if (response.isSuccessful) {
                     if (response.body()!![0].status == "Success") {
-                        send_otp!!.addAll(response.body()!!)
+                        sendOtp!!.addAll(response.body()!!)
                         sharedPreference.putString(
                             this@OtpSend,
                             "register_otp",
-                            "" + send_otp!![0].otp
+                            "" + sendOtp!![0].otp
                         )
                         sharedPreference.putString(
                             this@OtpSend,
                             "user_id",
-                            "" + send_otp!![0].id
+                            "" + sendOtp!![0].id
                         )
                         sharedPreference.putString(
                             this@OtpSend,
                             "user_status",
-                            "" + send_otp!![0].userStatus
+                            "" + sendOtp!![0].userStatus
                         )
                         sharedPreference.putString(
                             this@OtpSend,
                             "user_mail",
-                            "" + send_otp!![0].gmail
+                            "" + sendOtp!![0].gmail
                         )
                         val i = Intent(this@OtpSend, OtpVerify::class.java)
                         startActivity(i)

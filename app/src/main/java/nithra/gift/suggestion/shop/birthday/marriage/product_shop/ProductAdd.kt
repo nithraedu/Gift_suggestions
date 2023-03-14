@@ -3,7 +3,6 @@ package nithra.gift.suggestion.shop.birthday.marriage.product_shop
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
@@ -11,8 +10,6 @@ import android.os.Looper
 import android.os.Message
 import android.util.Log
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -37,67 +34,61 @@ import java.util.*
 
 class ProductAdd : AppCompatActivity() {
     var productname: TextInputEditText? = null
-    var prod_prize: TextInputEditText? = null
-    var offer_prize: TextInputEditText? = null
-    var offer_percentage: TextInputEditText? = null
-    var prod_des: TextInputEditText? = null
+    var prodPrize: TextInputEditText? = null
+    var offerPrize: TextInputEditText? = null
+    var offerPercentage: TextInputEditText? = null
+    var prodDes: TextInputEditText? = null
     var save: TextView? = null
-    var spin_occaction: Spinner? = null
-    var spin_gender: Spinner? = null
-    var myproduct: TextView? = null
+    var spinOccaction: Spinner? = null
+    var spinGender: Spinner? = null
+    private var myproduct: TextView? = null
     var IVPreviewImage: ImageView? = null
-    var IVPreviewImage1: ImageView? = null
-    var IVPreviewImage2: ImageView? = null
+    private var IVPreviewImage1: ImageView? = null
+    private var IVPreviewImage2: ImageView? = null
     var sharedPreference = SharedPreference()
-    var gift_name: String? = null
-    var gift_occasion: String? = null
-    var gift_gender: String? = null
-    var gift_for: String? = null
-    var gift_amount: String? = null
+    private var giftName: String? = null
+    private var giftOccasion: String? = null
+    private var giftGender: String? = null
+    private var giftAmount: String? = null
     var discount: String? = null
-    var total_amount: String? = null
-    var gift_description: String? = null
-    var spin: ArrayList<String>? = null
-    var spin1: ArrayList<String>? = null
+    private var totalAmount: String? = null
+    private var giftDescription: String? = null
+    private var spin: ArrayList<String>? = null
+    private var spin1: ArrayList<String>? = null
     var giftfor: ArrayList<GiftFor>? = null
     var occasion: ArrayList<Occasion>? = null
-    var add_gift: ArrayList<AddGift>? = null
+    private var addGift: ArrayList<AddGift>? = null
     var map1 = HashMap<String, String?>()
     var map2 = HashMap<String, String>()
     var path = ""
     var back: ImageView? = null
     var remove: ImageView? = null
-    var remove1: ImageView? = null
-    var remove2: ImageView? = null
-    var file_array = arrayOfNulls<File>(3)
+    private var remove1: ImageView? = null
+    private var remove2: ImageView? = null
+    private var fileArray = arrayOfNulls<File>(3)
     var uri: Uri? = null
-    var uri1: Uri? = null
-    var uri2: Uri? = null
-    var textView: TextView? = null
-    var textView1: TextView? = null
+    private var uri1: Uri? = null
+    private var uri2: Uri? = null
+    private var textView: TextView? = null
+    private var textView1: TextView? = null
     lateinit var selectedLanguage: BooleanArray
     lateinit var selectedLanguage1: BooleanArray
     lateinit var cat: Array<String?>
-    lateinit var cat_id: Array<String?>
+    lateinit var catId: Array<String?>
     lateinit var cat1: Array<String?>
-    lateinit var cat_id1: Array<String?>
-    var langList = ArrayList<Int>()
-    var langList1 = ArrayList<Int>()
+    lateinit var catId1: Array<String?>
+    private var langList = ArrayList<Int>()
+    private var langList1 = ArrayList<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.fragment_product)
         productname = findViewById(R.id.productname)
-        spin_occaction = findViewById(R.id.spin_occaction)
-        spin_gender = findViewById(R.id.spin_gender)
-        prod_prize = findViewById(R.id.prod_prize)
-        offer_prize = findViewById(R.id.offer_prize)
-        offer_percentage = findViewById(R.id.offer_percentage)
-        prod_des = findViewById(R.id.prod_des)
+        spinOccaction = findViewById(R.id.spin_occaction)
+        spinGender = findViewById(R.id.spin_gender)
+        prodPrize = findViewById(R.id.prod_prize)
+        offerPrize = findViewById(R.id.offer_prize)
+        offerPercentage = findViewById(R.id.offer_percentage)
+        prodDes = findViewById(R.id.prod_des)
         save = findViewById(R.id.save)
         myproduct = findViewById(R.id.myproduct)
         IVPreviewImage = findViewById(R.id.IVPreviewImage)
@@ -110,226 +101,217 @@ class ProductAdd : AppCompatActivity() {
         spin1 = ArrayList()
         giftfor = ArrayList()
         occasion = ArrayList()
-        add_gift = ArrayList()
+        addGift = ArrayList()
         back = findViewById(R.id.back)
         textView = findViewById(R.id.textView)
         textView1 = findViewById(R.id.textView1)
-        textView!!.setText("")
-        textView!!.setTag("")
-        textView1!!.setText("")
-        textView1!!.setTag("")
-        back!!.setOnClickListener({ finish() })
-        gender_gift()
-        gift_occasion()
-        remove!!.setVisibility(View.GONE)
-        remove1!!.setVisibility(View.GONE)
-        remove2!!.setVisibility(View.GONE)
-        remove!!.setOnClickListener({
+        textView!!.text = ""
+        textView!!.tag = ""
+        textView1!!.text = ""
+        textView1!!.tag = ""
+        back!!.setOnClickListener { finish() }
+        genderGift()
+        giftOccasion()
+        remove!!.visibility = View.GONE
+        remove1!!.visibility = View.GONE
+        remove2!!.visibility = View.GONE
+        remove!!.setOnClickListener {
             IVPreviewImage!!.setImageResource(R.drawable.ic_image_upload)
-            file_array[0] = null
-            remove!!.setVisibility(View.GONE)
-        })
-        remove1!!.setOnClickListener({
+            fileArray[0] = null
+            remove!!.visibility = View.GONE
+        }
+        remove1!!.setOnClickListener {
             IVPreviewImage1!!.setImageResource(R.drawable.ic_image_upload)
-            file_array[1] = null
-            remove1!!.setVisibility(View.GONE)
-        })
-        remove2!!.setOnClickListener({
+            fileArray[1] = null
+            remove1!!.visibility = View.GONE
+        }
+        remove2!!.setOnClickListener {
             IVPreviewImage2!!.setImageResource(R.drawable.ic_image_upload)
-            file_array[2] = null
-            remove2!!.setVisibility(View.GONE)
-        })
+            fileArray[2] = null
+            remove2!!.visibility = View.GONE
+        }
 
-        textView!!.setOnClickListener({
+        textView!!.setOnClickListener {
             if (Utils_Class.isNetworkAvailable(this@ProductAdd)) {
                 for (i in occasion!!.indices) {
                     cat[i] = occasion!![i].category
-                    cat_id[i] = occasion!![i].id
+                    catId[i] = occasion!![i].id
                 }
                 val builder = AlertDialog.Builder(this@ProductAdd)
                 builder.setTitle("Select Occasion")
                 builder.setCancelable(false)
-                builder.setMultiChoiceItems(cat, selectedLanguage) { dialogInterface, i, b ->
+                builder.setMultiChoiceItems(cat, selectedLanguage) { _, i, b ->
                     if (b) {
                         selectedLanguage[i] = true
                         langList.add(i)
-                        Collections.sort(langList)
+                        langList.sort()
                     } else {
                         langList.remove(Integer.valueOf(i))
                     }
                 }
-                builder.setPositiveButton("OK") { dialogInterface, i ->
+                builder.setPositiveButton("OK") { _, _ ->
                     val stringBuilder = StringBuilder()
                     val id = StringBuilder()
                     for (j in langList.indices) {
                         stringBuilder.append(cat[langList[j]])
-                        id.append(cat_id[langList[j]])
+                        id.append(catId[langList[j]])
                         if (j != langList.size - 1) {
                             stringBuilder.append(",")
                             id.append(",")
                         }
                     }
-                    textView!!.setText(stringBuilder.toString())
-                    textView!!.setTag(id.toString())
+                    textView!!.text = stringBuilder.toString()
+                    textView!!.tag = id.toString()
                 }
-                builder.setNegativeButton("Cancel") { dialogInterface, i -> dialogInterface.dismiss() }
-                builder.setNeutralButton("Clear All") { dialogInterface, i ->
+                builder.setNegativeButton("Cancel") { dialogInterface, _ -> dialogInterface.dismiss() }
+                builder.setNeutralButton("Clear All") { _, _ ->
                     for (j in selectedLanguage.indices) {
                         selectedLanguage[j] = false
                         langList.clear()
-                        textView!!.setText("")
-                        textView!!.setTag("")
+                        textView!!.text = ""
+                        textView!!.tag = ""
                     }
                 }
                 builder.show()
             } else {
                 Utils_Class.toast_normal(this@ProductAdd, "Please connect to your internet")
             }
-        })
-        textView1!!.setOnClickListener({
+        }
+        textView1!!.setOnClickListener {
             if (Utils_Class.isNetworkAvailable(this@ProductAdd)) {
                 for (i in giftfor!!.indices) {
                     cat1[i] = giftfor!![i].people
-                    cat_id1[i] = giftfor!![i].id
+                    catId1[i] = giftfor!![i].id
                 }
                 val builder = AlertDialog.Builder(this@ProductAdd)
                 builder.setTitle("Select Gift For")
                 builder.setCancelable(false)
-                builder.setMultiChoiceItems(cat1, selectedLanguage1) { dialogInterface, i, b ->
+                builder.setMultiChoiceItems(cat1, selectedLanguage1) { _, i, b ->
                     if (b) {
                         selectedLanguage1[i] = true
                         langList1.add(i)
-                        Collections.sort(langList1)
+                        langList1.sort()
                     } else {
                         langList1.remove(Integer.valueOf(i))
                     }
                 }
-                builder.setPositiveButton("OK") { dialogInterface, i ->
+                builder.setPositiveButton("OK") { _, _ ->
                     val stringBuilder = StringBuilder()
                     val id = StringBuilder()
                     for (j in langList1.indices) {
                         stringBuilder.append(cat1[langList1[j]])
-                        id.append(cat_id1[langList1[j]])
+                        id.append(catId1[langList1[j]])
                         if (j != langList1.size - 1) {
                             stringBuilder.append(",")
                             id.append(",")
                         }
                     }
-                    textView1!!.setText(stringBuilder.toString())
-                    textView1!!.setTag(id.toString())
+                    textView1!!.text = stringBuilder.toString()
+                    textView1!!.tag = id.toString()
                 }
-                builder.setNegativeButton("Cancel") { dialogInterface, i -> dialogInterface.dismiss() }
-                builder.setNeutralButton("Clear All") { dialogInterface, i ->
+                builder.setNegativeButton("Cancel") { dialogInterface, _ -> dialogInterface.dismiss() }
+                builder.setNeutralButton("Clear All") { _, _ ->
                     for (j in selectedLanguage1.indices) {
                         selectedLanguage1[j] = false
                         langList1.clear()
-                        textView1!!.setText("")
-                        textView1!!.setTag("")
+                        textView1!!.text = ""
+                        textView1!!.tag = ""
                     }
                 }
                 builder.show()
             } else {
                 Utils_Class.toast_normal(this@ProductAdd, "Please connect to your internet")
             }
-        })
-        save!!.setOnClickListener({
-            gift_name = productname!!.getText().toString().trim { it <= ' ' }
-            gift_occasion = textView!!.getTag().toString().trim { it <= ' ' }
-            gift_gender = textView1!!.getTag().toString().trim { it <= ' ' }
-            total_amount = prod_prize!!.getText().toString().trim { it <= ' ' }
-            discount = offer_percentage!!.getText().toString().trim { it <= ' ' }
-            gift_amount = offer_prize!!.getText().toString().trim { it <= ' ' }
-            gift_description = prod_des!!.getText().toString().trim { it <= ' ' }
-            if (gift_name == "") {
+        }
+        save!!.setOnClickListener {
+            giftName = productname!!.text.toString().trim { it <= ' ' }
+            giftOccasion = textView!!.tag.toString().trim { it <= ' ' }
+            giftGender = textView1!!.tag.toString().trim { it <= ' ' }
+            totalAmount = prodPrize!!.text.toString().trim { it <= ' ' }
+            discount = offerPercentage!!.text.toString().trim { it <= ' ' }
+            giftAmount = offerPrize!!.text.toString().trim { it <= ' ' }
+            giftDescription = prodDes!!.text.toString().trim { it <= ' ' }
+            if (giftName == "") {
                 Utils_Class.toast_center(this@ProductAdd, "Please Enter Gift Name...")
-            } else if (gift_occasion == "") {
+            } else if (giftOccasion == "") {
                 Utils_Class.toast_center(this@ProductAdd, "Please select Occasion...")
-            } else if (gift_gender == "") {
+            } else if (giftGender == "") {
                 Utils_Class.toast_center(this@ProductAdd, "Please select Gender...")
-            } else if (file_array[0] == null && file_array[1] == null && file_array[2] == null) {
+            } else if (fileArray[0] == null && fileArray[1] == null && fileArray[2] == null) {
                 Utils_Class.toast_center(this@ProductAdd, "Please set Gift image ...")
-            } else if (gift_description == "") {
+            } else if (giftDescription == "") {
                 Utils_Class.toast_center(this@ProductAdd, "Please Enter Gift Description...")
             } else {
                 if (Utils_Class.isNetworkAvailable(this@ProductAdd)) {
-                    submit_res()
+                    submitRes()
                 } else {
                     Utils_Class.toast_normal(this@ProductAdd, "Please connect to your internet")
                 }
             }
-        })
-        IVPreviewImage!!.setOnClickListener({
-            val dialog: Dialog
-            dialog = Dialog(
+        }
+        IVPreviewImage!!.setOnClickListener {
+            val dialog = Dialog(
                 this@ProductAdd,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.cam_gallery)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCanceledOnTouchOutside(false)
-            val camera: ImageView
-            val gallery: ImageView
-            camera = dialog.findViewById(R.id.camera)
-            gallery = dialog.findViewById(R.id.gallery)
+            val camera: ImageView = dialog.findViewById(R.id.camera)
+            val gallery: ImageView = dialog.findViewById(R.id.gallery)
             dialog.show()
             camera.setOnClickListener {
-                image_pick()
+                imagePick()
                 dialog.dismiss()
             }
             gallery.setOnClickListener {
-                image_pick_gal()
+                imagePickGal()
                 dialog.dismiss()
             }
-        })
-        IVPreviewImage1!!.setOnClickListener({ //choose_imge1();
-            val dialog: Dialog
-            dialog = Dialog(
+        }
+        IVPreviewImage1!!.setOnClickListener {
+            val dialog: Dialog = Dialog(
                 this@ProductAdd,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.cam_gallery)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCanceledOnTouchOutside(false)
-            val camera: ImageView
-            val gallery: ImageView
-            camera = dialog.findViewById(R.id.camera)
-            gallery = dialog.findViewById(R.id.gallery)
+            val camera: ImageView = dialog.findViewById(R.id.camera)
+            val gallery: ImageView = dialog.findViewById(R.id.gallery)
             dialog.show()
             camera.setOnClickListener {
-                image_pick1()
+                imagePick1()
                 dialog.dismiss()
             }
             gallery.setOnClickListener {
-                image_pick1_gal()
+                imagePick1Gal()
                 dialog.dismiss()
             }
-        })
-        IVPreviewImage2!!.setOnClickListener({ //choose_imge2();
-            val dialog: Dialog
-            dialog = Dialog(
+        }
+        IVPreviewImage2!!.setOnClickListener {
+            val dialog = Dialog(
                 this@ProductAdd,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.cam_gallery)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCanceledOnTouchOutside(false)
-            val camera: ImageView
-            val gallery: ImageView
-            camera = dialog.findViewById(R.id.camera)
-            gallery = dialog.findViewById(R.id.gallery)
+            val camera: ImageView = dialog.findViewById(R.id.camera)
+            val gallery: ImageView = dialog.findViewById(R.id.gallery)
             dialog.show()
             camera.setOnClickListener {
-                image_pick2()
+                imagePick2()
                 dialog.dismiss()
             }
             gallery.setOnClickListener {
-                image_pick2_gal()
+                imagePick2Gal()
                 dialog.dismiss()
             }
-        })
+        }
     }
 
-    fun image_pick() {
+    private fun imagePick() {
         mLauncher.launch(
             with(this@ProductAdd)
                 .crop()
@@ -338,7 +320,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick_gal() {
+    private fun imagePickGal() {
         mLauncher.launch(
             with(this@ProductAdd)
                 .crop()
@@ -347,7 +329,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick1() {
+    private fun imagePick1() {
         mLauncher1.launch(
             with(this@ProductAdd)
                 .crop()
@@ -356,7 +338,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick1_gal() {
+    private fun imagePick1Gal() {
         mLauncher1.launch(
             with(this@ProductAdd)
                 .crop()
@@ -365,7 +347,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick2() {
+    private fun imagePick2() {
         mLauncher2.launch(
             with(this@ProductAdd)
                 .crop()
@@ -374,7 +356,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick2_gal() {
+    private fun imagePick2Gal() {
         mLauncher2.launch(
             with(this@ProductAdd)
                 .crop()
@@ -383,7 +365,7 @@ class ProductAdd : AppCompatActivity() {
         )
     }
 
-    var mLauncher = registerForActivityResult<Intent, ActivityResult>(
+    private var mLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -393,7 +375,7 @@ class ProductAdd : AppCompatActivity() {
                 try {
                     val file = getFile(this@ProductAdd, uri, "img1.jpg")
                     path = file.path.replace(file.name, "")
-                    file_array[0] = file
+                    fileArray[0] = file
                     remove!!.visibility = View.VISIBLE
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -401,7 +383,7 @@ class ProductAdd : AppCompatActivity() {
             }
         }
     }
-    var mLauncher1 = registerForActivityResult<Intent, ActivityResult>(
+    private var mLauncher1 = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -411,7 +393,7 @@ class ProductAdd : AppCompatActivity() {
                 try {
                     val file = getFile(this@ProductAdd, uri1, "img2.jpg")
                     path = file.path.replace(file.name, "")
-                    file_array[1] = file
+                    fileArray[1] = file
                     remove1!!.visibility = View.VISIBLE
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -419,7 +401,7 @@ class ProductAdd : AppCompatActivity() {
             }
         }
     }
-    var mLauncher2 = registerForActivityResult<Intent, ActivityResult>(
+    private var mLauncher2 = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
@@ -429,7 +411,7 @@ class ProductAdd : AppCompatActivity() {
                 try {
                     val file = getFile(this@ProductAdd, uri2, "img3.jpg")
                     path = file.path.replace(file.name, "")
-                    file_array[2] = file
+                    fileArray[2] = file
                     remove2!!.visibility = View.VISIBLE
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -438,28 +420,28 @@ class ProductAdd : AppCompatActivity() {
         }
     }
 
-    fun submit_res() {
+    private fun submitRes() {
         map1.clear()
         map2.clear()
         map1["action"] = "add_gift"
         map1["user_id"] = sharedPreference.getString(this@ProductAdd, "user_id")
-        map1["gift_category"] = gift_occasion
-        map1["gift_for"] = gift_gender
-        map1["gift_name"] = gift_name
-        map1["gift_description"] = gift_description
+        map1["gift_category"] = giftOccasion
+        map1["gift_for"] = giftGender
+        map1["gift_name"] = giftName
+        map1["gift_description"] = giftDescription
         try {
-            for (i in file_array.indices) {
-                if (file_array[i] != null) {
-                    map2["gift_image[$i]"] = "" + Uri.fromFile(file_array[i])
+            for (i in fileArray.indices) {
+                if (fileArray[i] != null) {
+                    map2["gift_image[$i]"] = "" + Uri.fromFile(fileArray[i])
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        UploadAsync()
+        uploadAsync()
     }
 
-    fun gender_gift() {
+    private fun genderGift() {
         val map = HashMap<String, String>()
         map["action"] = "gift_for"
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
@@ -474,7 +456,7 @@ class ProductAdd : AppCompatActivity() {
                 if (response.isSuccessful) {
                     giftfor!!.addAll(response.body()!!)
                     cat1 = arrayOfNulls(giftfor!!.size)
-                    cat_id1 = arrayOfNulls(giftfor!!.size)
+                    catId1 = arrayOfNulls(giftfor!!.size)
                     selectedLanguage1 = BooleanArray(giftfor!!.size)
                 }
             }
@@ -484,7 +466,7 @@ class ProductAdd : AppCompatActivity() {
         })
     }
 
-    fun gift_occasion() {
+    private fun giftOccasion() {
         val map = HashMap<String, String?>()
         map["action"] = "category"
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
@@ -499,7 +481,7 @@ class ProductAdd : AppCompatActivity() {
                 if (response.isSuccessful) {
                     occasion!!.addAll(response.body()!!)
                     cat = arrayOfNulls(occasion!!.size)
-                    cat_id = arrayOfNulls(occasion!!.size)
+                    catId = arrayOfNulls(occasion!!.size)
                     selectedLanguage = BooleanArray(occasion!!.size)
                 }
             }
@@ -509,71 +491,67 @@ class ProductAdd : AppCompatActivity() {
         })
     }
 
-    fun UploadAsync() {
-        var dialog: Dialog? = null
-        dialog = this?.let {
-            Dialog(
-                it,
-                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
-            )
-        }
-        dialog!!.setContentView(R.layout.loading_dialog)
-        dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog!!.setCancelable(false)
+    private fun uploadAsync() {
+        val dialog: Dialog?
+        dialog = Dialog(
+            this,
+            android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+        )
+        dialog.setContentView(R.layout.loading_dialog)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
         val load: TextView = dialog.findViewById(R.id.loading)
-        load.setText("Uploading...")
-        dialog!!.show()
+        load.text = "Uploading..."
+        dialog.show()
         val handler: Handler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 val runnable = Runnable {
-                    if (this@ProductAdd != null) {
-                        if (dialog.isShowing) {
-                            dialog.dismiss()
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    if (msg.obj != null && msg.obj.toString().isNotEmpty()) {
+                        val result = msg.obj.toString()
+                        var jsonArray: JSONArray?
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonArray = JSONArray(result)
+                            jsonObject = jsonArray.getJSONObject(0)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
                         }
-                        if (msg.obj != null && msg.obj.toString().length != 0) {
-                            val result = msg.obj.toString()
-                            var jsonArray: JSONArray?
-                            var jsonObject: JSONObject? = null
-                            try {
-                                jsonArray = JSONArray(result)
-                                jsonObject = jsonArray.getJSONObject(0)
-                            } catch (e: JSONException) {
-                                e.printStackTrace()
+                        try {
+                            if (jsonObject!!.getString("status").contains("Success")) {
+                                spinOccaction!!.setSelection(0)
+                                spinGender!!.setSelection(0)
+                                productname!!.text!!.clear()
+                                prodPrize!!.text!!.clear()
+                                offerPercentage!!.text!!.clear()
+                                offerPrize!!.text!!.clear()
+                                prodDes!!.text!!.clear()
+                                sharedPreference.putString(
+                                    this@ProductAdd,
+                                    "gift_id",
+                                    "" + jsonObject.getString("id")
+                                )
+                                sharedPreference.putInt(this@ProductAdd, "product_add", 1)
+                                Toast.makeText(
+                                    this@ProductAdd,
+                                    "Your product added successfully, Thank you",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                finish()
                             }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    } else {
+                        runOnUiThread {
                             try {
-                                if (jsonObject!!.getString("status").contains("Success")) {
-                                    spin_occaction!!.setSelection(0)
-                                    spin_gender!!.setSelection(0)
-                                    productname!!.text!!.clear()
-                                    prod_prize!!.text!!.clear()
-                                    offer_percentage!!.text!!.clear()
-                                    offer_prize!!.text!!.clear()
-                                    prod_des!!.text!!.clear()
-                                    sharedPreference.putString(
-                                        this@ProductAdd,
-                                        "gift_id",
-                                        "" + jsonObject.getString("id")
-                                    )
-                                    sharedPreference.putInt(this@ProductAdd, "product_add", 1)
-                                    Toast.makeText(
-                                        this@ProductAdd,
-                                        "Your product added successfully, Thank you",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    finish()
+                                if (dialog.isShowing) {
+                                    dialog.dismiss()
                                 }
-                            } catch (e: JSONException) {
+                            } catch (e: Exception) {
                                 e.printStackTrace()
-                            }
-                        } else {
-                            runOnUiThread {
-                                try {
-                                    if (dialog.isShowing) {
-                                        dialog.dismiss()
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
                             }
                         }
                     }
@@ -589,8 +567,8 @@ class ProductAdd : AppCompatActivity() {
                     val path = "Images/"
                     val boundary: String
                     var tail = ""
-                    val LINE_END = "\r\n"
-                    val TWOHYPEN = "--"
+                    val lINEEND = "\r\n"
+                    val tWOHYPEN = "--"
                     val httpConn: HttpURLConnection
                     val charset = "UTF-8"
                     val writer: PrintWriter
@@ -602,7 +580,7 @@ class ProductAdd : AppCompatActivity() {
                     val maxBufferSize = 1024
                     try {
                         boundary = "===" + System.currentTimeMillis() + "==="
-                        tail = LINE_END + TWOHYPEN + boundary + TWOHYPEN + LINE_END
+                        tail = lINEEND + tWOHYPEN + boundary + tWOHYPEN + lINEEND
                         val url = URL(requestURL)
                         httpConn = url.openConnection() as HttpURLConnection
                         httpConn.doOutput = true
@@ -613,11 +591,11 @@ class ProductAdd : AppCompatActivity() {
                         )
                         val paramHeaders = ArrayList<String>()
                         for ((key, value) in map1) {
-                            val param = (TWOHYPEN + boundary + LINE_END
-                                    + "Content-Disposition: form-data; name=\"" + key + "\"" + LINE_END
-                                    + "Content-Type: text/plain; charset=" + charset + LINE_END
-                                    + LINE_END
-                                    + value + LINE_END)
+                            val param = (tWOHYPEN + boundary + lINEEND
+                                    + "Content-Disposition: form-data; name=\"" + key + "\"" + lINEEND
+                                    + "Content-Type: text/plain; charset=" + charset + lINEEND
+                                    + lINEEND
+                                    + value + lINEEND)
                             paramsPart += param
                             paramHeaders.add(param)
                         }
@@ -625,17 +603,17 @@ class ProductAdd : AppCompatActivity() {
                         val fileHeaders = ArrayList<String>()
                         try {
                             for ((key, value) in map2) {
-                                val file_name = value.substring(value.lastIndexOf("/") + 1)
+                                val fileName = value.substring(value.lastIndexOf("/") + 1)
                                 var file: File? = null
-                                file = File(filesDir.path, path + file_name)
-                                fileHeader = (TWOHYPEN + boundary + LINE_END
-                                        + "Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + file.name + "\"" + LINE_END
+                                file = File(filesDir.path, path + fileName)
+                                fileHeader = (tWOHYPEN + boundary + lINEEND
+                                        + "Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + file.name + "\"" + lINEEND
                                         + "Content-Type: " + URLConnection.guessContentTypeFromName(
                                     file.absolutePath
-                                ) + LINE_END
-                                        + "Content-Transfer-Encoding: binary" + LINE_END
-                                        + LINE_END)
-                                fileLength += file.length() + LINE_END.toByteArray(charset(charset)).size
+                                ) + lINEEND
+                                        + "Content-Transfer-Encoding: binary" + lINEEND
+                                        + lINEEND)
+                                fileLength += file.length() + lINEEND.toByteArray(charset(charset)).size
                                 filePart += fileHeader
                                 fileHeaders.add(fileHeader)
                                 filesAL.add(file)
@@ -672,12 +650,12 @@ class ProductAdd : AppCompatActivity() {
                                     writer.flush()
                                     totalRead += bytesRead
                                     runOnUiThread {
-                                        if (dialog != null && dialog.isShowing) {
-                                            load.setText("Loading...")
+                                        if (dialog.isShowing) {
+                                            load.text = "Loading..."
                                         }
                                     }
                                 }
-                                outputStream.write(LINE_END.toByteArray())
+                                outputStream.write(lINEEND.toByteArray())
                                 outputStream.flush()
                                 bufferedInputStream.close()
                             }
@@ -745,7 +723,7 @@ class ProductAdd : AppCompatActivity() {
             return destinationFilename
         }
 
-        fun createFileFromStream(ins: InputStream, destination: File?) {
+        private fun createFileFromStream(ins: InputStream, destination: File?) {
             try {
                 FileOutputStream(destination).use { os ->
                     val buffer = ByteArray(4096)

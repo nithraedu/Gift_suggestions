@@ -42,7 +42,7 @@
             android:name=".PrivacyPolicy"
             android:exported="false" />
         <activity
-            android:name=".Fav_class"
+            android:name=".Favclass"
             android:exported="false" />
         <activity
             android:name=".ImageSlide"
@@ -51,7 +51,7 @@
             android:name=".product_shop.SellerEntry"
             android:exported="false" />
         <activity
-            android:name=".Full_Details"
+            android:name=".FullDetails"
             android:exported="false" />
         <activity
             android:name=".product_shop.ProductFullView"

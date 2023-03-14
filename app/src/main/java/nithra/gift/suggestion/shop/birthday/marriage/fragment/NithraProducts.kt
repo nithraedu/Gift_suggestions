@@ -29,31 +29,28 @@ import retrofit2.Response
 class NithraProducts : Fragment() {
     var adapter: Adapter? = null
     var list: RecyclerView? = null
-    var no_item: LinearLayout? = null
+    var noItem: LinearLayout? = null
     var pullToRefresh: SwipeRefreshLayout? = null
-    var gift_show: ArrayList<GiftList>? = null
-    var intent1: Intent? = null
+    var giftShow: ArrayList<GiftList>? = null
+    private var intent1: Intent? = null
     var extra: Bundle? = null
     var title: String? = null
-    var title1: String? = null
-    var title3: String? = null
+    private var title1: String? = null
+    private var title3: String? = null
     var dialog:Dialog?=null
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_nithra_products, container, false)
-        gift_show = ArrayList()
+        giftShow = ArrayList()
         list = view.findViewById(R.id.list)
-        no_item = view.findViewById(R.id.no_item)
+        noItem = view.findViewById(R.id.no_item)
         pullToRefresh = view.findViewById(R.id.pullToRefresh)
 
         intent1 = requireActivity().intent
-        extra = intent1!!.getExtras()
+        extra = intent1!!.extras
 
 
         dialog = context?.let {
@@ -74,25 +71,25 @@ class NithraProducts : Fragment() {
             title3 = extra!!.getString("gender_id")
         }
         val gridLayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-        list!!.setLayoutManager(gridLayoutManager)
+        list!!.layoutManager = gridLayoutManager
         adapter = context?.let {
             Adapter(
-                it, gift_show
+                it
             )
         }
-        list!!.setAdapter(adapter)
-        get_cat()
-        get_cat1()
-        pullToRefresh!!.setOnRefreshListener({
-            gift_show!!.clear()
-            get_cat()
-            get_cat1()
-            pullToRefresh!!.setRefreshing(false)
-        })
+        list!!.adapter = adapter
+        getCat()
+        getCat1()
+        pullToRefresh!!.setOnRefreshListener {
+            giftShow!!.clear()
+            getCat()
+            getCat1()
+            pullToRefresh!!.isRefreshing = false
+        }
         return view
     }
 
-    fun get_cat() {
+    private fun getCat() {
         val map = HashMap<String, String?>()
         map["action"] = "nithra"
         map["gift_category"] = title1
@@ -108,16 +105,16 @@ class NithraProducts : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     if (response.body()!![0].status == "Success") {
-                        gift_show!!.clear()
-                        gift_show!!.addAll(response.body()!!)
+                        giftShow!!.clear()
+                        giftShow!!.addAll(response.body()!!)
                         adapter!!.notifyDataSetChanged()
                     }
-                    if (gift_show!!.size == 0) {
+                    if (giftShow!!.size == 0) {
                         pullToRefresh!!.visibility = View.GONE
-                        no_item!!.visibility = View.VISIBLE
+                        noItem!!.visibility = View.VISIBLE
                     } else {
                         pullToRefresh!!.visibility = View.VISIBLE
-                        no_item!!.visibility = View.GONE
+                        noItem!!.visibility = View.GONE
                     }
                     dialog!!.dismiss()
 
@@ -131,7 +128,7 @@ class NithraProducts : Fragment() {
         })
     }
 
-    fun get_cat1() {
+    private fun getCat1() {
         val map = HashMap<String, String?>()
         map["action"] = "nithra"
         map["gift_for"] = title3
@@ -147,16 +144,16 @@ class NithraProducts : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     if (response.body()!![0].status == "Success") {
-                        gift_show!!.clear()
-                        gift_show!!.addAll(response.body()!!)
+                        giftShow!!.clear()
+                        giftShow!!.addAll(response.body()!!)
                         adapter!!.notifyDataSetChanged()
                     }
-                    if (gift_show!!.size == 0) {
+                    if (giftShow!!.size == 0) {
                         pullToRefresh!!.visibility = View.GONE
-                        no_item!!.visibility = View.VISIBLE
+                        noItem!!.visibility = View.VISIBLE
                     } else {
                         pullToRefresh!!.visibility = View.VISIBLE
-                        no_item!!.visibility = View.GONE
+                        noItem!!.visibility = View.GONE
                     }
                     dialog!!.dismiss()
 
@@ -169,9 +166,9 @@ class NithraProducts : Fragment() {
         })
     }
 
-    inner class Adapter(ctx: Context, gift_show: ArrayList<GiftList>?) :
+    inner class Adapter(ctx: Context) :
         RecyclerView.Adapter<Adapter.ViewHolder>() {
-        var inflater: LayoutInflater
+        private var inflater: LayoutInflater
         var context: Context
 
         init {
@@ -190,7 +187,7 @@ class NithraProducts : Fragment() {
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val currentString = gift_show!![position].giftImage
+            val currentString = giftShow!![position].giftImage
             val separated = currentString!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
             if (separated.isNotEmpty()) {
@@ -198,31 +195,31 @@ class NithraProducts : Fragment() {
                     .error(R.drawable.ic_gift_default_img)
                     .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.img_slide)
+                    .into(holder.imgSlide)
             } else {
                 // handle the case where separated is empty or null
             }
-            holder.gridText.text = gift_show!![position].giftName
+            holder.gridText.text = giftShow!![position].giftName
             holder.category.setOnClickListener {
-                val currentString = gift_show!![position].giftImage
+                val currentString = giftShow!![position].giftImage
                 val i = Intent(getContext(), ImageSlide::class.java)
                 i.putExtra("pos", currentString)
-                i.putExtra("name", gift_show!![position].giftName)
+                i.putExtra("name", giftShow!![position].giftName)
                 startActivity(i)
             }
         }
 
         override fun getItemCount(): Int {
-            return gift_show!!.size
+            return giftShow!!.size
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var img_slide: ImageView
+            var imgSlide: ImageView
             var gridText: TextView
             var category: CardView
 
             init {
-                img_slide = itemView.findViewById(R.id.imageGrid)
+                imgSlide = itemView.findViewById(R.id.imageGrid)
                 gridText = itemView.findViewById(R.id.gridText)
                 category = itemView.findViewById(R.id.category)
             }

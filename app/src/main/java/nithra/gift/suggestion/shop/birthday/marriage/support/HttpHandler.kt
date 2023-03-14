@@ -11,7 +11,7 @@ import javax.net.ssl.HttpsURLConnection
 class HttpHandler {
     var context: Context? = null
 
-    constructor() {}
+    constructor()
     constructor(context: Context?) {
         this.context = context
     }

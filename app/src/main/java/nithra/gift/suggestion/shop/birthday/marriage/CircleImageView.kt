@@ -301,8 +301,7 @@ class CircleImageView : AppCompatImageView {
         return if (drawable is BitmapDrawable) {
             drawable.bitmap
         } else try {
-            val bitmap: Bitmap
-            bitmap = if (drawable is ColorDrawable) {
+            val bitmap: Bitmap = if (drawable is ColorDrawable) {
                 Bitmap.createBitmap(COLORDRAWABLE_DIMENSION, COLORDRAWABLE_DIMENSION, BITMAP_CONFIG)
             } else {
                 Bitmap.createBitmap(

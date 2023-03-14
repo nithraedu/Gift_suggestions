@@ -436,7 +436,6 @@ class NotificationView : AppCompatActivity() {
             val drawable1 = viewHolder!!.cunt!!.background.current as GradientDrawable
             drawable1.setColor(color)
             viewHolder!!.textView1!!.text = "" + players!![position]["bm"]
-            //viewHolder.time_txt.setText("" + players.get(position).get("msgTime"))
             viewHolder!!.chbk!!.setOnClickListener { v: View ->
                 chk_all = false
                 val action_delete11 = _menu!!.findItem(R.id.action_delete)

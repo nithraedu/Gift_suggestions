@@ -11,8 +11,6 @@ import android.net.Uri
 import android.os.*
 import android.view.MenuItem
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -44,7 +42,6 @@ import nithra.gift.suggestion.shop.birthday.marriage.fragment.Home
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Androidid
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitAPI
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitApiClient
-import nithra.gift.suggestion.shop.birthday.marriage.support.HttpHandler
 import nithra.gift.suggestion.shop.birthday.marriage.support.SharedPreference
 import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class
 import org.json.JSONException
@@ -61,27 +58,22 @@ import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     NavigationBarView.OnItemSelectedListener {
-    var viewpager2: ViewPager2? = null
-    var frag_adapter: Frag_Adapter? = null
-    var pref: SharedPreferences? = null
+    private var viewpager2: ViewPager2? = null
+    private var fragAdapter: FragAdapter? = null
+    private var pref: SharedPreferences? = null
     var sharedPreference = SharedPreference()
-    var and_id: ArrayList<Androidid>? = null
-    var appUpdateManager: AppUpdateManager? = null
-    var mReferrerClient: InstallReferrerClient? = null
+    var andId: ArrayList<Androidid>? = null
+    private var appUpdateManager: AppUpdateManager? = null
+    private var mReferrerClient: InstallReferrerClient? = null
     var source = ""
     var medium = ""
     var comp = ""
     var a = 0
-    var spa: SharedPreferences? = null
+    private var spa: SharedPreferences? = null
     private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.activity_main)
         pref = getSharedPreferences("register", MODE_PRIVATE)
 
@@ -92,10 +84,10 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
 
 
         viewpager2 = findViewById(R.id.viewpager2)
-        viewpager2!!.setUserInputEnabled(false)
-        frag_adapter = Frag_Adapter(this)
-        frag_adapter!!.addFragment(Home())
-        and_id = ArrayList()
+        viewpager2!!.isUserInputEnabled = false
+        fragAdapter = FragAdapter(this)
+        fragAdapter!!.addFragment(Home())
+        andId = ArrayList()
         if (sharedPreference.getInt(applicationContext, "android_id_check") == 0) {
             android()
         }
@@ -153,21 +145,21 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             }
         } else {
             if (sp.getString(this@MainActivity, "review_time") == "") {
-                val current_date = Calendar.getInstance()
-                val currentdate_mills = current_date.timeInMillis
-                sp.putString(this@MainActivity, "review_time", "" + currentdate_mills)
+                val currentDate = Calendar.getInstance()
+                val currentdateMills = currentDate.timeInMillis
+                sp.putString(this@MainActivity, "review_time", "" + currentdateMills)
             }
-            app_update_manager()
+            appUpdateManager()
         }
         //in_app cods end
 
-        viewpager2!!.setAdapter(frag_adapter)
+        viewpager2!!.adapter = fragAdapter
     }
 
     fun android() {
         val map = HashMap<String, String?>()
         map["action"] = "check_android_id"
-        map["android_id"] = Utils_Class.android_id(this)
+        map["android_id"] = Utils_Class.androidId(this)
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -179,9 +171,9 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             ) {
                 if (response.isSuccessful) {
                     if (response.body()!![0].status == "success") {
-                        and_id!!.addAll(response.body()!!)
+                        andId!!.addAll(response.body()!!)
                         sharedPreference.putInt(applicationContext, "android_id_check", 1)
-                        and_id!![0].userId?.let {
+                        andId!![0].userId?.let {
                             sharedPreference.putString(
                                 applicationContext,
                                 "android_userid",
@@ -198,10 +190,10 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
     fun feedback() {
-        val email_edt: EditText
-        val feedback_edt: EditText
+        val emailEdt: EditText
+        val feedbackEdt: EditText
         val privacy: TextView
-        val submit_btn: TextView
+        val submitBtn: TextView
         val dialog = Dialog(
             this@MainActivity,
             android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
@@ -209,9 +201,9 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         dialog.setContentView(R.layout.feed_back)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
         dialog.setCanceledOnTouchOutside(false)
-        email_edt = dialog.findViewById(R.id.edit_email)
-        feedback_edt = dialog.findViewById(R.id.editText1)
-        submit_btn = dialog.findViewById(R.id.btnSend)
+        emailEdt = dialog.findViewById(R.id.edit_email)
+        feedbackEdt = dialog.findViewById(R.id.editText1)
+        submitBtn = dialog.findViewById(R.id.btnSend)
         privacy = dialog.findViewById(R.id.policy)
         privacy.setOnClickListener {
             if (Utils_Class.isNetworkAvailable(this@MainActivity)) {
@@ -225,9 +217,9 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 ).show()
             }
         }
-        submit_btn.setOnClickListener(View.OnClickListener {
-            var feedback = feedback_edt.text.toString().trim { it <= ' ' }
-            val email = email_edt.text.toString().trim { it <= ' ' }
+        submitBtn.setOnClickListener(View.OnClickListener {
+            var feedback = feedbackEdt.text.toString().trim { it <= ' ' }
+            val email = emailEdt.text.toString().trim { it <= ' ' }
             if (feedback == "") {
                 Toast.makeText(
                     this@MainActivity,
@@ -289,7 +281,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         dialog.show()
     }
 
-    fun privacy() {
+    private fun privacy() {
         val dialog = Dialog(
             this@MainActivity,
             android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
@@ -300,11 +292,11 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         dialog.setCancelable(false)
         dialog.show()
         val head = dialog.findViewById<TextView>(R.id.head)
-        val first_line = dialog.findViewById<TextView>(R.id.first_line)
+        val firstLine = dialog.findViewById<TextView>(R.id.first_line)
         val b1 = dialog.findViewById<TextView>(R.id.b1)
         val b2 = dialog.findViewById<TextView>(R.id.b2)
         head.text = "Privacy & Terms"
-        first_line.text = """
+        firstLine.text = """
                Thanks for downloading or updating Gift Suggestions.
                
               
@@ -326,7 +318,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         b2.setOnClickListener {
             val editer = pref!!.edit()
             editer.putInt("p_p", 1)
-            editer.commit()
+            editer.apply()
             dialog.dismiss()
         }
     }
@@ -419,7 +411,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
 
-    inner class Frag_Adapter(fragmentActivity: FragmentActivity) :
+    inner class FragAdapter(fragmentActivity: FragmentActivity) :
         FragmentStateAdapter(fragmentActivity) {
         private val fragmentList = ArrayList<Fragment>()
         override fun createFragment(position: Int): Fragment {
@@ -436,7 +428,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
     //in_app cods start
-    private fun app_update_manager() {
+    private fun appUpdateManager() {
         appUpdateManager = AppUpdateManagerFactory.create(this@MainActivity)
         val appUpdateInfoTask = appUpdateManager!!.appUpdateInfo
         appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
@@ -456,16 +448,16 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             } else {
                 if (sp.getString(this@MainActivity, "review_complete") == "") {
                     if (sp.getString(this@MainActivity, "review_time") != "") {
-                        val before_date = sp.getString(this@MainActivity, "review_time")
-                        val current_date = Calendar.getInstance()
-                        val currentdate_mills = current_date.timeInMillis
+                        val beforeDate = sp.getString(this@MainActivity, "review_time")
+                        val currentDate = Calendar.getInstance()
+                        val currentdateMills = currentDate.timeInMillis
                         val sdf = SimpleDateFormat("dd/MM/yyyy")
-                        val string_current_date = sdf.format(currentdate_mills)
-                        val string_before_date = sdf.format(before_date)
+                        val stringCurrentDate = sdf.format(currentdateMills)
+                        val stringBeforeDate = sdf.format(beforeDate)
                         var timediff: Long = 0
                         try {
                             timediff = TimeUnit.DAYS.convert(
-                                sdf.parse(string_current_date).time - sdf.parse(string_before_date).time,
+                                sdf.parse(stringCurrentDate).time - sdf.parse(stringBeforeDate).time,
                                 TimeUnit.MILLISECONDS
                             )
                         } catch (e1: ParseException) {
@@ -473,7 +465,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                         }
                         if (timediff.toInt() >= 10) {
                             if (Utils_Class.isNetworkAvailable(this@MainActivity)) {
-                                inapp_review_dialog()
+                                inappReviewDialog()
                             }
                         }
                     }
@@ -482,8 +474,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         }
     }
 
-    private fun inapp_review_dialog() {
-        //        ReviewManager manager =new FakeReviewManager(Main_open.this);
+    private fun inappReviewDialog() {
         val manager = ReviewManagerFactory.create(this@MainActivity)
         val request = manager.requestReviewFlow()
         request.addOnCompleteListener { task: Task<ReviewInfo?> ->
@@ -491,7 +482,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 // We can get the ReviewInfo object
                 val reviewInfo = task.result
                 val flow = manager.launchReviewFlow(this@MainActivity, reviewInfo)
-                flow.addOnCompleteListener { task1: Task<Void?>? ->
+                flow.addOnCompleteListener {
                     sp.putString(
                         this@MainActivity,
                         "review_complete",
@@ -513,21 +504,25 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                     if (response != null) {
                         val referrerUrl = response.installReferrer
                         if (referrerUrl != null) {
-                            if (referrerUrl.length > 0) {
+                            if (referrerUrl.isNotEmpty()) {
                                 val referrerList =
                                     referrerUrl.split("&".toRegex()).dropLastWhile { it.isEmpty() }
                                         .toTypedArray()
                                 var i = 0
                                 while (i < referrerList.size) {
-                                    if (i == 0) {
-                                        source =
-                                            referrerList[i].substring(referrerList[i].indexOf("=") + 1)
-                                    } else if (i == 1) {
-                                        medium =
-                                            referrerList[i].substring(referrerList[i].indexOf("=") + 1)
-                                    } else if (i == 2) {
-                                        comp =
-                                            referrerList[i].substring(referrerList[i].indexOf("=") + 1)
+                                    when (i) {
+                                        0 -> {
+                                            source =
+                                                referrerList[i].substring(referrerList[i].indexOf("=") + 1)
+                                        }
+                                        1 -> {
+                                            medium =
+                                                referrerList[i].substring(referrerList[i].indexOf("=") + 1)
+                                        }
+                                        2 -> {
+                                            comp =
+                                                referrerList[i].substring(referrerList[i].indexOf("=") + 1)
+                                        }
                                     }
                                     i++
                                 }
@@ -561,15 +556,13 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
     fun send(context: Context?, utm: String?, utm1: String?, utm2: String?) {
-        val sh = HttpHandler()
-        val url = "https://nithra.mobi/apps/referrer.php"
         val postDataParams = JSONObject()
         try {
             postDataParams.put("app", "Gift Suggestions")
             postDataParams.put("ref", utm)
             postDataParams.put("mm", utm1)
             postDataParams.put("cn", utm2)
-            postDataParams.put("email", context?.let { Utils_Class.android_id(it) })
+            postDataParams.put("email", context?.let { Utils_Class.androidId(it) })
         } catch (e: JSONException) {
             e.printStackTrace()
         }
@@ -587,7 +580,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 113) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 sp.putInt(applicationContext, "permission", 1)
             }
         }

@@ -7,14 +7,9 @@ import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
 import android.database.sqlite.SQLiteDatabase
 import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Typeface
 import android.net.Uri
 import android.os.*
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.AdapterView
@@ -51,11 +46,6 @@ class ST_Activity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         var savedInstanceState = savedInstanceState
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.st_lay)
         myDB = openOrCreateDatabase("myDB", 0, null)
         myDB1 = openOrCreateDatabase("myDB1", 0, null)
@@ -79,7 +69,7 @@ class ST_Activity : AppCompatActivity() {
             sharedPreference.putInt(applicationContext, "Noti_add", show_ads)
             str_title = title
         }
-        content_view.setOnLongClickListener({ v: View? -> true })
+        content_view.setOnLongClickListener { v: View? -> true }
         val tit_txt = findViewById<TextView>(R.id.sticky)
         tit_txt.text = "" + str_title
         val ws = content_view.getSettings()
@@ -126,8 +116,7 @@ class ST_Activity : AppCompatActivity() {
 
             override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
                 try {
-                    mProgress(this@ST_Activity, "\n" +
-                            "Please wait...", true)!!
+                    mProgress(this@ST_Activity)!!
                         .show()
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -145,7 +134,7 @@ class ST_Activity : AppCompatActivity() {
             }
         })
         btn_close = findViewById(R.id.btn_close)
-        btn_close.setOnClickListener({ v: View? -> onBackPressed() })
+        btn_close.setOnClickListener { v: View? -> onBackPressed() }
         val mFab = findViewById<FloatingActionButton>(R.id.fab_share)
 
         mFab.setOnClickListener { v: View? ->

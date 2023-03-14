@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.Window
-import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
@@ -25,136 +23,130 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class OtpVerify : AppCompatActivity() {
-    var enterotp: TextView? = null
-    var edit_email: TextView? = null
-    var enter_otp: EditText? = null
-    var otp_1: EditText? = null
-    var otp_2: EditText? = null
-    var otp_3: EditText? = null
-    var otp_4: EditText? = null
-    var verify: String? = null
-    var edit_otp: String? = null
+    private var enterotp: TextView? = null
+    private var editEmail: TextView? = null
+    var enterOtp: EditText? = null
+    var otp1: EditText? = null
+    var otp2: EditText? = null
+    var otp3: EditText? = null
+    var otp4: EditText? = null
+    private var verify: String? = null
+    private var editOtp: String? = null
     var sharedPreference = SharedPreference()
-    var send_otp: ArrayList<SendOtppojo>? = null
-    var edit: ImageView? = null
+    var sendOtp: ArrayList<SendOtppojo>? = null
+    private var edit: ImageView? = null
     var back: ImageView? = null
     var extra: Bundle? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.fragment_enter_o_t_p)
-        val _tv = findViewById<TextView>(R.id.timer)
-        send_otp = ArrayList()
+        val ttv = findViewById<TextView>(R.id.timer)
+        sendOtp = ArrayList()
         back = findViewById(R.id.back)
         enterotp = findViewById(R.id.enterotp)
-        edit_email = findViewById(R.id.edit_email)
-        otp_1 = findViewById(R.id.otp_1)
-        otp_2 = findViewById(R.id.otp_2)
-        otp_3 = findViewById(R.id.otp_3)
-        otp_4 = findViewById(R.id.otp_4)
+        editEmail = findViewById(R.id.edit_email)
+        otp1 = findViewById(R.id.otp_1)
+        otp2 = findViewById(R.id.otp_2)
+        otp3 = findViewById(R.id.otp_3)
+        otp4 = findViewById(R.id.otp_4)
         edit = findViewById(R.id.edit)
-        enter_otp = findViewById(R.id.enter_otp)
-        back!!.setOnClickListener({ finish() })
-        edit_email!!.setText("" + sharedPreference.getString(this@OtpVerify, "resend"))
+        enterOtp = findViewById(R.id.enter_otp)
+        back!!.setOnClickListener { finish() }
+        editEmail!!.text = "" + sharedPreference.getString(this@OtpVerify, "resend")
         object : CountDownTimer(120000, 1000) {
             override fun onTick(millisUntilFinished: Long) {
-                _tv.text = "If you didn't receive a otp? " + millisUntilFinished / 1000
+                ttv.text = "If you didn't receive a otp? " + millisUntilFinished / 1000
             }
 
             override fun onFinish() {
-                _tv.text = "If you didn't receive a otp? Resend"
+                ttv.text = "If you didn't receive a otp? Resend"
                 sharedPreference.putString(this@OtpVerify, "register_otp", "" + 0)
             }
         }.start()
-        _tv.setOnClickListener {
-            //sharedPreference.putString(OtpVerify.this, "register_otp_1", "register_otp");
+        ttv.setOnClickListener {
             if (Utils_Class.isNetworkAvailable(this@OtpVerify)) {
-                otp_generate()
+                otpGenerate()
             } else {
                 Utils_Class.toast_normal(this@OtpVerify, "Please connect to your internet")
             }
             object : CountDownTimer(120000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    _tv.text = "If you didn't receive a otp? " + millisUntilFinished / 1000
+                    ttv.text = "If you didn't receive a otp? " + millisUntilFinished / 1000
                 }
 
                 override fun onFinish() {
-                    _tv.text = "If you didn't receive a otp? Resend"
+                    ttv.text = "If you didn't receive a otp? Resend"
                 }
             }.start()
         }
-        edit!!.setOnClickListener({
+        edit!!.setOnClickListener {
             finish()
-        })
-        otp_1!!.addTextChangedListener(object : TextWatcher {
+        }
+        otp1!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if (s.length != 0) {
-                    otp_2!!.requestFocus()
+                if (s.isNotEmpty()) {
+                    otp2!!.requestFocus()
                 }
             }
         })
-        otp_2!!.addTextChangedListener(object : TextWatcher {
+        otp2!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if (s.length != 0) {
-                    otp_3!!.requestFocus()
+                if (s.isNotEmpty()) {
+                    otp3!!.requestFocus()
                 } else {
-                    otp_1!!.requestFocus()
+                    otp1!!.requestFocus()
                 }
             }
         })
-        otp_3!!.addTextChangedListener(object : TextWatcher {
+        otp3!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if (s.length != 0) {
-                    otp_4!!.requestFocus()
+                if (s.isNotEmpty()) {
+                    otp4!!.requestFocus()
                 } else {
-                    otp_2!!.requestFocus()
+                    otp2!!.requestFocus()
                 }
             }
         })
-        otp_4!!.addTextChangedListener(object : TextWatcher {
+        otp4!!.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
             override fun afterTextChanged(s: Editable) {
-                if (s.length != 0) {
-                    otp_4!!.requestFocus()
+                if (s.isNotEmpty()) {
+                    otp4!!.requestFocus()
                 } else {
-                    otp_3!!.requestFocus()
+                    otp3!!.requestFocus()
                 }
             }
         })
-        enterotp!!.setOnClickListener({
-            edit_otp =
-                otp_1!!.getText().toString().trim { it <= ' ' } + otp_2!!.getText().toString()
-                    .trim { it <= ' ' } + otp_3!!.getText().toString()
-                    .trim { it <= ' ' } + otp_4!!.getText().toString().trim { it <= ' ' }
-            if (otp_1!!.getText().toString() == "" && otp_2!!.getText()
-                    .toString() == "" && otp_3!!.getText().toString() == "" && otp_4!!.getText()
+        enterotp!!.setOnClickListener {
+            editOtp =
+                otp1!!.text.toString().trim { it <= ' ' } + otp2!!.text.toString()
+                    .trim { it <= ' ' } + otp3!!.text.toString()
+                    .trim { it <= ' ' } + otp4!!.text.toString().trim { it <= ' ' }
+            if (otp1!!.text.toString() == "" && otp2!!.text
+                    .toString() == "" && otp3!!.text.toString() == "" && otp4!!.text
                     .toString() == ""
             ) {
                 Utils_Class.toast_center(this@OtpVerify, "Enter your otp")
             } else {
                 if (Utils_Class.isNetworkAvailable(this@OtpVerify)) {
-                    otp_verify()
+                    otpVerify()
                 } else {
                     Utils_Class.toast_normal(this@OtpVerify, "Please connect to your internet")
                 }
             }
-        })
+        }
     }
 
-    fun otp_verify() {
-        Utils_Class.mProgress(this@OtpVerify, "Loading please wait...", false)!!.show()
-        verify = edit_otp!!.trim { it <= ' ' }
+    private fun otpVerify() {
+        Utils_Class.mProgress(this@OtpVerify)!!.show()
+        verify = editOtp!!.trim { it <= ' ' }
         val map = HashMap<String, String?>()
         map["action"] = "check_otp"
         map["user_id"] = sharedPreference.getString(this@OtpVerify, "user_id")
@@ -172,7 +164,7 @@ class OtpVerify : AppCompatActivity() {
                     if (response.body()!![0].status == "Success") {
                         sharedPreference.putInt(this@OtpVerify, "yes", 1)
                         sharedPreference.putInt(this@OtpVerify, "profile", 1)
-                        enter_otp!!.text.clear()
+                        enterOtp!!.text.clear()
                         val user = sharedPreference.getString(this@OtpVerify, "user_status")
                         if (user == "exiting") {
                             sharedPreference.putInt(this@OtpVerify, "profile", 2)
@@ -197,8 +189,8 @@ class OtpVerify : AppCompatActivity() {
         })
     }
 
-    fun otp_generate() {
-        Utils_Class.mProgress(this@OtpVerify, "Loading please wait...", false)!!.show()
+    private fun otpGenerate() {
+        Utils_Class.mProgress(this@OtpVerify)!!.show()
         val map = HashMap<String, String?>()
         map["action"] = "check_seller"
         map["gmail"] = sharedPreference.getString(this@OtpVerify, "resend")
@@ -212,11 +204,11 @@ class OtpVerify : AppCompatActivity() {
                 response: Response<ArrayList<SendOtppojo>?>
             ) {
                 if (response.isSuccessful) {
-                    send_otp!!.addAll(response.body()!!)
+                    sendOtp!!.addAll(response.body()!!)
                     sharedPreference.putString(
                         this@OtpVerify,
                         "register_otp",
-                        "" + send_otp!![0].otp
+                        "" + sendOtp!![0].otp
                     )
                     Utils_Class.mProgress!!.dismiss()
                 }

@@ -25,38 +25,33 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Fav_class : AppCompatActivity() {
+class Favclass : AppCompatActivity() {
     var list: RecyclerView? = null
-    var no_item: LinearLayout? = null
+    var noItem: LinearLayout? = null
     var pullToRefresh: SwipeRefreshLayout? = null
     var sharedPreference = SharedPreference()
     var back: ImageView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.fragment_favourite)
         fav_show = ArrayList()
         list = findViewById(R.id.list)
-        no_item = findViewById(R.id.no_item)
+        noItem = findViewById(R.id.no_item)
         pullToRefresh = findViewById(R.id.pullToRefresh)
         back = findViewById(R.id.back)
-        back!!.setOnClickListener({ finish() })
-        Utils_Class.mProgress(this@Fav_class, "Loading please wait...", false)!!.show()
+        back!!.setOnClickListener { finish() }
+        Utils_Class.mProgress(this@Favclass)!!.show()
         val gridLayoutManager =
-            GridLayoutManager(this@Fav_class, 2, GridLayoutManager.VERTICAL, false)
-        list!!.setLayoutManager(gridLayoutManager)
-        adapter = Adapter(this@Fav_class, fav_show)
-        list!!.setAdapter(adapter)
-        pullToRefresh!!.setOnRefreshListener({
+            GridLayoutManager(this@Favclass, 2, GridLayoutManager.VERTICAL, false)
+        list!!.layoutManager = gridLayoutManager
+        adapter = Adapter(this@Favclass)
+        list!!.adapter = adapter
+        pullToRefresh!!.setOnRefreshListener {
             fav_show!!.clear()
             fav()
-            pullToRefresh!!.setRefreshing(false)
-        })
+            pullToRefresh!!.isRefreshing = false
+        }
     }
 
     public override fun onResume() {
@@ -64,7 +59,7 @@ class Fav_class : AppCompatActivity() {
         fav()
     }
 
-    fun fav() {
+    private fun fav() {
         fav_show!!.clear()
         val map = HashMap<String, String?>()
         map["action"] = "get_fav"
@@ -85,10 +80,10 @@ class Fav_class : AppCompatActivity() {
                     }
                     if (fav_show!!.size == 0) {
                         pullToRefresh!!.visibility = View.GONE
-                        no_item!!.visibility = View.VISIBLE
+                        noItem!!.visibility = View.VISIBLE
                     } else {
                         pullToRefresh!!.visibility = View.VISIBLE
-                        no_item!!.visibility = View.GONE
+                        noItem!!.visibility = View.GONE
                     }
                     Utils_Class.mProgress!!.dismiss()
                 }
@@ -103,7 +98,7 @@ class Fav_class : AppCompatActivity() {
         val map = HashMap<String, String?>()
         map["action"] = "favourite"
         map["gift_id"] = id_gift
-        map["user_id"] = sharedPreference.getString(this@Fav_class, "android_userid")
+        map["user_id"] = sharedPreference.getString(this@Favclass, "android_userid")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -118,13 +113,13 @@ class Fav_class : AppCompatActivity() {
                         if (response.body()!![0].fvAction == 1) {
                             fav_show!![pos].fav = 1
                             Utils_Class.toast_center(
-                                this@Fav_class,
+                                this@Favclass,
                                 "Your gift added to favourite..."
                             )
                         } else {
                             fav_show!![pos].fav = 0
                             Utils_Class.toast_center(
-                                this@Fav_class,
+                                this@Favclass,
                                 "Your gift removed from favourite..."
                             )
                         }
@@ -138,9 +133,9 @@ class Fav_class : AppCompatActivity() {
         })
     }
 
-    inner class Adapter(ctx: Context, gift_show: ArrayList<Fav_view>?) :
+    inner class Adapter(ctx: Context) :
         RecyclerView.Adapter<Adapter.ViewHolder>() {
-        var inflater: LayoutInflater
+        private var inflater: LayoutInflater
         var context: Context
 
         init {
@@ -173,7 +168,7 @@ class Fav_class : AppCompatActivity() {
                     .error(R.drawable.ic_gift_default_img)
                     .placeholder(R.drawable.ic_gift_default_img)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(holder.img_slide)
+                    .into(holder.imgSlide)
             } else {
                 // handle the case where separated is empty or null
             }
@@ -182,7 +177,7 @@ class Fav_class : AppCompatActivity() {
             holder.giftprize.text = "\u20B9 " + fav_show!![position].totalAmount
             holder.offerprize.text = "\u20B9 " + fav_show!![position].giftAmount
             holder.category.setOnClickListener {
-                val i = Intent(this@Fav_class, Full_Details::class.java)
+                val i = Intent(this@Favclass, FullDetails::class.java)
                 i.putExtra("full_view", fav_show!![position].giftId)
                 startActivity(i)
             }
@@ -201,7 +196,7 @@ class Fav_class : AppCompatActivity() {
         }
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var img_slide: ImageView
+            var imgSlide: ImageView
             var favourite: ImageView
             var gridText: TextView
             var head: TextView
@@ -210,7 +205,7 @@ class Fav_class : AppCompatActivity() {
             var category: CardView
 
             init {
-                img_slide = itemView.findViewById(R.id.imageGrid)
+                imgSlide = itemView.findViewById(R.id.imageGrid)
                 gridText = itemView.findViewById(R.id.gridText)
                 head = itemView.findViewById(R.id.head)
                 category = itemView.findViewById(R.id.category)

@@ -13,16 +13,12 @@ import android.os.Message
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
-import com.google.gson.Gson
 import nithra.gift.suggestion.shop.birthday.marriage.R
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.GetCountry
 import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitAPI
@@ -58,44 +54,33 @@ class ShopAdd : AppCompatActivity() {
     var anothermobilenumber: TextInputEditText? = null
     var save: TextView? = null
     var remove: ImageView? = null
-    var edit_img: ImageView? = null
-    var sell_name: String? = null
-    var shop_name: String? = null
-    var shop_add: String? = null
-    var mob_num: String? = null
-    var another_mob_num: String? = null
-    var shop_city: String? = null
-    var shop_country: String? = null
-    var shop_state: String? = null
-    var shop_pincode: String? = null
-    var shop_district: String? = null
-    var shop_latitude: String? = null
-    var shop_longitude: String? = null
-    var mail: String? = null
-    var web: String? = null
-    var country_text: String? = null
+    private var editImg: ImageView? = null
+    private var sellName: String? = null
+    var shopName: String? = null
+    private var shopAdd: String? = null
+    private var mobNum: String? = null
+    private var anotherMobNum: String? = null
+    private var shopCity: String? = null
+    private var shopCountry: String? = null
+    private var shopState: String? = null
+    private var shopPincode: String? = null
+    private var mail: String? = null
+    private var web: String? = null
+    private var countryText: String? = null
     var IVPreviewImage: ImageView? = null
-    var SELECT_PICTURE = 200
     var sharedPreference = SharedPreference()
-    var pack = "nithra.tamil.word.game.giftsuggestions"
     var back: ImageView? = null
-    var uri_1: Uri? = null
+    private var uri1: Uri? = null
     var map1 = HashMap<String, String?>()
     var map2 = HashMap<String, String>()
     var path = ""
-    var spin_country: Spinner? = null
-    var country_get: ArrayList<GetCountry>? = null
-    var spin: ArrayList<String>? = null
-    var coun_try: String? = null
-    var file_array = arrayOfNulls<File>(1)
-    var testView: TextView? = null
+    private var spinCountry: Spinner? = null
+    var countryGet: ArrayList<GetCountry>? = null
+    private var spin: ArrayList<String>? = null
+    private var fileArray = arrayOfNulls<File>(1)
+    private var testView: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.fragment_add)
         sellername = findViewById(R.id.sellername)
         shopname = findViewById(R.id.shopname)
@@ -115,15 +100,15 @@ class ShopAdd : AppCompatActivity() {
         back = findViewById(R.id.back)
         mailid = findViewById(R.id.mailid)
         website = findViewById(R.id.website)
-        spin_country = findViewById(R.id.spin_country)
-        edit_img = findViewById(R.id.edit_img)
+        spinCountry = findViewById(R.id.spin_country)
+        editImg = findViewById(R.id.edit_img)
         anothermobilenumber = findViewById(R.id.anothermobilenumber)
-        country_get = ArrayList()
+        countryGet = ArrayList()
         spin = ArrayList()
         testView = findViewById(R.id.testView)
-        testView!!.setText("")
-        testView!!.setTag("")
-        testView!!.setOnClickListener({
+        testView!!.text = ""
+        testView!!.tag = ""
+        testView!!.setOnClickListener {
             val dialog = Dialog(this@ShopAdd)
             dialog.setContentView(R.layout.searchable_spinner)
             dialog.window!!.setLayout(650, 800)
@@ -131,8 +116,8 @@ class ShopAdd : AppCompatActivity() {
             dialog.show()
             val editText = dialog.findViewById<EditText>(R.id.edit_text)
             val listView = dialog.findViewById<ListView>(R.id.list_view)
-            for (i in country_get!!.indices) {
-                country_get!![i].name?.let { it1 -> spin!!.add(it1) }
+            for (i in countryGet!!.indices) {
+                countryGet!![i].name?.let { it1 -> spin!!.add(it1) }
             }
             val adapter = ArrayAdapter(this@ShopAdd, android.R.layout.simple_list_item_1, spin!!)
             listView.adapter = adapter
@@ -151,107 +136,101 @@ class ShopAdd : AppCompatActivity() {
 
                 override fun afterTextChanged(s: Editable) {}
             })
-            listView.onItemClickListener = OnItemClickListener { parent, view, position, id ->
-                testView!!.setText(adapter.getItem(position))
-                testView!!.setTag(country_get!![position].id)
+            listView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
+                testView!!.text = adapter.getItem(position)
+                testView!!.tag = countryGet!![position].id
                 dialog.dismiss()
             }
-        })
-        val emailPattern: Regex = "^[A-Za-z](.*)([@]{1})(.{1,})(\\.)(.{1,})".toRegex()
+        }
+        val emailPattern: Regex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)".toRegex()
 
         mailid!!.setText(sharedPreference.getString(this@ShopAdd, "user_mail"))
-        back!!.setOnClickListener({ finish() })
-        spin_country()
-        IVPreviewImage!!.setOnClickListener({
-            val dialog: Dialog
-            dialog = Dialog(
+        back!!.setOnClickListener { finish() }
+        spinCountry()
+        IVPreviewImage!!.setOnClickListener {
+            val dialog = Dialog(
                 this@ShopAdd,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.cam_gallery)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCanceledOnTouchOutside(false)
-            val camera: ImageView
-            val gallery: ImageView
-            camera = dialog.findViewById(R.id.camera)
-            gallery = dialog.findViewById(R.id.gallery)
+            val camera: ImageView = dialog.findViewById(R.id.camera)
+            val gallery: ImageView = dialog.findViewById(R.id.gallery)
             dialog.show()
             camera.setOnClickListener {
-                image_pick()
+                imagePick()
                 dialog.dismiss()
             }
             gallery.setOnClickListener {
-                image_pick_gal()
+                imagePickGal()
                 dialog.dismiss()
             }
-        })
-        edit_img!!.setOnClickListener({ //openSomeActivityForResult();
-            val dialog: Dialog
-            dialog = Dialog(
+        }
+        editImg!!.setOnClickListener {
+            val dialog = Dialog(
                 this@ShopAdd,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.cam_gallery)
             dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
             dialog.setCanceledOnTouchOutside(false)
-            val camera: ImageView
-            val gallery: ImageView
-            camera = dialog.findViewById(R.id.camera)
-            gallery = dialog.findViewById(R.id.gallery)
+            val camera: ImageView = dialog.findViewById(R.id.camera)
+            val gallery: ImageView = dialog.findViewById(R.id.gallery)
             dialog.show()
             camera.setOnClickListener {
-                image_pick()
+                imagePick()
                 dialog.dismiss()
             }
             gallery.setOnClickListener {
-                image_pick_gal()
+                imagePickGal()
                 dialog.dismiss()
             }
-        })
-        save!!.setOnClickListener({
-            sell_name = sellername!!.getText().toString().trim { it <= ' ' }
-            shop_name = shopname!!.getText().toString().trim { it <= ' ' }
-            shop_add = shopaddress!!.getText().toString().trim { it <= ' ' }
-            mob_num = mobilenumber!!.getText().toString().trim { it <= ' ' }
-            another_mob_num = anothermobilenumber!!.getText().toString().trim { it <= ' ' }
-            mail = mailid!!.getText().toString().trim { it <= ' ' }
-            web = website!!.getText().toString().trim { it <= ' ' }
-            shop_city = city!!.getText().toString().trim { it <= ' ' }
-            shop_state = state!!.getText().toString().trim { it <= ' ' }
-            shop_country = country!!.getText().toString().trim { it <= ' ' }
-            shop_pincode = pincode!!.getText().toString().trim { it <= ' ' }
-            country_text = testView!!.getTag().toString().trim { it <= ' ' }
-            if (sell_name == "") {
+        }
+        save!!.setOnClickListener {
+            sellName = sellername!!.text.toString().trim { it <= ' ' }
+            shopName = shopname!!.text.toString().trim { it <= ' ' }
+            shopAdd = shopaddress!!.text.toString().trim { it <= ' ' }
+            mobNum = mobilenumber!!.text.toString().trim { it <= ' ' }
+            anotherMobNum = anothermobilenumber!!.text.toString().trim { it <= ' ' }
+            mail = mailid!!.text.toString().trim { it <= ' ' }
+            web = website!!.text.toString().trim { it <= ' ' }
+            shopCity = city!!.text.toString().trim { it <= ' ' }
+            shopState = state!!.text.toString().trim { it <= ' ' }
+            shopCountry = country!!.text.toString().trim { it <= ' ' }
+            shopPincode = pincode!!.text.toString().trim { it <= ' ' }
+            countryText = testView!!.tag.toString().trim { it <= ' ' }
+            if (sellName == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Seller Name...")
-            } else if (shop_name == "") {
+            } else if (shopName == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Shop name...")
-            } else if (mob_num == "") {
+            } else if (mobNum == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Correct Mobile Number...")
             } else if (mail == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Your Email...")
             } else if (!mail!!.matches(emailPattern)) {
                 Toast.makeText(this@ShopAdd, "Invalid email address", Toast.LENGTH_SHORT).show()
-            } else if (country_text == "") {
+            } else if (countryText == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Choose your Country / Region...")
-            } else if (shop_state == "") {
+            } else if (shopState == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Your state...")
-            } else if (shop_city == "") {
+            } else if (shopCity == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Your city...")
-            } else if (shop_add == "") {
+            } else if (shopAdd == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Your address...")
-            } else if (shop_pincode == "") {
+            } else if (shopPincode == "") {
                 Utils_Class.toast_center(this@ShopAdd, "Please Enter Your pin/postal code...")
             } else {
                 if (Utils_Class.isNetworkAvailable(this@ShopAdd)) {
-                    submit_res()
+                    submitRes()
                 } else {
                     Utils_Class.toast_normal(this@ShopAdd, "Please connect to your internet")
                 }
             }
-        })
+        }
     }
 
-    fun image_pick() {
+    private fun imagePick() {
         mLauncher.launch(
             with(this@ShopAdd)
                 .crop()
@@ -260,7 +239,7 @@ class ShopAdd : AppCompatActivity() {
         )
     }
 
-    fun image_pick_gal() {
+    private fun imagePickGal() {
         mLauncher.launch(
             with(this@ShopAdd)
                 .crop()
@@ -269,17 +248,17 @@ class ShopAdd : AppCompatActivity() {
         )
     }
 
-    var mLauncher = registerForActivityResult<Intent, ActivityResult>(
+    private var mLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            uri_1 = result.data!!.data
-            if (uri_1 != null) {
-                IVPreviewImage!!.setImageURI(uri_1)
+            uri1 = result.data!!.data
+            if (uri1 != null) {
+                IVPreviewImage!!.setImageURI(uri1)
                 try {
-                    val file = getFile(this@ShopAdd, uri_1, "img.jpg")
+                    val file = getFile(this@ShopAdd, uri1, "img.jpg")
                     path = file.path.replace(file.name, "")
-                    file_array[0] = file
+                    fileArray[0] = file
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -287,7 +266,7 @@ class ShopAdd : AppCompatActivity() {
         }
     }
 
-    fun spin_country() {
+    private fun spinCountry() {
         val map = HashMap<String, String>()
         map["action"] = "get_country"
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
@@ -300,8 +279,7 @@ class ShopAdd : AppCompatActivity() {
                 response: Response<ArrayList<GetCountry>?>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    country_get!!.addAll(response.body()!!)
+                    countryGet!!.addAll(response.body()!!)
                 }
             }
 
@@ -310,103 +288,99 @@ class ShopAdd : AppCompatActivity() {
         })
     }
 
-    fun submit_res() {
+    private fun submitRes() {
         map1.clear()
         map2.clear()
         map1["action"] = "add_seller"
         map1["user_id"] = sharedPreference.getString(this@ShopAdd, "user_id")
-        map1["shop_name"] = shop_name
-        map1["seller_mobile"] = mob_num
-        map1["seller_mobile2"] = another_mob_num
+        map1["shop_name"] = shopName
+        map1["seller_mobile"] = mobNum
+        map1["seller_mobile2"] = anotherMobNum
         map1["shop_email"] = mail
         map1["shop_website"] = web
-        map1["name"] = sell_name
-        map1["country"] = country_text
-        map1["state"] = shop_state
-        map1["address"] = shop_add
-        map1["pincode"] = shop_pincode
+        map1["name"] = sellName
+        map1["country"] = countryText
+        map1["state"] = shopState
+        map1["address"] = shopAdd
+        map1["pincode"] = shopPincode
         try {
-            for (i in file_array.indices) {
-                if (file_array[i] != null) {
-                    map2["logo[$i]"] = "" + Uri.fromFile(file_array[i])
+            for (i in fileArray.indices) {
+                if (fileArray[i] != null) {
+                    map2["logo[$i]"] = "" + Uri.fromFile(fileArray[i])
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
         }
-        UploadAsync()
+        uploadAsync()
     }
 
-    fun UploadAsync() {
-        var dialog: Dialog? = null
-        dialog = this?.let {
-            Dialog(
-                it,
-                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
-            )
-        }
-        dialog!!.setContentView(R.layout.loading_dialog)
-        dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog!!.setCancelable(false)
+    private fun uploadAsync() {
+        val dialog: Dialog?
+        dialog = Dialog(
+            this,
+            android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+        )
+        dialog.setContentView(R.layout.loading_dialog)
+        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.setCancelable(false)
         val load: TextView = dialog.findViewById(R.id.loading)
-        load.setText("Uploading...")
-        dialog!!.show()
+        load.text = "Uploading..."
+        dialog.show()
         val handler: Handler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 val runnable = Runnable {
                     //post execute
-                    if (this@ShopAdd != null) {
-                        if (dialog.isShowing) {
-                            dialog.dismiss()
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    if (msg.obj != null && msg.obj.toString().isNotEmpty()) {
+                        val result = msg.obj.toString()
+                        val jsonArray: JSONArray?
+                        var jsonObject: JSONObject? = null
+                        try {
+                            jsonArray = JSONArray(result)
+                            jsonObject = jsonArray.getJSONObject(0)
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
                         }
-                        if (msg.obj != null && msg.obj.toString().length != 0) {
-                            val result = msg.obj.toString()
-                            var jsonArray: JSONArray? = null
-                            var jsonObject: JSONObject? = null
-                            try {
-                                jsonArray = JSONArray(result)
-                                jsonObject = jsonArray.getJSONObject(0)
-                            } catch (e: JSONException) {
-                                e.printStackTrace()
+                        try {
+                            if (jsonObject!!.getString("status").contains("Success")) {
+                                IVPreviewImage!!.setImageResource(R.drawable.add)
+                                sellername!!.text!!.clear()
+                                shopname!!.text!!.clear()
+                                shopaddress!!.text!!.clear()
+                                mobilenumber!!.text!!.clear()
+                                anothermobilenumber!!.text!!.clear()
+                                mailid!!.text!!.clear()
+                                website!!.text!!.clear()
+                                city!!.text!!.clear()
+                                state!!.text!!.clear()
+                                country!!.text!!.clear()
+                                pincode!!.text!!.clear()
+                                sharedPreference.putInt(this@ShopAdd, "yes", 1)
+                                sharedPreference.putInt(this@ShopAdd, "profile", 2)
+                                Toast.makeText(
+                                    this@ShopAdd,
+                                    "Your shop added successfully, Thank you",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                val i =
+                                    Intent(this@ShopAdd, SellerProfileProductList::class.java)
+                                startActivity(i)
+                                finish()
                             }
+                        } catch (e: JSONException) {
+                            e.printStackTrace()
+                        }
+                    } else {
+                        runOnUiThread {
                             try {
-                                if (jsonObject!!.getString("status").contains("Success")) {
-                                    IVPreviewImage!!.setImageResource(R.drawable.add)
-                                    sellername!!.text!!.clear()
-                                    shopname!!.text!!.clear()
-                                    shopaddress!!.text!!.clear()
-                                    mobilenumber!!.text!!.clear()
-                                    anothermobilenumber!!.text!!.clear()
-                                    mailid!!.text!!.clear()
-                                    website!!.text!!.clear()
-                                    city!!.text!!.clear()
-                                    state!!.text!!.clear()
-                                    country!!.text!!.clear()
-                                    pincode!!.text!!.clear()
-                                    sharedPreference.putInt(this@ShopAdd, "yes", 1)
-                                    sharedPreference.putInt(this@ShopAdd, "profile", 2)
-                                    Toast.makeText(
-                                        this@ShopAdd,
-                                        "Your shop added successfully, Thank you",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    val i =
-                                        Intent(this@ShopAdd, SellerProfileProductList::class.java)
-                                    startActivity(i)
-                                    finish()
+                                if (dialog.isShowing) {
+                                    dialog.dismiss()
                                 }
-                            } catch (e: JSONException) {
+                            } catch (e: Exception) {
                                 e.printStackTrace()
-                            }
-                        } else {
-                            runOnUiThread {
-                                try {
-                                    if (dialog.isShowing) {
-                                        dialog.dismiss()
-                                    }
-                                } catch (e: Exception) {
-                                    e.printStackTrace()
-                                }
                             }
                         }
                     }
@@ -422,8 +396,8 @@ class ShopAdd : AppCompatActivity() {
                     val path = "Images/"
                     val boundary: String
                     var tail = ""
-                    val LINE_END = "\r\n"
-                    val TWOHYPEN = "--"
+                    val lINEEND = "\r\n"
+                    val tWOHYPEN = "--"
                     val httpConn: HttpURLConnection
                     val charset = "UTF-8"
                     val writer: PrintWriter
@@ -435,7 +409,7 @@ class ShopAdd : AppCompatActivity() {
                     val maxBufferSize = 1024
                     try {
                         boundary = "===" + System.currentTimeMillis() + "==="
-                        tail = LINE_END + TWOHYPEN + boundary + TWOHYPEN + LINE_END
+                        tail = lINEEND + tWOHYPEN + boundary + tWOHYPEN + lINEEND
                         val url = URL(requestURL)
                         httpConn = url.openConnection() as HttpURLConnection
                         httpConn.doOutput = true
@@ -446,11 +420,11 @@ class ShopAdd : AppCompatActivity() {
                         )
                         val paramHeaders = ArrayList<String>()
                         for ((key, value) in map1) {
-                            val param = (TWOHYPEN + boundary + LINE_END
-                                    + "Content-Disposition: form-data; name=\"" + key + "\"" + LINE_END
-                                    + "Content-Type: text/plain; charset=" + charset + LINE_END
-                                    + LINE_END
-                                    + value + LINE_END)
+                            val param = (tWOHYPEN + boundary + lINEEND
+                                    + "Content-Disposition: form-data; name=\"" + key + "\"" + lINEEND
+                                    + "Content-Type: text/plain; charset=" + charset + lINEEND
+                                    + lINEEND
+                                    + value + lINEEND)
                             paramsPart += param
                             paramHeaders.add(param)
                         }
@@ -458,17 +432,17 @@ class ShopAdd : AppCompatActivity() {
                         val fileHeaders = ArrayList<String>()
                         try {
                             for ((key, value) in map2) {
-                                val file_name = value.substring(value.lastIndexOf("/") + 1)
+                                val fileName = value.substring(value.lastIndexOf("/") + 1)
                                 var file: File? = null
-                                file = File(filesDir.path, path + file_name)
-                                fileHeader = (TWOHYPEN + boundary + LINE_END
-                                        + "Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + file.name + "\"" + LINE_END
+                                file = File(filesDir.path, path + fileName)
+                                fileHeader = (tWOHYPEN + boundary + lINEEND
+                                        + "Content-Disposition: form-data; name=\"" + key + "\"; filename=\"" + file.name + "\"" + lINEEND
                                         + "Content-Type: " + URLConnection.guessContentTypeFromName(
                                     file.absolutePath
-                                ) + LINE_END
-                                        + "Content-Transfer-Encoding: binary" + LINE_END
-                                        + LINE_END)
-                                fileLength += file.length() + LINE_END.toByteArray(charset(charset)).size
+                                ) + lINEEND
+                                        + "Content-Transfer-Encoding: binary" + lINEEND
+                                        + lINEEND)
+                                fileLength += file.length() + lINEEND.toByteArray(charset(charset)).size
                                 filePart += fileHeader
                                 fileHeaders.add(fileHeader)
                                 filesAL.add(file)
@@ -504,16 +478,13 @@ class ShopAdd : AppCompatActivity() {
                                     outputStream.write(buf, 0, bytesRead)
                                     writer.flush()
                                     totalRead += bytesRead
-                                    val progress = (totalRead * 100 / requestLength).toInt()
-                                    val finalTotal = totalRead.toLong()
-                                    val finalFileLength = fileLength
                                     runOnUiThread {
-                                        if (dialog != null && dialog.isShowing) {
-                                            load.setText("Loading...")
+                                        if (dialog.isShowing) {
+                                            load.text = "Loading..."
                                         }
                                     }
                                 }
-                                outputStream.write(LINE_END.toByteArray())
+                                outputStream.write(lINEEND.toByteArray())
                                 outputStream.flush()
                                 bufferedInputStream.close()
                             }
@@ -522,7 +493,7 @@ class ShopAdd : AppCompatActivity() {
                             writer.close()
                         } catch (_: Exception) {
                         }
-                        var line: String? = null
+                        var line: String?
                         val sb = StringBuilder()
                         try {
                             val status = httpConn.responseCode
@@ -582,7 +553,7 @@ class ShopAdd : AppCompatActivity() {
             return destinationFilename
         }
 
-        fun createFileFromStream(ins: InputStream, destination: File?) {
+        private fun createFileFromStream(ins: InputStream, destination: File?) {
             try {
                 FileOutputStream(destination).use { os ->
                     val buffer = ByteArray(4096)

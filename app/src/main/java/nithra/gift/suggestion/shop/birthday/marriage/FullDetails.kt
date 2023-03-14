@@ -6,8 +6,6 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
-import android.view.Window
-import android.view.WindowManager
 import android.webkit.URLUtil
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -26,7 +24,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class Full_Details : AppCompatActivity() {
+class FullDetails : AppCompatActivity() {
     var gift_show: ArrayList<Gift_Cat>? = null
     var intent1: Intent? = null
     var extra: Bundle? = null
@@ -52,11 +50,6 @@ class Full_Details : AppCompatActivity() {
     var btShowmore1: TextView? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestWindowFeature(Window.FEATURE_NO_TITLE)
-        this.window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         setContentView(R.layout.buyer_view)
         gift_show = ArrayList()
         back = findViewById(R.id.back)
@@ -81,32 +74,32 @@ class Full_Details : AppCompatActivity() {
         id_gift = extra!!.getString("full_view")
         pos_id = extra!!.getInt("position")
         giftprize!!.setPaintFlags(giftprize!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
-        Utils_Class.mProgress(this@Full_Details, "Loading please wait...", false)!!.show()
-        btShowmore!!.setOnClickListener({
-            if (btShowmore!!.getText().toString().equals("Show more...", ignoreCase = true)) {
-                description!!.setMaxLines(Int.MAX_VALUE)
-                btShowmore!!.setText("Show less")
+        Utils_Class.mProgress(this@FullDetails)!!.show()
+        btShowmore!!.setOnClickListener {
+            if (btShowmore!!.text.toString().equals("Show more...", ignoreCase = true)) {
+                description!!.maxLines = Int.MAX_VALUE
+                btShowmore!!.text = "Show less"
             } else {
-                description!!.setMaxLines(3)
-                btShowmore!!.setText("Show more...")
+                description!!.maxLines = 3
+                btShowmore!!.text = "Show more..."
             }
-        })
-        btShowmore1!!.setOnClickListener({
-            if (btShowmore1!!.getText().toString().equals("Show more...", ignoreCase = true)) {
-                detail_add!!.setMaxLines(Int.MAX_VALUE)
-                btShowmore1!!.setText("Show less")
+        }
+        btShowmore1!!.setOnClickListener {
+            if (btShowmore1!!.text.toString().equals("Show more...", ignoreCase = true)) {
+                detail_add!!.maxLines = Int.MAX_VALUE
+                btShowmore1!!.text = "Show less"
             } else {
-                detail_add!!.setMaxLines(3)
-                btShowmore1!!.setText("Show more...")
+                detail_add!!.maxLines = 3
+                btShowmore1!!.text = "Show more..."
             }
-        })
-        back!!.setOnClickListener({ finish() })
+        }
+        back!!.setOnClickListener { finish() }
         get_cat()
-        fav!!.setOnClickListener({ fav1() })
-        phone!!.setOnClickListener({
+        fav!!.setOnClickListener { fav1() }
+        phone!!.setOnClickListener {
             val dialog: Dialog
             dialog = Dialog(
-                this@Full_Details,
+                this@FullDetails,
                 android.R.style.Theme_DeviceDefault_Light_Dialog_NoActionBar_MinWidth
             )
             dialog.setContentView(R.layout.call_dialog)
@@ -127,7 +120,6 @@ class Full_Details : AppCompatActivity() {
             val phone1 = gift_show!![0].sellerMobile2!!.trim { it <= ' ' }
             if (gift_show!![0].sellerMobile2!!.isEmpty()) {
                 dialog.dismiss()
-                //                    lay2.setVisibility(View.GONE);
                 val intent = Intent(Intent.ACTION_DIAL, Uri.fromParts("tel", phone, null))
                 startActivity(intent)
             }
@@ -141,20 +133,20 @@ class Full_Details : AppCompatActivity() {
                 startActivity(intent)
                 dialog.dismiss()
             }
-        })
-        IVPreviewImage!!.setOnClickListener({
+        }
+        IVPreviewImage!!.setOnClickListener {
             val currentString = gift_show!![0].giftImage
             val i = Intent(applicationContext, ImageSlide::class.java)
             i.putExtra("pos", currentString)
             startActivity(i)
 
-        })
-        card_mail!!.setOnClickListener({
+        }
+        card_mail!!.setOnClickListener {
             if (gift_show!![0].shopEmail != null && !gift_show!![0].shopEmail
                 !!.trim { it <= ' ' }
                     .isEmpty()
             ) {
-                if (Utils_Class.isNetworkAvailable(this@Full_Details)) {
+                if (Utils_Class.isNetworkAvailable(this@FullDetails)) {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.data = Uri.parse("mailto:") // only email apps should handle this
                     intent.putExtra(
@@ -167,33 +159,33 @@ class Full_Details : AppCompatActivity() {
                         startActivity(intent)
                     }
                 } else {
-                    Utils_Class.toast_center(this@Full_Details, "Check Your Internet Connection...")
+                    Utils_Class.toast_center(this@FullDetails, "Check Your Internet Connection...")
                 }
             } else {
-                Utils_Class.toast_center(this@Full_Details, "Email not available...")
+                Utils_Class.toast_center(this@FullDetails, "Email not available...")
             }
-        })
-        card_web!!.setOnClickListener({
+        }
+        card_web!!.setOnClickListener {
             if (gift_show!![0].shopWebsite != null && !gift_show!![0].shopWebsite
                 !!.trim { it <= ' ' }
                     .isEmpty()
             ) {
-                if (Utils_Class.isNetworkAvailable(this@Full_Details)) {
+                if (Utils_Class.isNetworkAvailable(this@FullDetails)) {
                     val url = gift_show!![0].shopWebsite!!.trim { it <= ' ' }
                     if (URLUtil.isValidUrl(url)) {
                         val builder = CustomTabsIntent.Builder()
                         val customTabsIntent = builder.build()
-                        customTabsIntent.launchUrl(this@Full_Details, Uri.parse(url))
+                        customTabsIntent.launchUrl(this@FullDetails, Uri.parse(url))
                     } else {
-                        Utils_Class.toast_center(this@Full_Details, "URL not valid...")
+                        Utils_Class.toast_center(this@FullDetails, "URL not valid...")
                     }
                 } else {
-                    Utils_Class.toast_center(this@Full_Details, "Check Your Internet Connection...")
+                    Utils_Class.toast_center(this@FullDetails, "Check Your Internet Connection...")
                 }
             } else {
-                Utils_Class.toast_center(this@Full_Details, "Website not available...")
+                Utils_Class.toast_center(this@FullDetails, "Website not available...")
             }
-        })
+        }
     }
 
     fun get_cat() {
@@ -262,7 +254,7 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
         val map = HashMap<String, String?>()
         map["action"] = "favourite"
         map["gift_id"] = id_gift
-        map["user_id"] = sharedPreference.getString(this@Full_Details, "android_userid")
+        map["user_id"] = sharedPreference.getString(this@FullDetails, "android_userid")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -279,7 +271,7 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
                             Sellerproducts.gift_show!![pos_id].fav = 1
                             fav!!.setBackgroundResource(R.drawable.favorite_red)
                             Utils_Class.toast_center(
-                                this@Full_Details,
+                                this@FullDetails,
                                 "Your gift added to favourite..."
                             )
                         } else {
@@ -287,7 +279,7 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
                             Sellerproducts.gift_show!![pos_id].fav = 0
                             fav!!.setBackgroundResource(R.drawable.favorite_grey)
                             Utils_Class.toast_center(
-                                this@Full_Details,
+                                this@FullDetails,
                                 "Your gift removed from favourite..."
                             )
                         }

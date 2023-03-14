@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 
 class SharedPreference {
-    var prefrence: SharedPreferences? = null
-    var editor: SharedPreferences.Editor? = null
+    private var prefrence: SharedPreferences? = null
+    private var editor: SharedPreferences.Editor? = null
     fun putString(context: Context, text: String, text1: String) {
         prefrence = context.getSharedPreferences(
             PREFS_NAME,
@@ -17,13 +17,11 @@ class SharedPreference {
     }
 
     fun getString(context: Context, PREFS_KEY: String): String? {
-        val text: String?
         prefrence = context.getSharedPreferences(
             PREFS_NAME,
             Context.MODE_PRIVATE
         )
-        text = prefrence!!.getString(PREFS_KEY, "")
-        return text
+        return prefrence!!.getString(PREFS_KEY, "")
     }
 
     fun removeString(context: Context, PREFS_KEY: String) {
@@ -47,13 +45,11 @@ class SharedPreference {
     }
 
     fun getInt(context: Context, PREFS_KEY: String): Int {
-        val text: Int
         prefrence = context.getSharedPreferences(
             PREFS_NAME,
             Context.MODE_PRIVATE
         )
-        text = prefrence!!.getInt(PREFS_KEY, 0)
-        return text
+        return prefrence!!.getInt(PREFS_KEY, 0)
     }
 
     fun removeInt(context: Context, PREFS_KEY: String) {
@@ -77,13 +73,11 @@ class SharedPreference {
     }
 
     fun getBoolean(context: Context, PREFS_KEY: String): Boolean {
-        val text: Boolean
         prefrence = context.getSharedPreferences(
             PREFS_NAME,
             Context.MODE_PRIVATE
         )
-        text = prefrence!!.getBoolean(PREFS_KEY, true)
-        return text
+        return prefrence!!.getBoolean(PREFS_KEY, true)
     }
 
     fun removeBoolean(context: Context, PREFS_KEY: String) {
