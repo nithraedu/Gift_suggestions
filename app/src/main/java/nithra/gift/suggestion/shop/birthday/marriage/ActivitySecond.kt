@@ -13,8 +13,8 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
-import nithra.gift.suggestion.shop.birthday.marriage.Fragment.NithraProducts
-import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Sellerproducts
+import nithra.gift.suggestion.shop.birthday.marriage.fragment.NithraProducts
+import nithra.gift.suggestion.shop.birthday.marriage.fragment.Sellerproducts
 
 class ActivitySecond : AppCompatActivity() {
     var adapter: ViewPagerAdapter? = null
@@ -50,9 +50,8 @@ class ActivitySecond : AppCompatActivity() {
             title = extra!!.getString("title")
             title1 = extra!!.getString("cat_idd")
             title3 = extra!!.getString("gender_id")
-            println("gender= $title3")
         }
-        back!!.setOnClickListener(View.OnClickListener { finish() })
+        back!!.setOnClickListener({ finish() })
         cat_title!!.setText("$title Gifts")
     }
 

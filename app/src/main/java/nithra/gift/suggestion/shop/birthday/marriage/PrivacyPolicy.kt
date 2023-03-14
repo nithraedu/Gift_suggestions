@@ -23,7 +23,7 @@ class PrivacyPolicy : AppCompatActivity() {
         setContentView(R.layout.activity_privacy_policy)
         wv1 = findViewById(R.id.wv1)
         pb1 = findViewById(R.id.pb1)
-        wv1!!.setOnLongClickListener(OnLongClickListener { true })
+        wv1!!.setOnLongClickListener({ true })
         val webSettings = wv1!!.getSettings()
         webSettings.javaScriptEnabled = true
         wv1!!.setWebViewClient(object : WebViewClient() {

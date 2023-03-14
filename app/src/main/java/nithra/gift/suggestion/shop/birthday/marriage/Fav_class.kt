@@ -13,14 +13,14 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.gson.Gson
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_Add_Del
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Fav_view
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Fav_Add_Del
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Fav_view
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitAPI
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitApiClient
+import nithra.gift.suggestion.shop.birthday.marriage.support.SharedPreference
+import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,14 +45,14 @@ class Fav_class : AppCompatActivity() {
         no_item = findViewById(R.id.no_item)
         pullToRefresh = findViewById(R.id.pullToRefresh)
         back = findViewById(R.id.back)
-        back!!.setOnClickListener(View.OnClickListener { finish() })
+        back!!.setOnClickListener({ finish() })
         Utils_Class.mProgress(this@Fav_class, "Loading please wait...", false)!!.show()
         val gridLayoutManager =
             GridLayoutManager(this@Fav_class, 2, GridLayoutManager.VERTICAL, false)
         list!!.setLayoutManager(gridLayoutManager)
         adapter = Adapter(this@Fav_class, fav_show)
         list!!.setAdapter(adapter)
-        pullToRefresh!!.setOnRefreshListener(OnRefreshListener {
+        pullToRefresh!!.setOnRefreshListener({
             fav_show!!.clear()
             fav()
             pullToRefresh!!.setRefreshing(false)
@@ -69,7 +69,6 @@ class Fav_class : AppCompatActivity() {
         val map = HashMap<String, String?>()
         map["action"] = "get_fav"
         map["user_id"] = sharedPreference.getString(this, "android_userid")
-        println("print_map==$map")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -80,8 +79,6 @@ class Fav_class : AppCompatActivity() {
                 response: Response<ArrayList<Fav_view>>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    println("======response result:$result")
                     if (response.body()!![0].status == "Success") {
                         fav_show!!.addAll(response.body()!!)
                         adapter!!.notifyDataSetChanged()
@@ -95,11 +92,9 @@ class Fav_class : AppCompatActivity() {
                     }
                     Utils_Class.mProgress!!.dismiss()
                 }
-                println("======response :$response")
             }
 
             override fun onFailure(call: Call<ArrayList<Fav_view>>, t: Throwable) {
-                println("======response t:$t")
             }
         })
     }
@@ -109,7 +104,6 @@ class Fav_class : AppCompatActivity() {
         map["action"] = "favourite"
         map["gift_id"] = id_gift
         map["user_id"] = sharedPreference.getString(this@Fav_class, "android_userid")
-        println("favroute==$map")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -120,8 +114,6 @@ class Fav_class : AppCompatActivity() {
                 response: Response<ArrayList<Fav_Add_Del>>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    println("======response result:$result")
                     if (response.body()!![0].status == "Success") {
                         if (response.body()!![0].fvAction == 1) {
                             fav_show!![pos].fav = 1
@@ -135,16 +127,13 @@ class Fav_class : AppCompatActivity() {
                                 this@Fav_class,
                                 "Your gift removed from favourite..."
                             )
-                            println("print__id== " + fav_show!![pos].giftId)
                         }
                         adapter!!.notifyDataSetChanged()
                     }
                 }
-                println("======response :$response")
             }
 
             override fun onFailure(call: Call<ArrayList<Fav_Add_Del>>, t: Throwable) {
-                println("======response t:$t")
             }
         })
     }
@@ -179,11 +168,15 @@ class Fav_class : AppCompatActivity() {
             val currentString = fav_show!![position].giftImage
             val separated = currentString!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }
                 .toTypedArray()
-            Glide.with(context).load(separated[0])
-                .error(R.drawable.ic_gift_default_img)
-                .placeholder(R.drawable.ic_gift_default_img)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.img_slide)
+            if (separated.isNotEmpty()) {
+                Glide.with(context).load(separated[0])
+                    .error(R.drawable.ic_gift_default_img)
+                    .placeholder(R.drawable.ic_gift_default_img)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(holder.img_slide)
+            } else {
+                // handle the case where separated is empty or null
+            }
             holder.gridText.text = fav_show!![position].giftName
             holder.head.text = fav_show!![position].discount + "% offer"
             holder.giftprize.text = "\u20B9 " + fav_show!![position].totalAmount

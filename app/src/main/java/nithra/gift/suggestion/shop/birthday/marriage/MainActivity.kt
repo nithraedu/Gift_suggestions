@@ -8,9 +8,7 @@ import android.content.IntentSender.SendIntentException
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.RemoteException
+import android.os.*
 import android.view.MenuItem
 import android.view.View
 import android.view.Window
@@ -22,6 +20,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
@@ -37,15 +37,16 @@ import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
 import com.google.android.play.core.tasks.Task
-import com.google.gson.Gson
-import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Feedback
-import nithra.gift.suggestion.shop.birthday.marriage.Feedback.Method
-import nithra.gift.suggestion.shop.birthday.marriage.Feedback.RetrofitClient
-import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Home
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.Androidid
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitAPI
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.RetrofitApiClient
-import org.json.JSONArray
+import nithra.gift.suggestion.shop.birthday.marriage.feedback.Feedback
+import nithra.gift.suggestion.shop.birthday.marriage.feedback.Method
+import nithra.gift.suggestion.shop.birthday.marriage.feedback.RetrofitClient
+import nithra.gift.suggestion.shop.birthday.marriage.fragment.Home
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.Androidid
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitAPI
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.RetrofitApiClient
+import nithra.gift.suggestion.shop.birthday.marriage.support.HttpHandler
+import nithra.gift.suggestion.shop.birthday.marriage.support.SharedPreference
+import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class
 import org.json.JSONException
 import org.json.JSONObject
 import retrofit2.Call
@@ -72,6 +73,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     var comp = ""
     var a = 0
     var spa: SharedPreferences? = null
+    private var doubleBackToExitPressedOnce = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,7 +90,6 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         }
 
 
-        println("android_id" + Utils_Class.android_id(this))
 
         viewpager2 = findViewById(R.id.viewpager2)
         viewpager2!!.setUserInputEnabled(false)
@@ -101,10 +102,18 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         spa = applicationContext.getSharedPreferences("MyPref", MODE_PRIVATE)
 
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(this, "permission") == 0) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(
+                this,
+                "permission"
+            ) == 0
+        ) {
             sp.putInt(this, "permission", 1)
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 113)
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(this,"permission") == 10) {
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && sp.getInt(
+                this,
+                "permission"
+            ) == 10
+        ) {
             sp.putInt(this, "permission", 1)
             requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 113)
         } else {
@@ -132,14 +141,11 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             }
         }
         val cdate = Calendar.getInstance().time
-        println("Current time => $cdate")
         val df = SimpleDateFormat("dd/MMM/yyyy")
         val currentdate = df.format(cdate)
-        println("current date==$currentdate")
         val cal = Calendar.getInstance()
         cal.add(Calendar.DATE, -1)
         val yesterdaydate = df.format(cal.time)
-        println("yesterday date==" + df.format(cal.time))
         if (sp.getInt(this@MainActivity, currentdate) == 0) {
             sp.putInt(this@MainActivity, currentdate, 1)
             if (sp.getInt(this@MainActivity, yesterdaydate) != 0) {
@@ -172,8 +178,6 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 response: Response<ArrayList<Androidid>>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    println("======response result:$result")
                     if (response.body()!![0].status == "success") {
                         and_id!!.addAll(response.body()!!)
                         sharedPreference.putInt(applicationContext, "android_id_check", 1)
@@ -186,11 +190,9 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                         }
                     }
                 }
-                println("======response :$response")
             }
 
             override fun onFailure(call: Call<ArrayList<Androidid>>, t: Throwable) {
-                println("======response t:$t")
             }
         })
     }
@@ -216,14 +218,22 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 val intent = Intent(this@MainActivity, PrivacyPolicy::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(this@MainActivity, "please connect to the internet...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "please connect to the internet...",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         submit_btn.setOnClickListener(View.OnClickListener {
             var feedback = feedback_edt.text.toString().trim { it <= ' ' }
             val email = email_edt.text.toString().trim { it <= ' ' }
             if (feedback == "") {
-                Toast.makeText(this@MainActivity, "Please type your feedback or suggestion, Thank you", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Please type your feedback or suggestion, Thank you",
+                    Toast.LENGTH_SHORT
+                ).show()
                 return@OnClickListener
             }
             if (!Utils_Class.isNetworkAvailable(this@MainActivity)) {
@@ -244,7 +254,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
             map["feedback"] = feedback
             map["email"] = email
             map["model"] = Build.MODEL
-            map["vcode"] = ""+BuildConfig.VERSION_CODE
+            map["vcode"] = "" + BuildConfig.VERSION_CODE
             val method = RetrofitClient.retrofit!!.create(Method::class.java)
             val call = method.getAlldata(map)
             call.enqueue(object : Callback<List<Feedback>> {
@@ -254,31 +264,26 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 ) {
                     if (response.isSuccessful) {
                         try {
-                            val feedbacks = response.body()!!
-                            println("======response feedbacks:" + feedbacks[0].status)
-                            val jsonArray = JSONArray(Gson().toJson(response.body()))
-                            val jsonObject = jsonArray.getJSONObject(0)
-                            println("======response feedbacks:" + jsonObject.getString("status"))
                             dialog.dismiss()
-                            Toast.makeText(this@MainActivity, "Feedback sent, Thank you", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@MainActivity,
+                                "Feedback sent, Thank you",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         } catch (e: JSONException) {
-                            println("======response e:$e")
                             e.printStackTrace()
                         }
                     }
-                    println("======response :$response")
                 }
 
                 override fun onFailure(call: Call<List<Feedback>>, t: Throwable) {
-                    println("======response t:$t")
                 }
             })
         })
         dialog.setOnDismissListener {
             if (a == 1) {
                 finish()
-                /*val intent = Intent(this@MainActivity, ExitScreen::class.java)
-                startActivity(intent)*/
+
             }
         }
         dialog.show()
@@ -311,7 +316,11 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 val intent = Intent(this@MainActivity, PrivacyPolicy::class.java)
                 startActivity(intent)
             } else {
-                Toast.makeText(this@MainActivity, "Please connect the internet...", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@MainActivity,
+                    "Please connect the internet...",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
         b2.setOnClickListener {
@@ -324,67 +333,82 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
 
     override fun onBackPressed() {
 
-        val dialog = Dialog(
-            this@MainActivity,
-            android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
-        )
-        dialog.setContentView(R.layout.backpress)
-        dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false)
-        val yes: Button = dialog.findViewById(R.id.yes)
-        val no: Button = dialog.findViewById(R.id.no)
-        if (sharedPreference.getInt(this, "ratecheckval") == 0) {
-            val yesratedialog =
-                Dialog(this@MainActivity, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen)
-            yesratedialog.setContentView(R.layout.rate1)
-            val yesbut1: AppCompatButton = yesratedialog.findViewById(R.id.button2)
-            val nobut1: AppCompatButton = yesratedialog.findViewById(R.id.button1)
-            yesbut1.setOnClickListener {
-                try {
-                    sharedPreference.putInt(applicationContext, "ratecheckval", 1)
-                    val appPackageName = packageName
-                    val marketIntent =
-                        Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName"))
-                    startActivity(marketIntent)
-                } catch (e: Exception) {
-                    println()
+
+        val drawerLayout = findViewById<DrawerLayout>(R.id.drawer_layout)
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START)
+        } else {
+            if (sharedPreference.getInt(this, "ratecheckval") == 0) {
+
+                val dialog = Dialog(
+                    this@MainActivity,
+                    android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+                )
+                dialog.setContentView(R.layout.backpress)
+                dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+                dialog.setCancelable(false)
+                val yes: Button = dialog.findViewById(R.id.yes)
+                val no: Button = dialog.findViewById(R.id.no)
+                val yesratedialog =
+                    Dialog(
+                        this@MainActivity,
+                        android.R.style.Theme_Translucent_NoTitleBar_Fullscreen
+                    )
+                yesratedialog.setContentView(R.layout.rate1)
+                val yesbut1: AppCompatButton = yesratedialog.findViewById(R.id.button2)
+                val nobut1: AppCompatButton = yesratedialog.findViewById(R.id.button1)
+                yesbut1.setOnClickListener {
+                    try {
+                        sharedPreference.putInt(applicationContext, "ratecheckval", 1)
+                        val appPackageName = packageName
+                        val marketIntent =
+                            Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("market://details?id=$appPackageName")
+                            )
+                        startActivity(marketIntent)
+                    } catch (_: Exception) {
+                    }
+                    yesratedialog.dismiss()
+                    finish()
                 }
-                yesratedialog.dismiss()
-                finish()
-            }
-            nobut1.setOnClickListener {
-                sharedPreference.putInt(applicationContext, "ratecheckval", 1)
-                if (dialog.isShowing) {
+                nobut1.setOnClickListener {
+                    sharedPreference.putInt(applicationContext, "ratecheckval", 1)
+                    if (dialog.isShowing) {
+                        dialog.dismiss()
+                    }
+                    a = 1
+                    feedback()
+                }
+                dialog.show()
+
+                yesratedialog.setOnDismissListener {
+                    finish()
+
+                }
+
+                yes.setOnClickListener {
+                    sharedPreference.putInt(applicationContext, "ratecheckval", 1)
+                    Utils_Class.date_put(this@MainActivity, "rate_date", 90)
+                    yesratedialog.show()
                     dialog.dismiss()
                 }
-                a = 1
-                feedback()
-            }
-            dialog.show()
+                no.setOnClickListener {
+                    dialog.dismiss()
+                }
+            } else {
+                if (doubleBackToExitPressedOnce) {
+                    super.onBackPressed()
+                    return
+                }
 
-            yesratedialog.setOnDismissListener {
-                finish()
-                /*val intent = Intent(this@MainActivity, ExitScreen::class.java)
-                startActivity(intent)*/
-            }
+                this.doubleBackToExitPressedOnce = true
+                Toast.makeText(this, "Please click again to exit", Toast.LENGTH_SHORT).show()
 
-            yes.setOnClickListener {
-                Utils_Class.date_put(this@MainActivity, "rate_date", 90)
-                yesratedialog.show()
-                dialog.dismiss()
-            }
-            no.setOnClickListener {
-                dialog.dismiss()
-            }
-        } else {
-            dialog.show()
-            yes.setOnClickListener {
-                /*val intent = Intent(this@MainActivity, ExitScreen::class.java)
-                startActivity(intent)*/
-                finish()
-            }
-            no.setOnClickListener {
-                dialog.dismiss()
+                Handler(Looper.getMainLooper()).postDelayed({
+                    doubleBackToExitPressedOnce = false
+                }, 2000)
+
             }
         }
     }
@@ -420,7 +444,12 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                 && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)
             ) {
                 try {
-                    appUpdateManager!!.startUpdateFlowForResult(appUpdateInfo, AppUpdateType.IMMEDIATE, this@MainActivity, 200)
+                    appUpdateManager!!.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        AppUpdateType.IMMEDIATE,
+                        this@MainActivity,
+                        200
+                    )
                 } catch (e: SendIntentException) {
                     e.printStackTrace()
                 }
@@ -439,12 +468,10 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                                 sdf.parse(string_current_date).time - sdf.parse(string_before_date).time,
                                 TimeUnit.MILLISECONDS
                             )
-                            println("new Version $timediff")
                         } catch (e1: ParseException) {
                             e1.printStackTrace()
                         }
                         if (timediff.toInt() >= 10) {
-                            println("new Version 1 $timediff")
                             if (Utils_Class.isNetworkAvailable(this@MainActivity)) {
                                 inapp_review_dialog()
                             }
@@ -476,25 +503,15 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
     override fun onInstallReferrerSetupFinished(responseCode: Int) {
-        println("onInstallReferrerSetupFinished")
-        println("InstallReferrerClient responseCode $responseCode")
         when (responseCode) {
             InstallReferrerClient.InstallReferrerResponse.OK -> {
                 sp.putInt(this@MainActivity, "referrerCheck", 1)
-                println("Install Referrer conneceted... Successfully")
-                println("Install Referrer conneceted..." + mReferrerClient!!.isReady)
 
-                /*get response from referrer*/try {
+                /*get response from referrer*/
+                try {
                     val response = mReferrerClient!!.installReferrer
                     if (response != null) {
                         val referrerUrl = response.installReferrer
-                        val referrerClickTime = response.referrerClickTimestampSeconds
-                        val appInstallTime = response.installBeginTimestampSeconds
-                        val instantExperienceLaunched = response.googlePlayInstantParam
-                        println("=== ReferrerDetails_url $referrerUrl")
-                        println("=== ReferrerDetails_click_time $referrerClickTime")
-                        println("=== ReferrerDetails_ins_time $appInstallTime")
-                        println("=== ReferrerDetails_launch $instantExperienceLaunched")
                         if (referrerUrl != null) {
                             if (referrerUrl.length > 0) {
                                 val referrerList =
@@ -505,15 +522,12 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                                     if (i == 0) {
                                         source =
                                             referrerList[i].substring(referrerList[i].indexOf("=") + 1)
-                                        println("Referrer_source===$source")
                                     } else if (i == 1) {
                                         medium =
                                             referrerList[i].substring(referrerList[i].indexOf("=") + 1)
-                                        println("Referrer_medium===$medium")
                                     } else if (i == 2) {
                                         comp =
                                             referrerList[i].substring(referrerList[i].indexOf("=") + 1)
-                                        println("Referrer_comp===$comp")
                                     }
                                     i++
                                 }
@@ -523,35 +537,26 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
                                 override fun run() {
                                     try {
                                         send(this@MainActivity, source, medium, comp)
-                                    } catch (e: Exception) {
-                                        println(e.message)
+                                    } catch (_: Exception) {
                                     }
                                 }
                             }
                             checkUpdate.start()
-                        } else {
-                            println("=== Referrer URL NULL")
                         }
-                    } else {
-                        println("=== Referrer Details NULL")
                     }
                 } catch (e: RemoteException) {
                     e.printStackTrace()
-                    println("=== error " + e.message)
                 }
             }
             InstallReferrerClient.InstallReferrerResponse.FEATURE_NOT_SUPPORTED -> println("FEATURE_NOT_SUPPORTED")
-            InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE ->                 // Connection could not be established
-                println("SERVICE_UNAVAILABLE")
+            InstallReferrerClient.InstallReferrerResponse.SERVICE_UNAVAILABLE -> println("SERVICE_DISCONNECTED")               // Connection could not be established
             InstallReferrerClient.InstallReferrerResponse.SERVICE_DISCONNECTED -> println("SERVICE_DISCONNECTED")
             InstallReferrerClient.InstallReferrerResponse.DEVELOPER_ERROR -> println("DEVELOPER_ERROR")
-            else -> println("RESPONSE CODE NOT FOUND")
         }
         mReferrerClient!!.endConnection()
     }
 
     override fun onInstallReferrerServiceDisconnected() {
-        println("onInstallReferrerServiceDisconnected")
         mReferrerClient!!.startConnection(this)
     }
 
@@ -568,7 +573,6 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         } catch (e: JSONException) {
             e.printStackTrace()
         }
-        val result = sh.makeServiceCall(url, postDataParams)
     } //in_app cods end
 
     companion object {
@@ -576,16 +580,15 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
     }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == 113) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                println("jaasim==3")
                 sp.putInt(applicationContext, "permission", 1)
-            } else {
-                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    println("jaasim==4")
-                }
             }
         }
     }

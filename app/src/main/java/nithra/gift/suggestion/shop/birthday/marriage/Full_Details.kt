@@ -15,15 +15,13 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.browser.customtabs.CustomTabsIntent
 import androidx.cardview.widget.CardView
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.google.gson.Gson
-import nithra.gift.suggestion.shop.birthday.marriage.Fragment.Sellerproducts
-import nithra.gift.suggestion.shop.birthday.marriage.Retrofit.*
+import nithra.gift.suggestion.shop.birthday.marriage.fragment.Sellerproducts
+import nithra.gift.suggestion.shop.birthday.marriage.retrofit.*
+import nithra.gift.suggestion.shop.birthday.marriage.support.SharedPreference
+import nithra.gift.suggestion.shop.birthday.marriage.support.Utils_Class
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -84,7 +82,7 @@ class Full_Details : AppCompatActivity() {
         pos_id = extra!!.getInt("position")
         giftprize!!.setPaintFlags(giftprize!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
         Utils_Class.mProgress(this@Full_Details, "Loading please wait...", false)!!.show()
-        btShowmore!!.setOnClickListener(View.OnClickListener {
+        btShowmore!!.setOnClickListener({
             if (btShowmore!!.getText().toString().equals("Show more...", ignoreCase = true)) {
                 description!!.setMaxLines(Int.MAX_VALUE)
                 btShowmore!!.setText("Show less")
@@ -93,7 +91,7 @@ class Full_Details : AppCompatActivity() {
                 btShowmore!!.setText("Show more...")
             }
         })
-        btShowmore1!!.setOnClickListener(View.OnClickListener {
+        btShowmore1!!.setOnClickListener({
             if (btShowmore1!!.getText().toString().equals("Show more...", ignoreCase = true)) {
                 detail_add!!.setMaxLines(Int.MAX_VALUE)
                 btShowmore1!!.setText("Show less")
@@ -102,10 +100,10 @@ class Full_Details : AppCompatActivity() {
                 btShowmore1!!.setText("Show more...")
             }
         })
-        back!!.setOnClickListener(View.OnClickListener { finish() })
+        back!!.setOnClickListener({ finish() })
         get_cat()
-        fav!!.setOnClickListener(View.OnClickListener { fav1() })
-        phone!!.setOnClickListener(View.OnClickListener {
+        fav!!.setOnClickListener({ fav1() })
+        phone!!.setOnClickListener({
             val dialog: Dialog
             dialog = Dialog(
                 this@Full_Details,
@@ -144,16 +142,14 @@ class Full_Details : AppCompatActivity() {
                 dialog.dismiss()
             }
         })
-        IVPreviewImage!!.setOnClickListener(View.OnClickListener {
+        IVPreviewImage!!.setOnClickListener({
             val currentString = gift_show!![0].giftImage
-            val separated =
-                currentString!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
             val i = Intent(applicationContext, ImageSlide::class.java)
             i.putExtra("pos", currentString)
             startActivity(i)
 
         })
-        card_mail!!.setOnClickListener(View.OnClickListener {
+        card_mail!!.setOnClickListener({
             if (gift_show!![0].shopEmail != null && !gift_show!![0].shopEmail
                 !!.trim { it <= ' ' }
                     .isEmpty()
@@ -177,7 +173,7 @@ class Full_Details : AppCompatActivity() {
                 Utils_Class.toast_center(this@Full_Details, "Email not available...")
             }
         })
-        card_web!!.setOnClickListener(View.OnClickListener {
+        card_web!!.setOnClickListener({
             if (gift_show!![0].shopWebsite != null && !gift_show!![0].shopWebsite
                 !!.trim { it <= ' ' }
                     .isEmpty()
@@ -185,7 +181,6 @@ class Full_Details : AppCompatActivity() {
                 if (Utils_Class.isNetworkAvailable(this@Full_Details)) {
                     val url = gift_show!![0].shopWebsite!!.trim { it <= ' ' }
                     if (URLUtil.isValidUrl(url)) {
-                        println("urlprint$url")
                         val builder = CustomTabsIntent.Builder()
                         val customTabsIntent = builder.build()
                         customTabsIntent.launchUrl(this@Full_Details, Uri.parse(url))
@@ -206,7 +201,6 @@ class Full_Details : AppCompatActivity() {
         map["action"] = "get_cat"
         map["id"] = id_gift
         map["user_id"] = sharedPreference.getString(applicationContext, "android_userid")
-        println("printing==$map")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -217,8 +211,6 @@ class Full_Details : AppCompatActivity() {
                 response: Response<ArrayList<Gift_Cat>>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    println("======response result:$result")
                     if (response.body()!![0].status == "Success") {
                         gift_show!!.clear()
                         gift_show!!.addAll(response.body()!!)
@@ -241,7 +233,6 @@ class Full_Details : AppCompatActivity() {
 ${gift_show!![0].state}${gift_show!![0].country}"""
                         head!!.text =
                             gift_show!![0].discount + "% offer"
-                        println("gift_show== " + gift_show!!.size)
                         if (gift_show!![0].fav == 1) {
                             fav!!.setBackgroundResource(R.drawable.favorite_red)
                         } else {
@@ -260,11 +251,9 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
                     }
                     Utils_Class.mProgress!!.dismiss()
                 }
-                println("======response :$response")
             }
 
             override fun onFailure(call: Call<ArrayList<Gift_Cat>>, t: Throwable) {
-                println("======response t:$t")
             }
         })
     }
@@ -274,7 +263,6 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
         map["action"] = "favourite"
         map["gift_id"] = id_gift
         map["user_id"] = sharedPreference.getString(this@Full_Details, "android_userid")
-        println("favroute==$map")
         val retrofitAPI = RetrofitApiClient.retrofit!!.create(
             RetrofitAPI::class.java
         )
@@ -285,13 +273,10 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
                 response: Response<ArrayList<Fav_Add_Del>>
             ) {
                 if (response.isSuccessful) {
-                    val result = Gson().toJson(response.body())
-                    println("======response result:$result")
                     if (response.body()!![0].status == "Success") {
                         if (response.body()!![0].fvAction == 1) {
                             gift_show!![0].fav = 1
                             Sellerproducts.gift_show!![pos_id].fav = 1
-                            //Favourite.fav_show.get(0).setFav(1);
                             fav!!.setBackgroundResource(R.drawable.favorite_red)
                             Utils_Class.toast_center(
                                 this@Full_Details,
@@ -309,11 +294,9 @@ ${gift_show!![0].state}${gift_show!![0].country}"""
                         Sellerproducts.adapter!!.notifyDataSetChanged()
                     }
                 }
-                println("======response :$response")
             }
 
             override fun onFailure(call: Call<ArrayList<Fav_Add_Del>>, t: Throwable) {
-                println("======response t:$t")
             }
         })
     }

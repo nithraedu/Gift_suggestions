@@ -39,9 +39,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ExitScreen"
-            android:exported="false" />
-        <activity
             android:name=".PrivacyPolicy"
             android:exported="false" />
         <activity
@@ -51,37 +48,37 @@
             android:name=".ImageSlide"
             android:exported="false" />
         <activity
-            android:name=".SellerEntry"
+            android:name=".product_shop.SellerEntry"
             android:exported="false" />
         <activity
             android:name=".Full_Details"
             android:exported="false" />
         <activity
-            android:name=".ProductFullView"
+            android:name=".product_shop.ProductFullView"
             android:exported="false" />
         <activity
-            android:name=".ShopEdit"
+            android:name=".product_shop.ShopEdit"
             android:exported="false" />
         <activity
-            android:name=".ProductEdit"
+            android:name=".product_shop.ProductEdit"
             android:exported="false" />
         <activity
             android:name=".ActivitySecond"
             android:exported="false" />
         <activity
-            android:name=".Otp.ShopAdd"
+            android:name=".product_shop.ShopAdd"
             android:exported="false" />
         <activity
-            android:name=".Otp.ProductAdd"
+            android:name=".product_shop.ProductAdd"
             android:exported="false" />
         <activity
-            android:name=".Otp.OtpVerify"
+            android:name=".otp.OtpVerify"
             android:exported="false" />
         <activity
-            android:name=".Otp.OtpSend"
+            android:name=".otp.OtpSend"
             android:exported="false" />
         <activity
-            android:name=".SellerProfileProductList"
+            android:name=".product_shop.SellerProfileProductList"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
@@ -102,11 +99,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
 
-        <activity android:name=".Notification.NotificationView" />
-        <activity android:name=".Notification.ST_Activity" />
+        <activity android:name=".notification.NotificationView" />
+        <activity android:name=".notification.ST_Activity" />
 
         <service
-            android:name=".Notification.FirebaseMessageService"
+            android:name=".notification.FirebaseMessageService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

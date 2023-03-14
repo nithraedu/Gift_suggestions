@@ -46,13 +46,13 @@ class ImageSlide : AppCompatActivity() {
         val separated =
             pos_gift!!.split(",".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         gift_name!!.setText(name)
-        back!!.setOnClickListener(View.OnClickListener { finish() })
-        forward_arrow!!.setOnClickListener(View.OnClickListener {
+        back!!.setOnClickListener({ finish() })
+        forward_arrow!!.setOnClickListener({
             viewpager2!!.setCurrentItem(
                 viewpager2!!.getCurrentItem() + 1, true
             )
         })
-        back_arrow!!.setOnClickListener(View.OnClickListener {
+        back_arrow!!.setOnClickListener({
             viewpager2!!.setCurrentItem(
                 viewpager2!!.getCurrentItem() - 1, true
             )
@@ -87,7 +87,6 @@ class ImageSlide : AppCompatActivity() {
                 super.onPageScrollStateChanged(state)
             }
         })
-        println("print_url== " + separated[0])
         adapter = Adapter(this, viewpager2!!, separated)
         viewpager2!!.setAdapter(adapter)
     }

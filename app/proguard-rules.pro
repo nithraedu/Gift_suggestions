@@ -19,5 +19,5 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
--keep class  nithra.gift.suggestion.shop.birthday.marriage.Feedback** {*;}
--keep class  nithra.gift.suggestion.shop.birthday.marriage.Retrofit** {*;}
+-keep class  nithra.gift.suggestion.shop.birthday.marriage.feedback** {*;}
+-keep class  nithra.gift.suggestion.shop.birthday.marriage.retrofit** {*;}
