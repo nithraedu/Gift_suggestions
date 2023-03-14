@@ -2,7 +2,6 @@ package nithra.gift.suggestion.shop.birthday.marriage.product_shop
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -660,17 +659,26 @@ class ProductEdit : AppCompatActivity() {
 
 
     fun UploadAsync() {
-        val progressDialog = ProgressDialog(this@ProductEdit)
-        progressDialog.setMessage("Uploading... ")
-        progressDialog.setCancelable(false)
-        progressDialog.show()
+        var dialog: Dialog? = null
+        dialog = this?.let {
+            Dialog(
+                it,
+                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+            )
+        }
+        dialog!!.setContentView(R.layout.loading_dialog)
+        dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog!!.setCancelable(false)
+        val load: TextView = dialog.findViewById(R.id.loading)
+        load.setText("Uploading...")
+        dialog!!.show()
         val handler: Handler = object : Handler(Looper.myLooper()!!) {
             override fun handleMessage(msg: Message) {
                 val runnable = Runnable {
                     //post execute
                     if (applicationContext != null) {
-                        if (progressDialog.isShowing) {
-                            progressDialog.dismiss()
+                        if (dialog.isShowing) {
+                            dialog.dismiss()
                         }
                         if (msg.obj != null && msg.obj.toString().length != 0) {
                             val result = msg.obj.toString()
@@ -713,8 +721,8 @@ class ProductEdit : AppCompatActivity() {
                         } else {
                             runOnUiThread {
                                 try {
-                                    if (progressDialog.isShowing) {
-                                        progressDialog.dismiss()
+                                    if (dialog.isShowing) {
+                                        dialog.dismiss()
                                     }
                                 } catch (e: Exception) {
                                     e.printStackTrace()
@@ -817,8 +825,8 @@ class ProductEdit : AppCompatActivity() {
                                     writer.flush()
                                     totalRead += bytesRead
                                     runOnUiThread {
-                                        if (progressDialog.isShowing) {
-                                            progressDialog.setMessage("Loading...")
+                                        if (dialog.isShowing) {
+                                            load.setText("Loading...")
                                         }
                                     }
                                 }

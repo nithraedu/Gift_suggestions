@@ -1,6 +1,6 @@
 package nithra.gift.suggestion.shop.birthday.marriage.fragment
 
-import android.app.ProgressDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Paint
@@ -41,7 +41,7 @@ class Sellerproducts : Fragment() {
     var sharedPreference = SharedPreference()
     var no_item: LinearLayout? = null
     var pullToRefresh: SwipeRefreshLayout? = null
-    var mProgress: ProgressDialog? = null
+    var dialog: Dialog?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -63,9 +63,16 @@ class Sellerproducts : Fragment() {
             title1 = extra!!.getString("cat_idd")
             title3 = extra!!.getString("gender_id")
         }
-        mProgress = ProgressDialog(context)
-        mProgress!!.show()
-        mProgress!!.setMessage("Loading please wait...")
+        dialog = context?.let {
+            Dialog(
+                it,
+                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+            )
+        }
+        dialog!!.setContentView(R.layout.loading_dialog)
+        dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog!!.setCancelable(false)
+        dialog!!.show()
         val gridLayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
         list!!.setLayoutManager(gridLayoutManager)
         adapter = context?.let {
@@ -112,12 +119,13 @@ class Sellerproducts : Fragment() {
                         pullToRefresh!!.visibility = View.VISIBLE
                         no_item!!.visibility = View.GONE
                     }
-                    mProgress!!.dismiss()
+                    dialog!!.dismiss()
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<Gift_Cat>>, t: Throwable) {
-                mProgress!!.dismiss()
+                                    dialog!!.dismiss()
+
             }
         })
     }
@@ -149,12 +157,14 @@ class Sellerproducts : Fragment() {
                         pullToRefresh!!.visibility = View.VISIBLE
                         no_item!!.visibility = View.GONE
                     }
-                    mProgress!!.dismiss()
+                                        dialog!!.dismiss()
+
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<Gift_Cat>>, t: Throwable) {
-                mProgress!!.dismiss()
+                                    dialog!!.dismiss()
+
             }
         })
     }

@@ -1,7 +1,7 @@
 package nithra.gift.suggestion.shop.birthday.marriage.support
 
 import android.app.Activity
-import android.app.ProgressDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -13,16 +13,23 @@ import android.view.Gravity
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import nithra.gift.suggestion.shop.birthday.marriage.R
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Utils_Class {
-    public var mProgress: ProgressDialog? = null
+    var mProgress: Dialog?=null
     @JvmStatic
-    fun mProgress(context: Context?, txt: String?, aBoolean: Boolean?): ProgressDialog? {
-        mProgress = ProgressDialog(context)
-        mProgress!!.setMessage(txt)
-        //mProgress.setCancelable(aBoolean);
+    fun mProgress(context: Context?, txt: String?, aBoolean: Boolean?): Dialog? {
+        mProgress = context?.let {
+            Dialog(
+                it,
+                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+            )
+        }
+        mProgress!!.setContentView(R.layout.loading_dialog)
+        mProgress!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        mProgress!!.setCancelable(false)
         return mProgress
     }
 

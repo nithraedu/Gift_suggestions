@@ -1,6 +1,6 @@
 package nithra.gift.suggestion.shop.birthday.marriage.fragment
 
-import android.app.ProgressDialog
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -37,7 +37,7 @@ class NithraProducts : Fragment() {
     var title: String? = null
     var title1: String? = null
     var title3: String? = null
-    var mProgress: ProgressDialog? = null
+    var dialog:Dialog?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -51,16 +51,28 @@ class NithraProducts : Fragment() {
         list = view.findViewById(R.id.list)
         no_item = view.findViewById(R.id.no_item)
         pullToRefresh = view.findViewById(R.id.pullToRefresh)
+
         intent1 = requireActivity().intent
         extra = intent1!!.getExtras()
+
+
+        dialog = context?.let {
+            Dialog(
+                it,
+                android.R.style.Theme_DeviceDefault_Dialog_NoActionBar_MinWidth
+            )
+        }
+        dialog!!.setContentView(R.layout.loading_dialog)
+        dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog!!.setCancelable(false)
+        dialog!!.show()
+
+
         if (extra != null) {
             title = extra!!.getString("title")
             title1 = extra!!.getString("cat_idd")
             title3 = extra!!.getString("gender_id")
         }
-        mProgress = ProgressDialog(context)
-        mProgress!!.show()
-        mProgress!!.setMessage("Loading please wait...")
         val gridLayoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
         list!!.setLayoutManager(gridLayoutManager)
         adapter = context?.let {
@@ -107,12 +119,14 @@ class NithraProducts : Fragment() {
                         pullToRefresh!!.visibility = View.VISIBLE
                         no_item!!.visibility = View.GONE
                     }
-                    mProgress!!.dismiss()
+                    dialog!!.dismiss()
+
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<GiftList>>, t: Throwable) {
-                mProgress!!.dismiss()
+                dialog!!.dismiss()
+
             }
         })
     }
@@ -144,12 +158,13 @@ class NithraProducts : Fragment() {
                         pullToRefresh!!.visibility = View.VISIBLE
                         no_item!!.visibility = View.GONE
                     }
-                    mProgress!!.dismiss()
+                    dialog!!.dismiss()
+
                 }
             }
 
             override fun onFailure(call: Call<ArrayList<GiftList>>, t: Throwable) {
-                mProgress!!.dismiss()
+                dialog!!.dismiss()
             }
         })
     }

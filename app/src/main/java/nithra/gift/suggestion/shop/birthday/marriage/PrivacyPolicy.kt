@@ -2,7 +2,6 @@ package nithra.gift.suggestion.shop.birthday.marriage
 
 import android.os.Bundle
 import android.view.View
-import android.view.View.OnLongClickListener
 import android.view.Window
 import android.view.WindowManager
 import android.webkit.WebView
