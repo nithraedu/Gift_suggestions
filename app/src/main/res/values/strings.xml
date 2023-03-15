@@ -5,6 +5,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="Loading">Loading please wait...</string>
+    <string name="Entry_screen_txt">Thanks for downloading or updating Gift Suggestions.\n\n\nBy clicking privacy policy tab you can read our privacy policy and agree to the terms of privacy policy to continue using Gift Suggestions.</string>
 
 
     <string name="crop_image_activity_title">no</string>

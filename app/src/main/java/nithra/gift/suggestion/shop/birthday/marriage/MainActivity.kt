@@ -288,7 +288,6 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         )
         dialog.setContentView(R.layout.dialog_privacy_policy)
         dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
-        //dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false)
         dialog.show()
         val head = dialog.findViewById<TextView>(R.id.head)
@@ -296,11 +295,7 @@ class MainActivity : AppCompatActivity(), InstallReferrerStateListener,
         val b1 = dialog.findViewById<TextView>(R.id.b1)
         val b2 = dialog.findViewById<TextView>(R.id.b2)
         head.text = "Privacy & Terms"
-        firstLine.text = """
-               Thanks for downloading or updating Gift Suggestions.
-               
-              
-               """.trimIndent() + "By clicking privacy policy tab you can read our privacy policy and agree to the terms of privacy policy to continue using Gift Suggestions."
+        firstLine.text = getString(R.string.Entry_screen_txt)
         b1.text = "Privacy Policy"
         b2.text = "Agree & Continue"
         b1.setOnClickListener {
