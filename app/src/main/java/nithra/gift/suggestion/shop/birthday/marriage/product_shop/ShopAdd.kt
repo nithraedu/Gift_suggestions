@@ -524,7 +524,6 @@ class ShopAdd : AppCompatActivity() {
                 }
                 val message = Message()
                 message.obj = response
-                // handler.sendEmptyMessage(0);
                 handler.sendMessage(message)
             }
         }

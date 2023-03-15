@@ -6,16 +6,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentPagerAdapter
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import nithra.gift.suggestion.shop.birthday.marriage.fragment.NithraProducts
 import nithra.gift.suggestion.shop.birthday.marriage.fragment.Sellerproducts
 
 class ActivitySecond : AppCompatActivity() {
     var adapter: ViewPagerAdapter? = null
-    private var viewPager: ViewPager? = null
+    private var viewPager: ViewPager2? = null
     private var tabLayout: TabLayout? = null
     private var catTitle: TextView? = null
     private var intent1: Intent? = null
@@ -29,12 +30,14 @@ class ActivitySecond : AppCompatActivity() {
         setContentView(R.layout.activity_second)
         catTitle = findViewById(R.id.cat_title)
         viewPager = findViewById(R.id.viewpager)
-        adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter!!.add(NithraProducts(), "Our Suggestions")
-        adapter!!.add(Sellerproducts(), "Seller Suggestions")
+        adapter = ViewPagerAdapter(this)
+        adapter!!.addFragment(NithraProducts(), "Our Suggestions")
+        adapter!!.addFragment(Sellerproducts(), "Seller Suggestions")
         viewPager!!.adapter = adapter
         tabLayout = findViewById(R.id.tab_layout)
-        tabLayout!!.setupWithViewPager(viewPager)
+        TabLayoutMediator(tabLayout!!, viewPager!!) { tab, position ->
+            tab.text = adapter!!.getTabTitle(position)
+        }.attach()
         intent1 = intent
         extra = intent1!!.extras
         back = findViewById(R.id.back)
@@ -47,26 +50,26 @@ class ActivitySecond : AppCompatActivity() {
         catTitle!!.text = "$title Gifts"
     }
 
-    inner class ViewPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(
-        fm!!
-    ) {
+    inner class ViewPagerAdapter(activity: FragmentActivity?) : FragmentStateAdapter(activity!!) {
         private val fragments: MutableList<Fragment> = ArrayList()
         private val fragmentTitle: MutableList<String> = ArrayList()
-        fun add(fragment: Fragment, title: String) {
+
+        public fun getTabTitle(position : Int): String{
+            return fragmentTitle[position]
+        }
+
+        fun addFragment(fragment: Fragment, title: String) {
             fragments.add(fragment)
             fragmentTitle.add(title)
         }
 
-        override fun getItem(position: Int): Fragment {
-            return fragments[position]
-        }
-
-        override fun getCount(): Int {
+        override fun getItemCount(): Int {
             return fragments.size
         }
 
-        override fun getPageTitle(position: Int): CharSequence {
-            return fragmentTitle[position]
+        override fun createFragment(position: Int): Fragment {
+            return fragments[position]
         }
+
     }
 }
