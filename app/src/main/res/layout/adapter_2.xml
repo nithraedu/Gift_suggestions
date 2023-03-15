@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/gender"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -8,25 +7,21 @@
     android:orientation="vertical">
 
 
+    <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
+        android:id="@+id/imageGrid"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:padding="5dp" />
 
-            <nithra.gift.suggestion.shop.birthday.marriage.CircleImageView
-                android:id="@+id/imageGrid"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:padding="5dp"/>
-
-            <TextView
-                android:id="@+id/gridText"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="2dp"
-                android:text="Testing"
-                android:textColor="@color/black"
-                android:textSize="12dp" />
-
-
-
+    <TextView
+        android:id="@+id/gridText"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Testing"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
 
 
 </LinearLayout>

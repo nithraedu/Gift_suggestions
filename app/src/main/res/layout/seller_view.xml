@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:orientation="vertical">
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="350dp">
@@ -16,22 +17,24 @@
             android:layout_height="match_parent"
             android:scaleType="fitXY"
             android:src="@drawable/ic_gift_default_img" />
+
         <LinearLayout
             android:id="@+id/swipe"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="end"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Image click to full view"
-                android:padding="5dp"
                 android:background="@drawable/background_trans"
+                android:padding="5dp"
+                android:text="Image click to full view"
                 android:textColor="@color/white"
-                android:textStyle="bold"/>
+                android:textStyle="bold" />
         </LinearLayout>
 
 
@@ -51,55 +54,57 @@
                 <ImageView
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:backgroundTint="#0069ff"
+                    android:backgroundTint="@color/back_tint"
                     android:src="@drawable/ic_baseline_arrow_back_24" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/cat_title"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginEnd="10dp"
                 android:background="@drawable/button_circle"
                 android:gravity="center">
+
                 <ImageView
                     android:id="@+id/profile_delete"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
-                    android:src="@drawable/ic_baseline_delete_24"/>
+                    android:src="@drawable/ic_baseline_delete_24" />
             </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/button_circle"
-            android:gravity="center">
-            <ImageView
-                android:id="@+id/profile_edit"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:src="@drawable/edit"/>
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/button_circle"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/profile_edit"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/edit" />
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_alignParentBottom="true"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
 
             <ImageView
                 android:id="@+id/IVPreviewImage1"
@@ -124,8 +129,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="10dp"
-            android:background="@drawable/card_back">
+            android:background="@drawable/card_back"
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -149,10 +154,10 @@
                     android:id="@+id/giftname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="Personalized Best Dad LED Lamp"
                     android:textColor="@color/black"
-                    android:layout_marginTop="10dp"
-                    android:textSize="20dp"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -162,11 +167,12 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+
                     <TextView
                         android:layout_width="13dp"
                         android:layout_height="13dp"
-                        android:visibility="gone"
-                        android:background="#003399" />
+                        android:background="@color/otp_txt"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/head"
@@ -174,17 +180,17 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="3dp"
                         android:text="25% OFFER"
-                        android:visibility="gone"
-                        android:textColor="#003399"
-                        android:textStyle="bold" />
+                        android:textColor="@color/otp_txt"
+                        android:textStyle="bold"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/giftgender"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginStart="5dp"
                         android:background="@drawable/circle2"
                         android:paddingLeft="10dp"
-                        android:layout_marginLeft="5dp"
                         android:paddingRight="10dp"
                         android:text="Women"
                         android:textColor="@color/white"
@@ -194,10 +200,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Description"
                     android:layout_marginTop="10dp"
-                    android:textColor="#ff3a52"
-                    android:textSize="18dp"
+                    android:text="Description"
+                    android:textColor="@color/bottom_icon"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -210,11 +216,11 @@
                         android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:maxLines="3"
                         android:layout_marginTop="5dp"
+                        android:maxLines="3"
                         android:text="Nithra android development company "
                         android:textColor="@color/black"
-                        android:textSize="16dp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/btShowmore"
@@ -229,10 +235,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Shop Information"
-                    android:textColor="#ff3a52"
-                    android:textSize="18dp"
                     android:layout_marginTop="10dp"
+                    android:text="Shop Information"
+                    android:textColor="@color/bottom_icon"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -249,29 +255,33 @@
                         android:layout_height="wrap_content"
                         android:text="Shop Name"
                         android:textColor="@color/black"
-                        android:textSize="18dp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:orientation="vertical">
-                    <TextView
-                        android:id="@+id/detail_add"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Address"
-                        android:maxLines="3"
-                        android:textColor="@color/black" />
-                    <TextView
-                        android:id="@+id/btShowmore1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/transparent"
-                        android:text="Show more..."
-                        android:textAllCaps="false"
-                        android:textColor="@android:color/holo_blue_light" />
+
+                        <TextView
+                            android:id="@+id/detail_add"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:maxLines="3"
+                            android:text="Address"
+                            android:textColor="@color/black" />
+
+                        <TextView
+                            android:id="@+id/btShowmore1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@android:color/transparent"
+                            android:text="Show more..."
+                            android:textAllCaps="false"
+                            android:textColor="@android:color/holo_blue_light" />
                     </LinearLayout>
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -286,14 +296,14 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
-                            android:background="#ff7a3f"
+                            android:background="@color/buy_sell"
                             app:cardCornerRadius="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="#ff7a3f"
+                                android:background="@color/buy_sell"
                                 android:gravity="center"
                                 android:paddingLeft="8dp"
                                 android:paddingTop="5dp"
@@ -322,14 +332,14 @@
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
-                            android:background="#ff3a52"
+                            android:background="@color/bottom_icon"
                             app:cardCornerRadius="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="#ff3a52"
+                                android:background="@color/bottom_icon"
                                 android:gravity="center"
                                 android:paddingLeft="8dp"
                                 android:paddingTop="5dp"
@@ -350,13 +360,14 @@
                                     android:textColor="@color/white" />
                             </LinearLayout>
                         </androidx.cardview.widget.CardView>
+
                         <androidx.cardview.widget.CardView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
                             android:layout_marginRight="5dp"
                             android:layout_weight="1"
-                            android:background="#00b36e"
+                            android:background="@color/call"
                             app:cardCornerRadius="5dp">
 
                             <LinearLayout
@@ -364,7 +375,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
-                                android:background="#00b36e"
+                                android:background="@color/call"
                                 android:gravity="center"
                                 android:paddingLeft="8dp"
                                 android:paddingTop="5dp"
@@ -396,60 +407,64 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:visibility="gone"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="15dp"
+        android:visibility="gone">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:visibility="gone"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:visibility="gone">
+
             <TextView
                 android:id="@+id/giftprize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="825"
                 android:textColor="@color/black"
-                android:textSize="18dp"/>
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/offerprize"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="750"
-                android:layout_marginLeft="8dp"
-                android:textColor="#ff7a3f"
-                android:textStyle="bold"
-                android:textSize="22dp"/>
+                android:textColor="@color/buy_sell"
+                android:textSize="22sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
+
         <TextView
             android:id="@+id/mobile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="1"
             android:gravity="center"
             android:text="8056512813"
-            android:textStyle="bold"
-            android:textSize="18dp"
-            android:layout_weight="1"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
-            android:layout_gravity="end"
-            android:background="#0069ff"
+            android:background="@color/back_tint"
             app:cardCornerRadius="5dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:background="#0069ff"
+                android:background="@color/back_tint"
                 android:gravity="center"
                 android:paddingLeft="25dp"
                 android:paddingTop="10dp"
@@ -463,12 +478,11 @@
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="Call us"
-                    android:textStyle="bold"
-                    android:textSize="18dp"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
     </LinearLayout>
-
 </LinearLayout>

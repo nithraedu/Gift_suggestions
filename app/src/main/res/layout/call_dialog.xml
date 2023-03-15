@@ -27,33 +27,36 @@
                 android:padding="10dp"
                 android:text="Mobile Number"
                 android:textColor="@color/white"
-                android:textSize="20dp" />
+                android:textSize="20sp" />
 
             <LinearLayout
                 android:id="@+id/lay1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/mobileno"
-                    app:tint="@color/black"/>
-            <TextView
-                android:id="@+id/call1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:text="0123456789"
-                android:gravity="center"
-                android:layout_weight="1"
-                android:textColor="@color/black"
-                android:textSize="20dp" />
+                    app:tint="@color/black" />
+
+                <TextView
+                    android:id="@+id/call1"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="0123456789"
+                    android:textColor="@color/black"
+                    android:textSize="20sp" />
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/mobileno"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
 
             </LinearLayout>
 
@@ -61,27 +64,30 @@
                 android:id="@+id/lay2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="10dp">
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/mobileno"
-                    app:tint="@color/black"/>
+                    app:tint="@color/black" />
+
                 <TextView
                     android:id="@+id/call2"
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:text="0123456789"
-                    android:gravity="center"
                     android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="0123456789"
                     android:textColor="@color/black"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
+
                 <ImageView
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/mobileno"
-                    app:tint="@color/white"/>
+                    app:tint="@color/white" />
 
             </LinearLayout>
         </LinearLayout>

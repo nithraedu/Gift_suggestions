@@ -10,13 +10,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
             android:background="@drawable/button_circle"
             android:gravity="center">
 
@@ -24,19 +24,19 @@
                 android:id="@+id/back"
                 android:layout_width="25dp"
                 android:layout_height="25dp"
-                android:backgroundTint="#0069ff"
+                android:backgroundTint="@color/back_tint"
                 android:src="@drawable/ic_baseline_arrow_back_24" />
         </LinearLayout>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:layout_weight="1"
             android:gravity="center_vertical"
             android:text="Edit Gift Details"
             android:textColor="@color/black"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
@@ -49,14 +49,14 @@
             android:padding="5dp"
             android:text="My product"
             android:textColor="@color/white"
-            android:textSize="15dp"
+            android:textSize="15sp"
             android:visibility="gone" />
 
     </LinearLayout>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="10dp"
         android:layout_weight="1">
 
@@ -119,7 +119,6 @@
                             android:id="@+id/textView"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:background="@drawable/background1"
                             android:drawableRight="@android:drawable/arrow_down_float"
                             android:drawablePadding="16dp"
@@ -133,6 +132,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:orientation="vertical">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -142,7 +142,6 @@
                             android:id="@+id/textView1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:background="@drawable/background1"
                             android:drawableRight="@android:drawable/arrow_down_float"
                             android:drawablePadding="16dp"
@@ -189,33 +188,6 @@
                             android:layout_marginBottom="10dp" />
                     </LinearLayout>
 
-                    <!--   <RelativeLayout
-                           android:layout_width="match_parent"
-                           android:layout_height="match_parent">
-
-                           <Button
-                               android:id="@+id/BSelectImage"
-                               android:layout_width="wrap_content"
-                               android:layout_height="wrap_content"
-                               android:layout_centerHorizontal="true"
-                               android:layout_marginTop="32dp"
-                               android:backgroundTint="@color/black"
-                               android:text="Product Image"
-                               android:textColor="@android:color/white"
-                               android:textSize="18sp" />
-
-                           <ImageView
-                               android:id="@+id/IVPreviewImage"
-                               android:layout_width="150dp"
-                               android:layout_height="150dp"
-                               android:layout_below="@id/BSelectImage"
-                               android:layout_centerHorizontal="true"
-                               android:layout_marginStart="16dp"
-                               android:layout_marginTop="16dp"
-                               android:layout_marginEnd="16dp" />
-
-                       </RelativeLayout>-->
-
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -224,10 +196,10 @@
                         android:layout_margin="10dp"
                         android:hint="Gift Amount"
                         android:theme="@style/AppThemetextinput"
+                        android:visibility="gone"
                         app:boxCornerRadiusBottomEnd="15dp"
                         app:boxCornerRadiusBottomStart="15dp"
                         app:boxCornerRadiusTopEnd="15dp"
-                        android:visibility="gone"
                         app:boxCornerRadiusTopStart="15dp"
                         app:endIconMode="clear_text"
                         app:hintTextColor="@color/app_color2">
@@ -252,10 +224,10 @@
                         android:layout_margin="10dp"
                         android:hint="Offer Percentage (%)"
                         android:theme="@style/AppThemetextinput"
+                        android:visibility="gone"
                         app:boxCornerRadiusBottomEnd="15dp"
                         app:boxCornerRadiusBottomStart="15dp"
                         app:boxCornerRadiusTopEnd="15dp"
-                        android:visibility="gone"
                         app:boxCornerRadiusTopStart="15dp"
                         app:endIconMode="clear_text"
                         app:hintTextColor="@color/app_color2">
@@ -279,8 +251,8 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
                         android:hint="Offer Amount"
-                        android:visibility="gone"
                         android:theme="@style/AppThemetextinput"
+                        android:visibility="gone"
                         app:boxCornerRadiusBottomEnd="15dp"
                         app:boxCornerRadiusBottomStart="15dp"
                         app:boxCornerRadiusTopEnd="15dp"
@@ -338,7 +310,7 @@
                                     android:layout_gravity="center"
                                     android:background="@drawable/button_circle"
                                     android:src="@drawable/ic_baseline_close_24"
-                                    app:tint="@color/red"/>
+                                    app:tint="@color/red" />
                             </RelativeLayout>
 
                             <RelativeLayout
@@ -403,8 +375,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:gravity="center"
-                        android:visibility="gone"
-                        android:text="*Add 3 image in the required field as given format .png.jpg.jpge." />
+                        android:text="*Add 3 image in the required field as given format .png.jpg.jpge."
+                        android:visibility="gone" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
@@ -440,10 +412,12 @@
 
 
     </androidx.core.widget.NestedScrollView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/save"
             android:layout_width="match_parent"
@@ -459,6 +433,6 @@
             android:paddingBottom="15dp"
             android:text="Update"
             android:textColor="@color/white"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
     </LinearLayout>
 </LinearLayout>

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -11,40 +12,44 @@
         app:cardCornerRadius="8dp"
         app:cardElevation="5dp"
         app:cardUseCompatPadding="true">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="20dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="20dp">
 
-                <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="70dp"
-                    android:src="@drawable/gift_suggestions_round"
-                    android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_gravity="center"
+                android:src="@drawable/gift_suggestions_round" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:gravity="center"
-                android:textSize="20dp"
-                android:textStyle="bold"
+                android:text="Do you want to exit the App?"
                 android:textColor="@color/black"
-                android:text="Do you want to exit the App?"/>
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:orientation="horizontal">
+
                 <Button
                     android:id="@+id/yes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
-                    android:backgroundTint="@color/app_color"
                     android:layout_weight="1"
-                    android:text="Yes"/>
+                    android:backgroundTint="@color/app_color"
+                    android:text="Yes" />
+
                 <Button
                     android:id="@+id/no"
                     android:layout_width="match_parent"
@@ -53,7 +58,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_weight="1"
                     android:backgroundTint="@color/app_color"
-                    android:text="No"/>
+                    android:text="No" />
 
             </LinearLayout>
         </LinearLayout>

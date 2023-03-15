@@ -8,7 +8,7 @@
         android:id="@+id/main_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#fff"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     android:layout_gravity="top"
-                    android:background="#2445b0"
+                    android:background="@color/rate_tit"
                     app:layout_collapseMode="pin" />
 
                 <RelativeLayout
@@ -49,9 +49,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_toLeftOf="@+id/btn_close"
+                        android:layout_toStartOf="@+id/btn_close"
                         android:padding="5dp"
-                        android:text="American Pickers"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="@android:color/white" />
 
@@ -59,9 +58,9 @@
                         android:id="@+id/btn_close"
                         android:layout_width="35dp"
                         android:layout_height="37dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         android:layout_centerHorizontal="true"
-                        android:layout_marginRight="5dp"
+                        android:layout_marginEnd="5dp"
                         android:backgroundTint="@color/white"
                         android:background="@drawable/delete"/>
 
@@ -75,7 +74,7 @@
             android:id="@+id/scrool"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#fff"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <WebView
@@ -96,7 +95,7 @@
             app:fabSize="mini"
             app:tint="@color/white"
             android:backgroundTint="@color/app_color"
-            android:layout_marginRight="15dp"
+            android:layout_marginEnd="15dp"
             android:layout_marginBottom="15dp"
             android:layout_gravity="bottom|end"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

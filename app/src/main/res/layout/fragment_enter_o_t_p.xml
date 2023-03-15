@@ -27,7 +27,7 @@
                     android:id="@+id/back"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:backgroundTint="#0069ff"
+                    android:backgroundTint="@color/back_tint"
                     android:src="@drawable/ic_baseline_arrow_back_24" />
             </LinearLayout>
 
@@ -58,7 +58,7 @@
                     android:gravity="center"
                     android:text="OTP Verification"
                     android:textColor="@color/black"
-                    android:textSize="25dp"
+                    android:textSize="25sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -68,7 +68,7 @@
                     android:gravity="center"
                     android:text="Thank you for registering with us.\n Please type your OTP as Shared on your Mail id"
                     android:textColor="@color/black"
-                    android:textSize="15dp" />
+                    android:textSize="15sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -83,13 +83,13 @@
                         android:layout_height="match_parent"
                         android:text="demo@gmail.com"
                         android:textColor="@color/red"
-                        android:textSize="15dp" />
+                        android:textSize="15sp" />
 
                     <ImageView
                         android:id="@+id/edit"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:src="@drawable/edit" />
                 </LinearLayout>
 
@@ -114,7 +114,7 @@
                         android:maxLength="1"
                         android:maxLines="1"
                         android:padding="10dp"
-                        android:textColor="#003399"
+                        android:textColor="@color/otp_txt"
                         android:textCursorDrawable="@null"
                         android:textStyle="bold" />
 
@@ -132,7 +132,7 @@
                         android:maxLength="1"
                         android:maxLines="1"
                         android:padding="10dp"
-                        android:textColor="#003399"
+                        android:textColor="@color/otp_txt"
                         android:textCursorDrawable="@null"
                         android:textStyle="bold" />
 
@@ -150,7 +150,7 @@
                         android:maxLength="1"
                         android:maxLines="1"
                         android:padding="10dp"
-                        android:textColor="#003399"
+                        android:textColor="@color/otp_txt"
                         android:textCursorDrawable="@null"
                         android:textStyle="bold" />
 
@@ -168,7 +168,7 @@
                         android:maxLength="1"
                         android:maxLines="1"
                         android:padding="10dp"
-                        android:textColor="#003399"
+                        android:textColor="@color/otp_txt"
                         android:textCursorDrawable="@null"
                         android:textStyle="bold" />
 
@@ -200,7 +200,7 @@
                     android:gravity="center"
                     android:text="OTP Not Received? Resend"
                     android:textColor="@color/black"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -213,7 +213,7 @@
                     android:gravity="center"
                     android:text="Continue"
                     android:textColor="@color/white"
-                    android:textSize="20dp" />
+                    android:textSize="20sp" />
 
 
             </LinearLayout>

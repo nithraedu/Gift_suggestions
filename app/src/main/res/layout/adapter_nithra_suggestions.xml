@@ -35,14 +35,13 @@
                     android:id="@+id/gridText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/imageGrid"
                     android:ellipsize="end"
                     android:gravity="center"
                     android:maxLines="1"
                     android:padding="2dp"
                     android:text="Testing"
                     android:textColor="@color/black"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold" />
             </LinearLayout>
 
         </RelativeLayout>

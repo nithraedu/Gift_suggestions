@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".otp.OtpSend">
 
@@ -28,7 +28,7 @@
                     android:id="@+id/back"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:backgroundTint="#0069ff"
+                    android:backgroundTint="@color/back_tint"
                     android:src="@drawable/ic_baseline_arrow_back_24" />
             </LinearLayout>
 
@@ -65,32 +65,32 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="Let's get started"
-                    android:textColor="#0f0f54"
-                    android:textSize="20dp"
+                    android:textColor="@color/otp_start"
+                    android:textSize="20sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
                     android:gravity="center"
                     android:text="OTP will send to your Email Id"
                     android:textColor="@color/red"
-                    android:layout_marginTop="5dp"
-                    android:textSize="15dp"
+                    android:textSize="15sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/background4"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/background4"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
+                        android:layout_marginStart="10dp"
                         android:src="@drawable/profile" />
 
                     <EditText
@@ -108,29 +108,30 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-                    android:background="@drawable/background4"
                     android:layout_marginTop="20dp"
+                    android:background="@drawable/background4"
                     android:orientation="horizontal">
 
                     <ImageView
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:layout_marginLeft="10dp"
-                        app:tint="@color/black"
-                        android:src="@drawable/email_form" />
+                        android:layout_marginStart="10dp"
+                        android:src="@drawable/email_form"
+                        app:tint="@color/black" />
 
-                <EditText
-                    android:id="@+id/gmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@null"
-                    android:hint="Email"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:padding="10dp"
-                    android:textCursorDrawable="@null" />
+                    <EditText
+                        android:id="@+id/gmail"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@null"
+                        android:hint="Email"
+                        android:inputType="textEmailAddress"
+                        android:maxLines="1"
+                        android:padding="10dp"
+                        android:textCursorDrawable="@null" />
                 </LinearLayout>
+
                 <TextView
                     android:id="@+id/getotp"
                     android:layout_width="wrap_content"
@@ -139,17 +140,15 @@
                     android:layout_marginTop="20dp"
                     android:background="@drawable/background11"
                     android:gravity="center"
-                    android:text="Get OTP"
                     android:paddingLeft="60dp"
-                    android:paddingRight="60dp"
                     android:paddingTop="10dp"
+                    android:paddingRight="60dp"
                     android:paddingBottom="10dp"
+                    android:text="Get OTP"
                     android:textColor="@color/white"
-                    android:textSize="25dp" />
-
+                    android:textSize="25sp" />
 
             </LinearLayout>
-
 
         </LinearLayout>
     </LinearLayout>

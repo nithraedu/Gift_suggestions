@@ -5,12 +5,11 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="5dp">
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
@@ -29,8 +28,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:visibility="visible"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <LinearLayout
                     android:id="@+id/noti"
@@ -53,15 +52,15 @@
                     android:id="@+id/notifi_count"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
-                    android:layout_marginLeft="-20dp"
+                    android:layout_marginStart="-20dp"
                     android:layout_marginTop="5dp"
-                    android:layout_marginRight="10dp"
+                    android:layout_marginEnd="10dp"
                     android:background="@drawable/circle2"
                     android:gravity="center"
                     android:text="9+"
                     android:textAlignment="center"
-                    android:textColor="#fff"
-                    android:textSize="10dp" />
+                    android:textColor="@color/white"
+                    android:textSize="10sp" />
             </LinearLayout>
 
 
@@ -70,8 +69,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="end"
-                android:visibility="gone"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="gone">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -88,6 +87,7 @@
 
                 </LinearLayout>
             </LinearLayout>
+
             <LinearLayout
                 android:id="@+id/favourite"
                 android:layout_width="wrap_content"
@@ -120,103 +120,106 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:visibility="gone"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:visibility="gone">
 
         <EditText
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="45dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
+            android:layout_weight="1"
             android:background="@drawable/background1"
             android:drawableStart="@drawable/ic_baseline_search_24"
             android:gravity="center_vertical"
             android:hint="  Search"
             android:padding="10dp"
-            android:layout_weight="1"
-            android:textSize="18dp"
+            android:textSize="18sp"
             android:theme="@style/BaseTheme" />
+
         <ImageView
             android:layout_width="42dp"
             android:layout_height="42dp"
-            android:src="@drawable/ic_search_click"/>
+            android:src="@drawable/ic_search_click" />
     </LinearLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/pullToRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1">
 
-        <TextView
-            android:id="@+id/tv_hinds"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="150dp"
-            android:gravity="center"
-            android:textColor="@color/app_color"
-            android:textStyle="italic"
-            android:text="Please connect to your internet \n after swipe down for Refresh"
-            android:textSize="20dp" />
+            <TextView
+                android:id="@+id/tv_hinds"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="150dp"
+                android:gravity="center"
+                android:text="Please connect to your internet \n after swipe down for Refresh"
+                android:textColor="@color/app_color"
+                android:textSize="20sp"
+                android:textStyle="italic" />
 
-        <LinearLayout
-            android:id="@+id/full_lay"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/full_lay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Gift For"
-            android:textColor="@color/red"
-            android:textStyle="bold"
-            android:textSize="16dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Gift For"
+                        android:textColor="@color/red"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp" />
 
-    </LinearLayout>
+                </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="#F0F2F3"
-        android:padding="5dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/main_bg"
+                    android:orientation="vertical"
+                    android:padding="5dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="Gift Occasions"
-            android:textColor="@color/red"
-            android:textStyle="bold"
-            android:layout_marginTop="5dp"
-            android:textSize="16dp"/>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:padding="5dp"
+                        android:text="Gift Occasions"
+                        android:textColor="@color/red"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp" />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/list2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp" />
 
-    </LinearLayout>
+                </LinearLayout>
 
-        </LinearLayout>
+            </LinearLayout>
 
         </RelativeLayout>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
